@@ -9,21 +9,30 @@
         transparent 50%)
 }
 
-.date-range-picker-input {
+.date-picker-input {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
     justify-content: center;
+    gap: 15px;
 }
 
-.date-range-picker-dropdown {
-    position: absolute;
-    top: 100%;
+.date-picker-field {
+    cursor: pointer;
+    padding: 0.6em 1.3em;
+    width: 204px;
+}
+
+.date-picker-dropdown {
+    position: relative;
+    top: -95px;
     left: 0;
-    z-index: 999;
+    right: auto;
+    z-index: 100;
     background: var(--background-colour);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     border-radius: 8px;
     margin-top: 4px;
+    padding: 10px 0;
 }
 
 button:hover {
@@ -36,8 +45,8 @@ button:hover {
 }
 
 .rdp-day_button[aria-selected="true"] {
-    background-color: #74E8C5;
-    color: #3C3C3C;
+    background-color: var(--primary-colour);
+    color: var(--secondary-colour);
 }
 
 .rdp-range_middle {
@@ -57,7 +66,7 @@ button:hover {
 
     .rdp-day_button {
         background-color: var(--primary-colour-alt2);
-        color: #3C3C3C;
+        color: var(--secondary-colour);
     }
 }
 
@@ -74,7 +83,6 @@ button:hover {
     color: var(--secondary-colour);
 }
 
-/* Nav buttons */
 .rdp-button_previous, .rdp-button_next {
     color: var(--secondary-colour);
 }

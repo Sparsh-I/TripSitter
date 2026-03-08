@@ -22,36 +22,40 @@ export default function DatePicker({ selected, onSelect }: DatePickerProps) {
     }, []);
 
     function formatDate(date: Date | undefined): string {
-        return date ? date.toLocaleDateString() : '';
+        return date ? date.toLocaleDateString("en-GB", {weekday: "short", month: "short", day: "numeric"}) : '';
     }
 
     const inputValue =
         selected?.from && selected?.to
-            ? `${formatDate(selected.from)}-${formatDate(selected.to)}`
+            ? `${formatDate(selected.from)} ➜ ${formatDate(selected.to)}`
             : selected?.from
                 ? `${formatDate(selected.from)}-...}`
                 : '';
 
+    function clearDates() {
+        onSelect(undefined);
+    }
+
     return (
-        <div ref={ref} className="date-range-picker-input">
+        <div ref={ref} className="date-picker-input">
             <input
                 readOnly
-                placeholder="Dates"
+                placeholder="When?"
                 value={inputValue}
                 onClick={() => setOpen((prev) => !prev)}
-                style={{ cursor: 'pointer', padding: '8px 12px', width: '260px' }}
+                className="date-picker-field"
             />
 
             {open && (
-                <div className="date-range-picker-dropdown">
+                <div className="date-picker-dropdown">
                     <DayPicker
                         mode="range"
                         selected={selected}
                         onSelect={onSelect}
-                        numberOfMonths={1}
+                        numberOfMonths={2}
                         disabled={{ before: new Date() }}
                     />
-                    <button>Clear</button>
+                    <button onClick={clearDates}>Clear</button>
                 </div>
             )}
         </div>
