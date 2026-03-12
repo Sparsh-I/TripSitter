@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
 
 #root {
   width: 1440px;
@@ -11,7 +11,7 @@
   /* colour palette */
   --primary-colour: #74E8C5;
   --primary-colour-alt: #4FB697;
-  --primary-colour-alt2: #dffffc;
+  --primary-colour-alt2: #E2FFF7;
   --secondary-colour: #3c3c3c;
   --secondary-colour-alt: #252525;
   --background-colour: #F8F8F8;
@@ -59,7 +59,19 @@ body {
 }
 
 button {
+  font-family: var(--font), sans-serif;
   border-radius: 20px;
+  width: fit-content;
+  height: fit-content;
+  background-color: var(--primary-colour-alt);
+  color: var(--background-colour);
+}
+
+button.alt {
+  background-color: transparent;
+  color: var(--primary-colour-alt);
+  border-color: var(--primary-colour-alt);
+  border-width: 2px;
 }
 
 input {
@@ -91,52 +103,9 @@ p {
   font-family: var(--font), sans-serif;
   font-size: 24px;
   font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
-.navbar {
-  width: 100%;
-  height: 75px;
-  background-color: var(--secondary-colour);
-  display: flex;
-
-  .logo {
-    width: 21%;
-    display: flex;
-    padding: 0 1em;
-    color: var(--background-colour);
-    font-family: var(--font), sans-serif;
-    margin: 0;
-    line-height: 1.3;
-  }
-
-  .h3-text {
-    color: var(--primary-colour);
-  }
-
-  ul {;
-    display: flex;
-    list-style: none;
-    gap: 5rem;
-    margin: 0;
-    justify-content: center;
-    align-items: center;
-  }
-
-  li {
-    cursor: pointer;
-    color: var(--primary-colour);
-  }
-}
-
-.navbar-profile {
-  .profile-icon {
-    /*background: var(--primary-colour);*/
-    background-color: #000;
-    border-radius: 50%;
-    width: 20px;
-  }
+  font-weight: 700;
+  line-height: 1.8;
+  margin: auto;
 }
 
 #banner {
@@ -164,11 +133,13 @@ p {
   color: var(--background-colour);
   border-radius: 10px;
   padding: 0 18px;
+  margin-bottom: 10px;
 }
 
 .new-trip {
   display: flex;
   gap: 1.3em;
+  padding: 4em 0;
 }
 
 .title-input {

@@ -3,6 +3,7 @@ import { DayPicker } from 'react-day-picker';
 import type { DateRange } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import '../styles/DateRangePicker.css';
+import { formatDate } from "../utils/DateUtils.tsx";
 
 interface DatePickerProps {
     selected: DateRange | undefined;
@@ -20,10 +21,6 @@ export default function DatePicker({ selected, onSelect }: DatePickerProps) {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
-
-    function formatDate(date: Date | undefined): string {
-        return date ? date.toLocaleDateString("en-GB", {weekday: "short", month: "short", day: "numeric"}) : '';
-    }
 
     const inputValue =
         selected?.from && selected?.to

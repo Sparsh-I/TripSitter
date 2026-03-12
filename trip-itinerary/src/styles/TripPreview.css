@@ -1,0 +1,9 @@
+.trip-preview {
+    display: flex;
+}
+
+.trip-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

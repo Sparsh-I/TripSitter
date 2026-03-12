@@ -1,11 +1,18 @@
 import "./styles/App.css";
 import { Route, Routes } from "react-router-dom";
-import StartPage from "./pages/StartPage";
+import HomePage from "./pages/HomePage.tsx";
+import MyTripsPage from "./pages/MyTripsPage.tsx";
+import ConnectionsPage from "./pages/ConnectionsPage.tsx";
+import MyMapPage from "./pages/MyMapPage.tsx";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<StartPage/>}/>
+        <Route path="/" element={<HomePage/>}/>
+        <Route path="/home" element={<HomePage/>}/>
+        <Route path="/my-trips" element={<MyTripsPage/>}/>
+        <Route path="/connections" element={<ConnectionsPage/>}/>
+        <Route path="/my-map" element={<MyMapPage/>}/>
     </Routes>
   )
 }
