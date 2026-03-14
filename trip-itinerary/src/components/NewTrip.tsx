@@ -23,14 +23,14 @@ export default function NewTrip() {
         <div className="new-trip">
             <div style={{ display: "flex", flexDirection: "column"}}>
                 <div className="black-label">
-                    <h3 className="h3-text">Title</h3>
+                    <h3>Title</h3>
                 </div>
                 <input className="title-input" id="title-input-home" type="text" placeholder="What are we calling this?"/>
                 <button style={{ margin: "30px 0" }} onClick={submitTrip}>Submit</button>
             </div>
             <div>
                 <div className="black-label">
-                    <h3 className="h3-text">Dates</h3>
+                    <h3>Dates</h3>
                 </div>
                 <DatePicker selected={range} onSelect={setRange}/>
             </div>

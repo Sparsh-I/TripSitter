@@ -19,7 +19,7 @@
 }
 
 body {
-  background: var(--background-colour)
+  background: #ffffff
 }
 
 /*.logo {
@@ -89,7 +89,7 @@ p {
   font-family: var(--font), sans-serif;
 }
 
-.h1-text {
+h1 {
   color: var(--secondary-colour);
   font-family: var(--font), sans-serif;
   font-size: 36px;
@@ -98,7 +98,17 @@ p {
   line-height: 1.5;
 }
 
-.h3-text {
+h2 {
+  color: var(--secondary-colour);
+  font-family: var(--font), sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.8;
+  margin: auto;
+}
+
+h3 {
   color: var(--background-colour);
   font-family: var(--font), sans-serif;
   font-size: 24px;
@@ -125,6 +135,7 @@ p {
   color: var(--secondary-colour);
   border-radius: 10px;
   padding: 0 10px;
+  margin-bottom: 40px;
 }
 
 .black-label {
@@ -136,6 +147,31 @@ p {
   margin-bottom: 10px;
 }
 
+.green-label {
+  width: fit-content;
+  background: var(--primary-colour);
+  color: var(--secondary-colour-alt);
+  border-radius: 10px;
+  padding: 0 18px;
+  margin-bottom: 10px;
+}
+
+.primary-text {
+  color: var(--primary-colour);
+}
+
+.primary-alt-text {
+  color: var(--primary-colour-alt);
+}
+
+.black-text {
+  color: var(--secondary-colour);
+}
+
+.white-text {
+  color: var(--background-colour);
+}
+
 .new-trip {
   display: flex;
   gap: 1.3em;
@@ -144,4 +180,14 @@ p {
 
 .title-input {
   width: 250px;
+}
+
+.login-background {
+  width: 90%;
+  height: 100%;
+  margin: -24px auto;
+  background-image: url("../assets/login-background.jpg");
+  background-size: 100%;
+  background-position: top;
+  background-repeat: no-repeat;
 }

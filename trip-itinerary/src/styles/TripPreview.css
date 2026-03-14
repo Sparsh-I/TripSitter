@@ -1,9 +1,63 @@
 .trip-preview {
     display: flex;
+    margin: 15px 0 50px 0;
+    border: solid 1px var(--secondary-colour);
+    border-radius: 20px;
+    width: 250px;
+    background-color: var(--background-colour);
+
+    button:hover {
+        background-color: var(--primary-colour-alt);
+
+        .img-main {
+            opacity: 0;
+        }
+
+        .img-hover {
+            opacity: 1;
+        }
+    }
+}
+
+.trip-preview img {
+    border-radius: 20px;
+    width: 175px;
+    height: 175px;
+    object-fit: contain;
+    display: flex;
 }
 
 .trip-options {
     display: flex;
+    justify-content: space-around;
     flex-direction: column;
     align-items: center;
+
+    img {
+        display: flex;
+        border-radius: 0;
+    }
 }
+
+.trips-carousels {
+    margin: 50px 100px;
+}
+
+.image-container {
+    align-items: center;
+    position: relative;
+    width: 20px;
+    height: 20px;
+
+    img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.img-hover {
+    opacity: 0;
+}
+
