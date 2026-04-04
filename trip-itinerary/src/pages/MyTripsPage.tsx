@@ -1,5 +1,11 @@
 import NavBar from '../components/NavBar';
-import TripPreview from "../components/TripPreview.tsx";
+import TripPreview from '../components/TripPreview.tsx';
+import TripCarousel from "../components/TripCarousel.tsx";
+
+const trips = [
+    { id: 'Trip1' },
+    { id: 'Trip2' },
+]
 
 export default function MyTripsPage() {
     return (
@@ -11,7 +17,7 @@ export default function MyTripsPage() {
                     <div className="green-label">
                         <h3 className="black-text">Upcoming</h3>
                     </div>
-                    <TripPreview/>
+                    <TripCarousel trips={trips}/>
                 </div>
                 <div className="past-trips">
                     <div className="black-label">
