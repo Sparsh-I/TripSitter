@@ -11,13 +11,15 @@ export default function MyMapPage() {
     return (
         <div>
             <NavBar/>
-            <MapContainer center={[20, 0]} zoom={2} style={{ height: '400px' , width: '100%' }}>
+            <MapContainer center={[20, 0] as [number, number]} zoom={2} style={{ height: '400px' , width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                {places.map((place) => (
-                    <Marker key={place.name} position={[place.lat, place.lng]}>
-                        <Popup>{place.name}</Popup>
-                    </Marker>
-                ))}
+                <>
+                    {places.map((place) => (
+                        <Marker key={place.name} position={[place.lat, place.lng]}>
+                            <Popup>{place.name}</Popup>
+                        </Marker>
+                    ))}
+                </>
             </MapContainer>
         </div>
     );
