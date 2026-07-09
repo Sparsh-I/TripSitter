@@ -1,7 +1,7 @@
 import DatePicker from "./DatePicker.tsx";
 import { useState } from "react";
 import type {DateRange} from "react-day-picker";
-import { formatDate } from "../utils/DateUtils.tsx";
+// import { formatDate } from "../utils/DateUtils.tsx";
 import NewTripPopup from "./NewTripPopup.tsx";
 
 export default function NewTrip() {
@@ -9,10 +9,10 @@ export default function NewTrip() {
     const [title, setTitle] = useState("");
     const [showPopup, setShowPopup] = useState(false);
 
-    function parseDateRange(dateRange: DateRange | undefined): string {
-        if (!dateRange) return "";
-        return `${formatDate(dateRange.from)} ➜ ${formatDate(dateRange.to)}`;
-    }
+    // function parseDateRange(dateRange: DateRange | undefined): string {
+    //     if (!dateRange) return "";
+    //     return `${formatDate(dateRange.from)} ➜ ${formatDate(dateRange.to)}`;
+    // }
 
     const isFilled = title.trim() !== "" && range?.from && range?.to;
 
