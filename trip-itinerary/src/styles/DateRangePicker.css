@@ -9,6 +9,23 @@
         transparent 50%)
 }
 
+.date-picker-input-popup {
+    position: relative;
+}
+
+.date-picker-dropdown {
+    position: relative;
+    top: 100%;
+    left: 0;
+    right: auto;
+    z-index: 1001;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 4px;
+    padding: 15px 20px;
+}
+
 .date-picker-input {
     position: relative;
     display: inline-flex;
@@ -20,19 +37,6 @@
     cursor: pointer;
     padding: 0.6em 1.3em;
     width: 204px;
-}
-
-.date-picker-dropdown {
-    position: relative;
-    top: -140px;
-    left: 0;
-    right: auto;
-    z-index: 100;
-    background: var(--background-colour);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    border-radius: 8px;
-    margin-top: 4px;
-    padding: 15px 20px;
 }
 
 button:hover {

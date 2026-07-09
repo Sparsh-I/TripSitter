@@ -8,9 +8,10 @@ import { formatDate } from "../utils/DateUtils.tsx";
 interface DatePickerProps {
     selected: DateRange | undefined;
     onSelect: (date: DateRange | undefined) => void;
+    variant?: 'default' | 'popup';
 }
 
-export default function DatePicker({ selected, onSelect }: DatePickerProps) {
+export default function DatePicker({ selected, onSelect, variant = 'default' }: DatePickerProps) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
@@ -33,8 +34,10 @@ export default function DatePicker({ selected, onSelect }: DatePickerProps) {
         onSelect(undefined);
     }
 
+    const containerClass = variant === 'popup' ? 'date-picker-input-popup' : 'date-picker-input';
+
     return (
-        <div ref={ref} className="date-picker-input">
+        <div ref={ref} className={containerClass}>
             <input
                 readOnly
                 placeholder="When?"
