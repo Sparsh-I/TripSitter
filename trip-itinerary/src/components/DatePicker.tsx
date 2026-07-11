@@ -52,7 +52,7 @@ export default function DatePicker({ selected, onSelect, variant = 'default' }: 
                         mode="range"
                         selected={selected}
                         onSelect={onSelect}
-                        numberOfMonths={2}
+                        numberOfMonths={1}
                         disabled={{ before: new Date() }}
                     />
                     <button onClick={clearDates}>Clear</button>

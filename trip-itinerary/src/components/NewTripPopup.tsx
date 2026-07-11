@@ -1,6 +1,7 @@
 import DatePicker from "./DatePicker.tsx";
 import {useState} from "react";
 import type {DateRange} from "react-day-picker";
+import '../styles/PopupWindow.css';
 
 interface NewTripPopupProps {
     title: string;
@@ -29,18 +30,15 @@ export default function NewTripPopup({ title, dateLabel, onClose }: NewTripPopup
                         </tr>
                         <tr>
                             <td><p className="popup-labels"><strong>Location</strong></p></td>
-                            <td><input type="text" size={40}></input></td>
+                            <td><input type="text" size={37}></input></td>
                         </tr>
                         <tr>
-                            <td><p className="popup-labels"><strong>Location</strong></p></td>
-                        </tr>
-                        <tr>
-                            <td colSpan={2}>
-                                <textarea cols={30} style={{ width: "100%" }}></textarea>
-                            </td>
+                            <td><p className="popup-labels"><strong>Notes</strong></p></td>
                         </tr>
                     </tbody>
                 </table>
+
+                <textarea cols={50} placeholder="Anything extra..."></textarea>
 
                 <div style={{marginTop: "20px"}}>
                     <button onClick={onClose}>Save</button>

@@ -1,0 +1,44 @@
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative; /* anchors the absolutely-positioned button below */
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    min-width: 550px;
+    min-height: 460px;
+}
+
+.popup-labels {
+    text-align: left;
+    color: black;
+}
+
+td {
+    vertical-align: top;
+}
+
+.popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: #333;
+    padding: 4px 8px;
+}
+
+.popup-close:hover {
+    color: #000;
+}
