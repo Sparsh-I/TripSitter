@@ -10,7 +10,7 @@ interface DatePickerProps {
     onSelect: (date: DateRange | undefined) => void;
     variant?: 'default' | 'popup';
     fieldSize: number;
-    numMonths: number;
+    numMonths?: number;
 }
 
 export default function DatePicker({ selected, onSelect, variant = 'default', fieldSize, numMonths = 2 }: DatePickerProps) {
