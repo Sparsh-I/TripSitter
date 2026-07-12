@@ -75,6 +75,10 @@ button.alt {
   border-width: 2px;
 }
 
+li {
+  color: #1a1a1a;
+}
+
 input, textarea {
   font-family: var(--font), sans-serif;
   font-size: medium;
@@ -196,4 +200,8 @@ h3 {
   background-size: 100%;
   background-position: top;
   background-repeat: no-repeat;
+}
+
+.leaflet-container {
+  width: 400px
 }

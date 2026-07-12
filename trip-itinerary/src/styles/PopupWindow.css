@@ -14,7 +14,9 @@
     padding: 30px;
     border-radius: 8px;
     min-width: 550px;
-    min-height: 460px;
+    height: 560px;
+
+    overflow-y: auto;
 }
 
 .popup-labels {
@@ -41,4 +43,35 @@ td {
 
 .popup-close:hover {
     color: #000;
+}
+
+.location-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 90%;        /* locks width to match the input, not its content */
+    z-index: 1002;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 210px;
+    overflow-y: auto;
+
+    list-style: none;
+    margin: 4px 25px 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.location-search-dropdown li {
+    padding: 8px 12px;
+    cursor: pointer;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.location-search-dropdown li:hover {
+    background: #f0f0f0;
 }

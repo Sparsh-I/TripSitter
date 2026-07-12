@@ -9,9 +9,11 @@ interface DatePickerProps {
     selected: DateRange | undefined;
     onSelect: (date: DateRange | undefined) => void;
     variant?: 'default' | 'popup';
+    fieldSize: number;
+    numMonths: number;
 }
 
-export default function DatePicker({ selected, onSelect, variant = 'default' }: DatePickerProps) {
+export default function DatePicker({ selected, onSelect, variant = 'default', fieldSize, numMonths = 2 }: DatePickerProps) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
 
@@ -44,6 +46,7 @@ export default function DatePicker({ selected, onSelect, variant = 'default' }: 
                 value={inputValue}
                 onClick={() => setOpen((prev) => !prev)}
                 className="date-picker-field"
+                size={fieldSize}
             />
 
             {open && (
@@ -52,7 +55,7 @@ export default function DatePicker({ selected, onSelect, variant = 'default' }: 
                         mode="range"
                         selected={selected}
                         onSelect={onSelect}
-                        numberOfMonths={1}
+                        numberOfMonths={numMonths}
                         disabled={{ before: new Date() }}
                     />
                     <button onClick={clearDates}>Clear</button>
