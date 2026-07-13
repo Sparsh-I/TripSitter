@@ -128,17 +128,6 @@ h3 {
   margin: auto;
 }
 
-#banner {
-  width: 100%;
-  height: 31em;
-  background: var(--primary-colour-alt);
-  background-image: url("../assets/banner.jpg");
-  background-size: cover;
-  background-position: top;
-  padding: 2em 2em;
-  box-sizing: border-box;
-}
-
 .white-label {
   width: fit-content;
   background: var(--background-colour);
@@ -163,7 +152,7 @@ h3 {
   color: var(--secondary-colour-alt);
   border-radius: 10px;
   padding: 0 18px;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
 .primary-text {
@@ -180,16 +169,6 @@ h3 {
 
 .white-text {
   color: var(--background-colour);
-}
-
-.new-trip {
-  display: flex;
-  gap: 1.3em;
-  padding: 4em 0;
-}
-
-.title-input {
-  width: 250px;
 }
 
 .login-background {
