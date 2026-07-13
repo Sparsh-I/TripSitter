@@ -51,13 +51,20 @@
 
 .connections-side {
     width: 150px;
-    margin-top: -20px;
+    margin-top: -24px;
 
     .connections-link {
         background-color: var(--primary-colour-alt);
-        color: var(--background-colour);
         border-radius: 11px 11px 0 0;
-        font-size: 0.85em;
+    }
+
+    .connections-text {
+        color: var(--background-colour);
+        font-size: 0.75em;
+    }
+
+    .connections-text:hover {
+        text-decoration: underline;
     }
 
     .placeholder-img {

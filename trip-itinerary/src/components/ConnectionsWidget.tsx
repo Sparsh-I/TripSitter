@@ -6,12 +6,11 @@ export default function ConnectionsWidget() {
         <div className="connections-widget">
             <div className="recently-label">RECENTLY</div>
             <div className="recently-description">
-                This is some sample text that would instead be
-                replaced with a description of a connections's trip
+                No recent activity to show!
             </div>
 
             <div className="connections-side">
-                <div className="connections-link"><NavLink to="/connections">GO TO CONNECTIONS</NavLink></div>
+                <div className="connections-link"><NavLink className="connections-text" to="/connections">GO TO CONNECTIONS</NavLink></div>
                 <img className="placeholder-img" alt="placeholder" src="/src/assets/trip_preview/placeholder.jpg"/>
             </div>
         </div>
