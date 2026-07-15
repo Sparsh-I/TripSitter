@@ -14,9 +14,8 @@
 }
 
 .date-picker-dropdown {
-    position: relative;
+    /*position: relative;*/
     top: 100%;
-    left: 25px;
     right: auto;
     z-index: 1001;
     background: white;
@@ -24,7 +23,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     margin-top: 4px;
     padding: 20px;
-    width: 75%;
+    width: 310px;
 }
 
 .date-picker-input {
