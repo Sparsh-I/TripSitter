@@ -11,10 +11,10 @@
 
 .date-picker-input-popup {
     position: relative;
+    justify-items: center;
 }
 
 .date-picker-dropdown {
-    /*position: relative;*/
     top: 100%;
     right: auto;
     z-index: 1001;
