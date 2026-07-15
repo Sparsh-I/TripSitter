@@ -11,6 +11,10 @@
     margin: 20px 0 0 0;
 }
 
-input {
+input, textarea {
     border: 1px solid #aaa;
+}
+
+.edit-trip-button {
+    margin: 3% 0;
 }
