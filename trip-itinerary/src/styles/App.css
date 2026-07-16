@@ -159,6 +159,7 @@ h3 {
   color: var(--secondary-colour-alt);
   border-radius: 10px;
   padding: 0 18px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
