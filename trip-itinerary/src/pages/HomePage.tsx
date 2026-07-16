@@ -1,6 +1,7 @@
 import NavBar from '../components/NavBar';
 import NewTrip from "../components/NewTrip";
 import ConnectionsWidget from "../components/ConnectionsWidget.tsx";
+import UpcomingTripWidget from "../components/UpcomingTripWidget.tsx";
 import "../styles/Homepage.css";
 
 export default function HomePage() {
@@ -14,8 +15,9 @@ export default function HomePage() {
                 </div>
                 <NewTrip/>
             </div>
-            <div id="notifications">
+            <div className="notifications" id="notifications">
                 <ConnectionsWidget/>
+                <UpcomingTripWidget/>
             </div>
         </div>
     );

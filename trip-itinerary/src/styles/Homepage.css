@@ -19,9 +19,14 @@
     width: 250px;
 }
 
+.notifications {
+    display: flex;
+    justify-content: space-around;
+    padding: 2.5em 0.5em;
+}
+
 .connections-widget {
-    margin: 5vh 0 0 5vh;
-    width: 610px;
+    width: 40%;
     height: 150px;
     display: flex;
     align-items: stretch;
@@ -44,7 +49,7 @@
 .recently-description {
     background-color: var(--background-colour);
     color: black;
-    padding: 10px 10px 0 10px;
+    padding: 10px;
     text-align: left;
     width: 65%;
 }
@@ -56,6 +61,7 @@
     .connections-link {
         background-color: var(--primary-colour-alt);
         border-radius: 11px 11px 0 0;
+        white-space: nowrap;
     }
 
     .connections-text {
@@ -69,6 +75,16 @@
 
     .placeholder-img {
         border-radius: 0 0 10px 0;
-        width: 100%
+        width: 100%;
+        height: 85%;
+        object-fit: cover;
     }
+}
+
+.upcoming-trips-widget {
+    width: 40%;
+    height: 150px;
+    background: var(--background-colour);
+    border: solid 1px var(--secondary-colour);
+    border-radius: 15px;
 }
