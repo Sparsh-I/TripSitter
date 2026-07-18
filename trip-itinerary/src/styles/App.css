@@ -115,7 +115,7 @@ h2 {
 }
 
 h3 {
-  color: var(--background-colour);
+  color: var(--secondary-colour);
   font-family: var(--font), sans-serif;
   font-size: 24px;
   font-style: normal;
@@ -136,6 +136,7 @@ h3 {
 }
 
 .white-label {
+
   width: fit-content;
   background: var(--background-colour);
   color: var(--secondary-colour);
@@ -145,18 +146,24 @@ h3 {
 }
 
 .black-label {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--background-colour);
+  }
+
   width: fit-content;
   background: var(--secondary-colour);
-  color: var(--background-colour);
   border-radius: 10px;
   padding: 0 18px;
   margin-bottom: 10px;
 }
 
 .green-label {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--secondary-colour-alt);
+  }
+
   width: fit-content;
   background: var(--primary-colour);
-  color: var(--secondary-colour-alt);
   border-radius: 10px;
   padding: 0 18px;
   margin-top: 10px;
