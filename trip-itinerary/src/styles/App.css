@@ -75,10 +75,6 @@ button.alt {
   border-width: 2px;
 }
 
-li {
-  color: #1a1a1a;
-}
-
 input, textarea {
   font-family: var(--font), sans-serif;
   font-size: medium;
@@ -119,13 +115,24 @@ h2 {
 }
 
 h3 {
-  color: var(--background-colour);
+  color: var(--secondary-colour);
   font-family: var(--font), sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: 1.8;
   margin: auto;
+}
+
+#banner {
+  width: 100%;
+  height: 31em;
+  background: var(--primary-colour-alt);
+  background-image: url("../assets/banner.jpg");
+  background-size: cover;
+  background-position: top;
+  padding: 2em 2em;
+  box-sizing: border-box;
 }
 
 .white-label {
@@ -138,18 +145,24 @@ h3 {
 }
 
 .black-label {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--background-colour);
+  }
+
   width: fit-content;
   background: var(--secondary-colour);
-  color: var(--background-colour);
   border-radius: 10px;
   padding: 0 18px;
   margin-bottom: 10px;
 }
 
 .green-label {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--secondary-colour-alt);
+  }
+
   width: fit-content;
   background: var(--primary-colour);
-  color: var(--secondary-colour-alt);
   border-radius: 10px;
   padding: 0 18px;
   margin: 10px 0;
@@ -169,6 +182,16 @@ h3 {
 
 .white-text {
   color: var(--background-colour);
+}
+
+.new-trip {
+  display: flex;
+  gap: 1.3em;
+  padding: 4em 0;
+}
+
+.title-input {
+  width: 250px;
 }
 
 .login-background {

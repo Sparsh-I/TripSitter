@@ -19,8 +19,9 @@
         z-index: 101;
     }
 
-    .h3-text {
-        color: var(--primary-colour);
+    h3 {
+        color: var(--background-colour);
+        font-weight: 600;
     }
 
     .active-link h3 {
@@ -42,25 +43,20 @@
 
     li {
         cursor: pointer;
-        color: var(--primary-colour);
         padding: 0.3em 0.75em;
         border-radius: 6px;
         transition: background-color 0.2s ease;
     }
 
     li:hover {
-        background-color: var(--primary-colour);
-        .h3-text {
+        h3 {
             color: var(--secondary-colour);
         }
+        background-color: var(--primary-colour);
     }
 
     li.active {
         background-color: var(--primary-colour);
-        .h3-text {
-            color: var(--secondary-colour);
-            font-weight: 600;
-        }
     }
 }
 
