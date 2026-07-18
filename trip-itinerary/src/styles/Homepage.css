@@ -89,6 +89,8 @@
     border-radius: 15px;
 }
 
-#upcoming-trips-title {
+#upcoming-trip-title, #upcoming-trip-desc {
     text-align: left;
+    color: var(--secondary-colour);
+    padding: 0 10px;
 }
