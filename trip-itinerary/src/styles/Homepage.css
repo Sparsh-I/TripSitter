@@ -88,3 +88,7 @@
     border: solid 1px var(--secondary-colour);
     border-radius: 15px;
 }
+
+#upcoming-trips-title {
+    text-align: left;
+}
