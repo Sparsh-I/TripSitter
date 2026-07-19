@@ -3,6 +3,7 @@ import '../styles/Homepage.css';
 export default function UpcomingTripWidget() {
     return (
         <div className="upcoming-trips-widget">
+            <span className="boarding-pass-punch"></span>
             <table>
                 <tbody>
                     <tr>
@@ -12,7 +13,7 @@ export default function UpcomingTripWidget() {
                         <td>
                             <h3>LOCA➜TION</h3>
                         </td>
-                        <td rowSpan={2} style={{ verticalAlign: "middle",  padding: "8px 40px", borderLeft: "1px dashed black" }}>
+                        <td rowSpan={2} style={{ verticalAlign: "middle",  padding: "8px 20px", borderLeft: "1px dashed black" }}>
                             <h3 className="black-text">MMM</h3>
                             <h1 style={{margin: "-5px 0"}}>DD</h1>
                             <h3 className="black-text">YYYY</h3>

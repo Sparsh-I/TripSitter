@@ -82,15 +82,48 @@
 }
 
 .upcoming-trips-widget {
-    width: 40%;
+    position: relative;
+    width: 500px;
     height: 150px;
     background: var(--background-colour);
     border: solid 1px var(--secondary-colour);
     border-radius: 15px;
+    overflow: visible;
+    padding: 0 1em;
+}
+
+.upcoming-trips-widget::before,
+.upcoming-trips-widget::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.upcoming-trips-widget::before {
+    left: -20px;
+    border-right: solid 1px var(--secondary-colour);
+    border-left: none;
+}
+
+.upcoming-trips-widget::after {
+    right: -20px;
+    border-left: solid 1px var(--secondary-colour);
 }
 
 #upcoming-trip-title, #upcoming-trip-desc {
     text-align: left;
     color: var(--secondary-colour);
-    padding: 0 10px;
+    padding: 0 20px;
+    margin: 10px 0;
+    max-width: 400px;
+    min-width: 230px;
+    white-space: break-spaces;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
