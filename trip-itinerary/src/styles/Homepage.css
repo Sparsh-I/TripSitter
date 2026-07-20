@@ -23,10 +23,11 @@
     display: flex;
     justify-content: space-around;
     padding: 2.5em 0.5em;
+    margin: 40px 0;
 }
 
 .connections-widget {
-    width: 40%;
+    width: 550px;
     height: 150px;
     display: flex;
     align-items: stretch;
@@ -85,8 +86,7 @@
     position: relative;
     width: 500px;
     height: 150px;
-    background: var(--background-colour);
-    border: solid 1px var(--secondary-colour);
+    background: var(--primary-colour-alt);
     border-radius: 15px;
     overflow: visible;
     padding: 0 1em;
@@ -107,18 +107,16 @@
 
 .upcoming-trips-widget::before {
     left: -20px;
-    border-right: solid 1px var(--secondary-colour);
     border-left: none;
 }
 
 .upcoming-trips-widget::after {
     right: -20px;
-    border-left: solid 1px var(--secondary-colour);
 }
 
 #upcoming-trip-title, #upcoming-trip-desc {
     text-align: left;
-    color: var(--secondary-colour);
+    color: var(--background-colour);
     padding: 0 20px;
     margin: 10px 0;
     max-width: 400px;
