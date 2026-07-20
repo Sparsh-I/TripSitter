@@ -136,6 +136,7 @@ h3 {
 }
 
 .white-label {
+
   width: fit-content;
   background: var(--background-colour);
   color: var(--secondary-colour);
