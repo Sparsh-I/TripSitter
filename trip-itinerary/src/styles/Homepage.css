@@ -1,0 +1,127 @@
+#banner {
+    width: 100%;
+    height: 29em;
+    background: var(--primary-colour-alt);
+    background-image: url("../assets/banner.jpg");
+    background-size: cover;
+    background-position: top;
+    padding: 2em 2em;
+    box-sizing: border-box;
+}
+
+.new-trip {
+    display: flex;
+    gap: 1.3em;
+    padding: 4em 0;
+}
+
+.title-input {
+    width: 250px;
+}
+
+.notifications {
+    display: flex;
+    justify-content: space-around;
+    padding: 2.5em 0.5em;
+    margin: 40px 0;
+}
+
+.connections-widget {
+    width: 550px;
+    height: 150px;
+    display: flex;
+    align-items: stretch;
+}
+
+.recently-label {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    background-color: var(--secondary-colour);
+    border-radius: 0 11px 11px 0;
+    width: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.recently-description {
+    background-color: var(--background-colour);
+    color: black;
+    padding: 10px;
+    text-align: left;
+    width: 65%;
+}
+
+.connections-side {
+    width: 150px;
+    margin-top: -24px;
+
+    .connections-link {
+        background-color: var(--primary-colour-alt);
+        border-radius: 11px 11px 0 0;
+        white-space: nowrap;
+    }
+
+    .connections-text {
+        color: var(--background-colour);
+        font-size: 0.75em;
+    }
+
+    .connections-text:hover {
+        text-decoration: underline;
+    }
+
+    .placeholder-img {
+        border-radius: 0 0 10px 0;
+        width: 100%;
+        height: 85%;
+        object-fit: cover;
+    }
+}
+
+.upcoming-trips-widget {
+    position: relative;
+    width: 500px;
+    height: 150px;
+    background: var(--primary-colour-alt);
+    border-radius: 15px;
+    overflow: visible;
+    padding: 0 1em;
+}
+
+.upcoming-trips-widget::before,
+.upcoming-trips-widget::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.upcoming-trips-widget::before {
+    left: -20px;
+    border-left: none;
+}
+
+.upcoming-trips-widget::after {
+    right: -20px;
+}
+
+#upcoming-trip-title, #upcoming-trip-desc {
+    text-align: left;
+    color: var(--background-colour);
+    padding: 0 20px;
+    margin: 10px 0;
+    max-width: 400px;
+    min-width: 230px;
+    white-space: break-spaces;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
