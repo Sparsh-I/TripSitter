@@ -52,7 +52,7 @@ export default function EditTripPage() {
                     <div key={index}>
                         <h3 className="input-labels">Dates{entries.length > 1 ? ` #${index + 1}` : ""}</h3>
                         <div style={{display: "flex"}}>
-                            <DatePicker selected={entry.range} onSelect={(range) => {setRangeAt(index, range);}}/>
+                            <DatePicker selected={entry.range} onSelect={(range) => {setRangeAt(index, range);}} fieldSize={20}/>
                         </div>
 
                         <h3 className="input-labels">Location{entries.length > 1 ? ` #${index + 1}` : ""}</h3>
