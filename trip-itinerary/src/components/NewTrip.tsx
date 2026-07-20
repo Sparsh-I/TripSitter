@@ -52,7 +52,7 @@ export default function NewTrip() {
                 <div className="black-label">
                     <h3>Dates</h3>
                 </div>
-                <DatePicker selected={range} onSelect={setRange}/>
+                <DatePicker selected={range} onSelect={setRange} fieldSize={21}/>
             </div>
 
             {showPopup && (

@@ -3,10 +3,10 @@
     height: 75px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 0 1.5em;
+    justify-content: space-between;
+    padding: 0 3.5em;
     box-sizing: border-box;
-    margin-top: 20px;
+    margin: 20px 0 0 0;
 
     .logo {
         display: flex;
@@ -19,8 +19,9 @@
         z-index: 101;
     }
 
-    .h3-text {
-        color: var(--primary-colour);
+    h3 {
+        color: var(--background-colour);
+        font-weight: 600;
     }
 
     .active-link h3 {
@@ -42,25 +43,20 @@
 
     li {
         cursor: pointer;
-        color: var(--primary-colour);
         padding: 0.3em 0.75em;
         border-radius: 6px;
         transition: background-color 0.2s ease;
     }
 
     li:hover {
-        background-color: var(--primary-colour);
-        .h3-text {
+        h3 {
             color: var(--secondary-colour);
         }
+        background-color: var(--primary-colour);
     }
 
     li.active {
         background-color: var(--primary-colour);
-        .h3-text {
-            color: var(--secondary-colour);
-            font-weight: 600;
-        }
     }
 }
 
