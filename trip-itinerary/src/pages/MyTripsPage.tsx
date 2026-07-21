@@ -1,18 +1,19 @@
 import NavBar from '../components/NavBar';
 import TripPreview from '../components/TripPreview.tsx';
 import TripCarousel from "../components/TripCarousel.tsx";
+import type {Trip} from "../types/Trip.ts";
 
-const trips = [
-    { id: 'Trip1' },
-    { id: 'Trip2' },
-]
 
-export default function MyTripsPage() {
+interface MyTripsPageProps {
+    trips: Trip[]
+}
+
+export default function MyTripsPage({ trips }: MyTripsPageProps) {
     return (
         <div>
             <NavBar/>
             <div className="trips-carousels">
-                <h2 style={{ textAlign: "left", padding: "20px 0"}}>My Trips</h2>
+                <h2 style={{textAlign: "left", padding: "20px 0"}}>My Trips</h2>
                 <div className="upcoming-trips">
                     <div className="green-label">
                         <h3 className="black-text">Upcoming</h3>

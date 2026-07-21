@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 
-interface TripLocation {
+export interface TripLocation {
     lat: number;
     lng: number;
     label: string;
@@ -57,6 +57,7 @@ export default function LocationSearch({ onLocationSelect }: LocationSearchProps
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 onFocus={() => results.length > 0 && setOpen(true)}
+                onBlur={() => setOpen(false)}
                 placeholder="Search for a location..."
                 size={37}
             />

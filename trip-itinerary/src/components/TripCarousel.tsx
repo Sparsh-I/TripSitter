@@ -4,10 +4,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 // import 'swiper/css/navigation';
 // import 'swiper/css/pagination';
 import TripPreview from './TripPreview';
-
-interface Trip {
-    id: string;
-}
+import { type Trip } from '../types/Trip';
 
 interface TripCarouselProps {
     trips: Trip[]

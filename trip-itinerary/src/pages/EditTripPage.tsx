@@ -3,6 +3,7 @@ import DatePicker from "../components/DatePicker.tsx";
 import {useState} from "react";
 import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
+import LocationSearch, { type TripLocation } from "../components/LocationSearch.tsx";
 
 interface LocationEntry {
     range: DateRange | undefined;
@@ -10,6 +11,7 @@ interface LocationEntry {
 }
 
 export default function EditTripPage() {
+    const [, setLocation] = useState<TripLocation | null>(null);
     const [title, setTitle] = useState("");
     const [entries, setEntries] = useState<LocationEntry[]>([
         { range: undefined, location: "" },
@@ -43,7 +45,7 @@ export default function EditTripPage() {
                     placeholder="What are we calling this?"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
-                    style={{width: "90%", display: "flex", margin: "10px 0"}}
+                    style={{width: "95%", margin: "10px 0"}}
                 />
                 <br/>
                 <hr/>
@@ -56,11 +58,7 @@ export default function EditTripPage() {
                         </div>
 
                         <h3 className="input-labels">Location{entries.length > 1 ? ` #${index + 1}` : ""}</h3>
-                        <input
-                            type="text"
-                            placeholder="Where are we going?"
-                            style={{width: "90%", display: "flex", margin: "10px 0"}}
-                        />
+                        <LocationSearch onLocationSelect={setLocation} />
                         {index > 0 && (
                             <button className="edit-trip-button" onClick={() => removeEntry(index)}>- Remove</button>
                         )}
@@ -72,7 +70,7 @@ export default function EditTripPage() {
                 <button className="edit-trip-button" onClick={addEntry}>+ Add Another Location</button>
 
                 <h3 className="input-labels">Additional Notes</h3>
-                <textarea style={{width: "90%", margin: "10px 0"}} placeholder="Anything extra..."></textarea>
+                <textarea style={{width: "100%", margin: "10px 0"}} placeholder="Anything extra..."></textarea>
 
                 <div style={{marginTop: "20px"}}>
                     <button className="edit-trip-button" onClick={() => {}}>Save</button>

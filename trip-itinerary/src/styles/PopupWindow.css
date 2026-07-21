@@ -21,7 +21,7 @@
 
 .popup-labels {
     text-align: left;
-    color: black;
+    color: var(--secondary-colour);
 }
 
 td {

@@ -7,13 +7,19 @@ import ConnectionsPage from "./pages/ConnectionsPage.tsx";
 import MyMapPage from "./pages/MyMapPage.tsx";
 import EditTripPage from "./pages/EditTripPage.tsx";
 
+const trips = [
+    { id: 'Trip1', lat: 1, lng: 15, startDate: "sDate1", endDate: "eDate1" },
+    { id: 'Trip2', lat: 2, lng: 30, startDate: "sDate2", endDate: "eDate2" },
+    { id: 'Trip3', lat: 3, lng: 45, startDate: "sDate3", endDate: "eDate3" },
+]
+
 export default function App() {
   return (
     <Routes>
         <Route path="/" element={<HomePage/>}/>
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/my-trips" element={<MyTripsPage/>}/>
+        <Route path="/my-trips" element={<MyTripsPage trips={trips}/>}/>
         <Route path="/connections" element={<ConnectionsPage/>}/>
         <Route path="/my-map" element={<MyMapPage/>}/>
 
