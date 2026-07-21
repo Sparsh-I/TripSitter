@@ -6,8 +6,11 @@ import edit from '../assets/trip_preview/edit.svg';
 import editHover from '../assets/trip_preview/edit-hover.svg';
 import share from '../assets/trip_preview/share.svg';
 import shareHover from '../assets/trip_preview/share-hover.svg';
+import { useNavigate } from "react-router-dom";
 
 export default function TripPreview() {
+    const navigate = useNavigate();
+
     return (
         <div>
             <div className="trip-preview">
@@ -19,7 +22,7 @@ export default function TripPreview() {
                             <img className="img-hover" src={eyeHover} alt="Preview Hovered"/>
                         </div>
                     </button>
-                    <button className="alt">
+                    <button className="alt" onClick={() => navigate("/edit-trip")}>
                         <div className="image-container">
                             <img className="img-main" src={edit} alt="Edit"/>
                             <img className="img-hover" src={editHover} alt="Edit Hovered"/>

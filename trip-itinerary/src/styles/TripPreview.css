@@ -40,7 +40,7 @@
 }
 
 .trips-carousels {
-    margin: 50px 100px;
+    margin: 10px 100px;
 }
 
 .image-container {
@@ -60,4 +60,3 @@
 .img-hover {
     opacity: 0;
 }
-
