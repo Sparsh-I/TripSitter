@@ -39,8 +39,8 @@ TripSitter is currently in **early development**. Features are actively being bu
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/tripsitter.git
-   cd tripsitter
+   git clone https://github.com/Sparsh-I/TripSitter.git
+   cd trip-itinerary
    ```
 
 2. **Install dependencies**
