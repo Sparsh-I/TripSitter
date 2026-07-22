@@ -1,7 +1,7 @@
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 
-export async function getCountryCode(lat: number, lng: number): Promise<string | null> {
+export async function getCountryCode(lat: number | undefined, lng: number | undefined): Promise<string | null> {
     const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`;
 
     const response = await fetch(url, {
@@ -15,5 +15,5 @@ export async function getCountryCode(lat: number, lng: number): Promise<string |
 countries.registerLocale(enLocale);
 
 export function getAlpha3(alpha2: string): string | undefined {
-    return countries.alpha2ToAlpha3(alpha2); // "CA" -> "CAN"
+    return countries.alpha2ToAlpha3(alpha2);
 }
