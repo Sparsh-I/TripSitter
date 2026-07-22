@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { DayPicker } from 'react-day-picker';
 import type { DateRange } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import '../styles/DateRangePicker.css';
-import { formatDate } from "../utils/DateUtils.tsx";
+import '../../styles/DateRangePicker.css';
+import { formatDate } from "../../utils/TripDateUtils.ts";
 
 interface DatePickerProps {
     selected: DateRange | undefined;

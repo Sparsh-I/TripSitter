@@ -1,10 +1,11 @@
 .trip-preview {
     display: flex;
-    margin: 15px 0 50px 0;
+    margin: 15px 0 15px 0;
     border: solid 1px var(--secondary-colour);
     border-radius: 20px;
-    width: 250px;
+    width: 275px;
     background-color: var(--background-colour);
+    justify-content: space-evenly;
 
     button:hover {
         background-color: var(--primary-colour-alt);
@@ -31,7 +32,6 @@
     display: flex;
     justify-content: space-around;
     flex-direction: column;
-    align-items: center;
 
     img {
         display: flex;
@@ -59,4 +59,11 @@
 
 .img-hover {
     opacity: 0;
+}
+
+.no-trips-display {
+    background-color: var(--background-colour);
+    border-radius: 15px;
+    padding: 60px;
+    margin: 40px 0;
 }

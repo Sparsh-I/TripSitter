@@ -1,14 +1,20 @@
-import NavBar from '../components/NavBar';
-import TripPreview from '../components/TripPreview.tsx';
-import TripCarousel from "../components/TripCarousel.tsx";
-import type {Trip} from "../types/Trip.ts";
+import NavBar from '../components/global/NavBar.tsx';
+import TripCarousel from "../components/my_trips/TripCarousel.tsx";
+import type { Trip } from "../types/Trip.ts";
+import { futureTrips, pastTrips } from "../utils/TripDateUtils";
+import { getTrips } from "../utils/TripStorage.ts";
+import { useEffect, useState } from "react";
 
+export default function MyTripsPage() {
+    const [trips, setTrips] = useState<Trip[]>([]);
 
-interface MyTripsPageProps {
-    trips: Trip[]
-}
+    useEffect(() => {
+        setTrips(getTrips());
+    }, [])
 
-export default function MyTripsPage({ trips }: MyTripsPageProps) {
+    const upcoming = futureTrips(trips);
+    const past = pastTrips(trips);
+
     return (
         <div>
             <NavBar/>
@@ -18,13 +24,25 @@ export default function MyTripsPage({ trips }: MyTripsPageProps) {
                     <div className="green-label">
                         <h3 className="black-text">Upcoming</h3>
                     </div>
-                    <TripCarousel trips={trips}/>
+                    {upcoming.length === 0 ? (
+                        <div className="no-trips-display">
+                            <h3>No trips to show</h3>
+                        </div>
+                    ) : (
+                        <TripCarousel trips={upcoming} />
+                    )}
                 </div>
                 <div className="past-trips">
                     <div className="black-label">
                         <h3>Past</h3>
                     </div>
-                    <TripPreview/>
+                    {past.length === 0 ? (
+                        <div className="no-trips-display">
+                            <h3>No trips to show</h3>
+                        </div>
+                    ) : (
+                        <TripCarousel trips={past} />
+                    )}
                 </div>
             </div>
         </div>

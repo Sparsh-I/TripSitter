@@ -1,7 +1,7 @@
-import NavBar from '../components/NavBar';
-import NewTrip from "../components/NewTrip";
-import ConnectionsWidget from "../components/ConnectionsWidget.tsx";
-import UpcomingTripWidget from "../components/UpcomingTripWidget.tsx";
+import NavBar from '../components/global/NavBar.tsx';
+import NewTrip from "../components/homepage/NewTrip.tsx";
+import ConnectionsWidget from "../components/homepage/ConnectionsWidget.tsx";
+import UpcomingTripWidget from "../components/homepage/UpcomingTripWidget.tsx";
 import "../styles/Homepage.css";
 
 export default function HomePage() {

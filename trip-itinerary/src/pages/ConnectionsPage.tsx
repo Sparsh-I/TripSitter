@@ -1,4 +1,4 @@
-import NavBar from '../components/NavBar';
+import NavBar from '../components/global/NavBar.tsx';
 
 export default function ConnectionsPage() {
     return (

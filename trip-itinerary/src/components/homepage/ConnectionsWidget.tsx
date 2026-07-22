@@ -1,4 +1,4 @@
-import '../styles/Homepage.css';
+import '../../styles/Homepage.css';
 import { NavLink } from "react-router-dom";
 
 export default function ConnectionsWidget() {

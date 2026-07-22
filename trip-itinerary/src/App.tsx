@@ -1,5 +1,4 @@
-import "./styles/App.css";
-import { Route, Routes } from "react-router-dom";
+// Page Imports
 import HomePage from "./pages/HomePage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import MyTripsPage from "./pages/MyTripsPage.tsx";
@@ -7,11 +6,9 @@ import ConnectionsPage from "./pages/ConnectionsPage.tsx";
 import MyMapPage from "./pages/MyMapPage.tsx";
 import EditTripPage from "./pages/EditTripPage.tsx";
 
-const trips = [
-    { id: 'Trip1', lat: 1, lng: 15, startDate: "sDate1", endDate: "eDate1" },
-    { id: 'Trip2', lat: 2, lng: 30, startDate: "sDate2", endDate: "eDate2" },
-    { id: 'Trip3', lat: 3, lng: 45, startDate: "sDate3", endDate: "eDate3" },
-]
+// Styling, components and function imports
+import "./styles/App.css";
+import { Route, Routes } from "react-router-dom";
 
 export default function App() {
   return (
@@ -19,11 +16,11 @@ export default function App() {
         <Route path="/" element={<HomePage/>}/>
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/my-trips" element={<MyTripsPage trips={trips}/>}/>
+        <Route path="/my-trips" element={<MyTripsPage/>}/>
         <Route path="/connections" element={<ConnectionsPage/>}/>
         <Route path="/my-map" element={<MyMapPage/>}/>
 
-        <Route path="/edit-trip" element={<EditTripPage/>}></Route>
+        <Route path="/edit-trip/:id" element={<EditTripPage/>}></Route>
     </Routes>
   )
 }

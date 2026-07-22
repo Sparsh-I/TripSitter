@@ -1,4 +1,4 @@
-import DatePicker from "./DatePicker.tsx";
+import DatePicker from "../global/DatePicker.tsx";
 import { useState } from "react";
 import type {DateRange} from "react-day-picker";
 // import { formatDate } from "../utils/DateUtils.tsx";

@@ -1,9 +1,12 @@
 import "../styles/EditTrip.css";
-import DatePicker from "../components/DatePicker.tsx";
-import {useState} from "react";
+import DatePicker from "../components/global/DatePicker.tsx";
+import { useEffect, useState } from "react";
 import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
-import LocationSearch, { type TripLocation } from "../components/LocationSearch.tsx";
+import LocationSearch, { type TripLocation } from "../components/global/LocationSearch.tsx";
+import { useParams } from "react-router-dom";
+import { getTrips } from "../utils/TripStorage";
+import { type Trip } from "../types/Trip";
 
 interface LocationEntry {
     range: DateRange | undefined;
@@ -12,12 +15,22 @@ interface LocationEntry {
 
 export default function EditTripPage() {
     const [, setLocation] = useState<TripLocation | null>(null);
-    const [title, setTitle] = useState("");
+    const [, setTitle] = useState("");
     const [entries, setEntries] = useState<LocationEntry[]>([
         { range: undefined, location: "" },
     ]);
+    const { id } = useParams<{ id: string }>();
+    const [tripDetails, setTripDetails] = useState<Trip | null>(null);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const trips = getTrips();
+        const found = trips.find(t => t.id === id);
+        setTripDetails(found ?? null);
+    }, [id]);
+
+    if (!tripDetails) return <div className="no-trip-found"><h1>No Trip Found :(</h1></div>
 
     function addEntry() {
         setEntries(prev => [...prev, { range: undefined, location: "" }]);
@@ -43,7 +56,7 @@ export default function EditTripPage() {
                 <input
                     type="text"
                     placeholder="What are we calling this?"
-                    value={title}
+                    value={tripDetails.title}
                     onChange={e => setTitle(e.target.value)}
                     style={{width: "95%", margin: "10px 0"}}
                 />

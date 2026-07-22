@@ -18,3 +18,10 @@ input, textarea {
 .edit-trip-button {
     margin: 3% 0;
 }
+
+.no-trip-found {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}

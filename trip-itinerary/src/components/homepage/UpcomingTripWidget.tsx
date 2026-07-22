@@ -1,4 +1,4 @@
-import '../styles/Homepage.css';
+import '../../styles/Homepage.css';
 
 export default function UpcomingTripWidget() {
     return (

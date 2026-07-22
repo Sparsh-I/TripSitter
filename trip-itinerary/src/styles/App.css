@@ -91,38 +91,30 @@ textarea {
   padding: 0.5em 0.5em;
 }
 
-p, li {
+p, li, h1, h2, h3, h4 {
   font-family: var(--font), sans-serif;
   color: var(--secondary-colour);
 }
 
+h1, h2, h3, h4 {
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.8;
+  margin: auto;
+}
+
 h1 {
-  color: var(--secondary-colour);
-  font-family: var(--font), sans-serif;
   font-size: 36px;
   font-style: italic;
-  font-weight: 700;
   line-height: 1.5;
 }
 
 h2 {
-  color: var(--secondary-colour);
-  font-family: var(--font), sans-serif;
   font-size: 32px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.8;
-  margin: auto;
 }
 
 h3 {
-  color: var(--secondary-colour);
-  font-family: var(--font), sans-serif;
   font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 1.8;
-  margin: auto;
 }
 
 #banner {

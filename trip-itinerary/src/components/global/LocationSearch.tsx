@@ -8,8 +8,8 @@ export interface TripLocation {
 }
 
 interface SearchSuggestion {
-    x: number; // lng
-    y: number; // lat
+    x: number;
+    y: number;
     label: string;
 }
 
@@ -65,7 +65,13 @@ export default function LocationSearch({ onLocationSelect }: LocationSearchProps
             {open && results.length > 0 && (
                 <ul className="location-search-dropdown">
                     {results.map((result, i) => (
-                        <li key={i} onClick={() => handleSelect(result)}>
+                        <li
+                            key={i}
+                            onMouseDown={e => {
+                                e.preventDefault();
+                                handleSelect(result);
+                            }}
+                        >
                             {result.label}
                         </li>
                     ))}

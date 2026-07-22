@@ -1,10 +1,10 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
-// import 'swiper/css';
-// import 'swiper/css/navigation';
-// import 'swiper/css/pagination';
-import TripPreview from './TripPreview';
-import { type Trip } from '../types/Trip';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import TripPreview from './TripPreview.tsx';
+import { type Trip } from '../../types/Trip.ts';
 
 interface TripCarouselProps {
     trips: Trip[]
@@ -25,7 +25,7 @@ export default function TripCarousel({ trips }: TripCarouselProps) {
         >
             {trips.map((trip) => (
                 <SwiperSlide key={trip.id}>
-                    <TripPreview/>
+                    <TripPreview tripDetails={trip}/>
                 </SwiperSlide>
             ))}
         </Swiper>
