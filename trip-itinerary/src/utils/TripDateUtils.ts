@@ -1,6 +1,7 @@
 import type {Trip} from "../types/Trip.ts";
 
-const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+const today = new Date()
+    //.toISOString().split('T')[0]; // "YYYY-MM-DD"
 
 export const formatDate= (date: Date | undefined): string => {
     return date ? date.toLocaleDateString("en-GB", {weekday: "short", month: "short", day: "numeric"}) : '';
