@@ -15,10 +15,11 @@ interface SearchSuggestion {
 
 interface LocationSearchProps {
     onLocationSelect: (location: TripLocation) => void;
+    defaultVal?: string;
 }
 
-export default function LocationSearch({ onLocationSelect }: LocationSearchProps) {
-    const [query, setQuery] = useState("");
+export default function LocationSearch({ onLocationSelect, defaultVal = "" }: LocationSearchProps) {
+    const [query, setQuery] = useState(defaultVal);
     const [results, setResults] = useState<SearchSuggestion[]>([]);
     const [open, setOpen] = useState(false);
     const provider = useRef(new OpenStreetMapProvider());
@@ -36,7 +37,7 @@ export default function LocationSearch({ onLocationSelect }: LocationSearchProps
             const res = await provider.current.search({ query });
             setResults(res as SearchSuggestion[]);
             setOpen(true);
-        }, 300); // wait 300ms after typing stops before searching
+        }, 300);
 
         return () => {
             if (debounceRef.current) clearTimeout(debounceRef.current);
