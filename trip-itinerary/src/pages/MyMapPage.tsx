@@ -1,11 +1,9 @@
 import NavBar from '../components/global/NavBar.tsx';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import {getTrips} from "../utils/TripStorage.ts";
 
-const places = [
-    { name: 'Paris', lat: 48.8566, lng: 2.3522 },
-    { name: 'Tokyo', lat: 35.6762, lng: 139.6503 },
-]
+const places = getTrips().map(({ lat, lng, title }) => ({ lat, lng, title }));
 
 export default function MyMapPage() {
     return (
@@ -15,8 +13,8 @@ export default function MyMapPage() {
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                 <>
                     {places.map((place) => (
-                        <Marker key={place.name} position={[place.lat, place.lng]}>
-                            <Popup>{place.name}</Popup>
+                        <Marker key={place.title} position={[place.lat, place.lng]}>
+                            <Popup>{place.title}</Popup>
                         </Marker>
                     ))}
                 </>
