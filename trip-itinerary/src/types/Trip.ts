@@ -6,5 +6,6 @@ export interface Trip {
     locationLabel: string;
     startDate: Date;
     endDate: Date;
+    link?: string;
     notes?: string;
 }

@@ -118,17 +118,6 @@ h3 {
   font-size: 24px;
 }
 
-#banner {
-  width: 100%;
-  height: 31em;
-  background: var(--primary-colour-alt);
-  background-image: url("../assets/banner.jpg");
-  background-size: cover;
-  background-position: top;
-  padding: 2em 2em;
-  box-sizing: border-box;
-}
-
 .white-label {
 
   width: fit-content;

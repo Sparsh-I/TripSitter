@@ -8,6 +8,8 @@ import share from '../../assets/trip_preview/share.svg';
 import shareHover from '../../assets/trip_preview/share-hover.svg';
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types/Trip.ts";
+import PreviewTripPopup from "./PreviewTripPopup.tsx";
+import {useState} from "react";
 
 interface TripPreviewProps {
     tripDetails: Trip
@@ -15,6 +17,15 @@ interface TripPreviewProps {
 
 export default function TripPreview({ tripDetails }: TripPreviewProps ) {
     const navigate = useNavigate();
+    const [showPopup, setShowPopup] = useState(false);
+
+    function openPreview() {
+        setShowPopup(true);
+    }
+
+    function closePopup() {
+        setShowPopup(false);
+    }
 
     return (
         <div style={{width: "280px", margin: "0 0 25px 0"}}>
@@ -22,7 +33,7 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                 <div className="trip-preview">
                     <img src={placeholder} alt="placeholder"/>
                     <div className="trip-options">
-                        <button className="alt">
+                        <button className="alt" onClick={openPreview}>
                             <div className="image-container">
                                 <img className="img-main" src={eye} alt="Preview"/>
                                 <img className="img-hover" src={eyeHover} alt="Preview Hovered"/>
@@ -44,6 +55,13 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                 </div>
                 <h3>{tripDetails.title}</h3>
             </div>
+
+            {showPopup && (
+                <PreviewTripPopup
+                    trip={tripDetails}
+                    onClose={closePopup}
+                />
+            )}
         </div>
     );
 }

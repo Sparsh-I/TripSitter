@@ -5,7 +5,6 @@ import UpcomingTripWidget from "../components/homepage/UpcomingTripWidget.tsx";
 import "../styles/Homepage.css";
 
 export default function HomePage() {
-
     return (
         <div>
             <NavBar/>

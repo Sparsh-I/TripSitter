@@ -15,7 +15,8 @@ export function getTrips(): Trip[] {
             locationLabel: "Tokyo, Japan",
             startDate: new Date("2026-09-10"),
             endDate: new Date("2026-09-20"),
-            notes: "Cherry blossom season, remember to book teamLab tickets in advance"
+            notes: "Cherry blossom season, remember to book teamLab tickets in advance",
+            link: "https://www.airbnb.ca/rooms/36845659?source_impression_id=p3_1784937755_P3w0RbdfF1Qa_qO7"
         },
         {
             id: "2026-07-22T10:05:00.000Z",
@@ -25,7 +26,8 @@ export function getTrips(): Trip[] {
             locationLabel: "Toronto, Ontario, Canada",
             startDate: new Date("2026-08-01"),
             endDate: new Date("2026-08-05"),
-            notes: "Staying at Aunt Rosa's place"
+            notes: "Staying at Aunt Rosa's place",
+            link: "https://www.airbnb.ca/rooms/700905641219777851?source_impression_id=p3_1784937228_P3lq2JPxxbG9H-a-"
         },
         {
             id: "2026-07-22T10:10:00.000Z",
