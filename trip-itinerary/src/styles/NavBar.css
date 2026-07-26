@@ -111,7 +111,7 @@
     background-color: var(--background-colour);
     z-index: 1005;
     text-align: right;
-    padding: 0 50px 0 0;
+    padding: 100px 50px 0 0;
 
     ul {
         list-style: none;
