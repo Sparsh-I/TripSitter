@@ -15,7 +15,7 @@ export default function NavBar() {
                 </ul>
                 <span className="navbar-profile"></span>
                 <button>
-                    <img src={menuIcon} className="menu-icon"></img>
+                    <img src={menuIcon} className="menu-icon" alt="Menu"></img>
                 </button>
             </div>
             <br/>

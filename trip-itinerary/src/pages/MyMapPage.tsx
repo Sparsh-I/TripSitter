@@ -9,7 +9,11 @@ import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import '../styles/MyMap.css';
 
-delete (L.Icon.Default.prototype as any)._getIconUrl;
+interface IconDefaultPrototype {
+    _getIconUrl?: () => string;
+}
+
+delete (L.Icon.Default.prototype as IconDefaultPrototype)._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconUrl: icon,
     shadowUrl: iconShadow,
