@@ -122,27 +122,31 @@
 .upcoming-trips-widget {
     position: relative;
     width: 500px;
-    height: 150px;
+    height: 148px;
     background: var(--primary-colour-alt);
     border-radius: 15px;
     overflow: visible;
     padding: 0 1em;
 
+    table {
+        height: 100%;
+    }
+
+    h3 {
+        font-size: 20px;
+        line-height: 1.6;
+    }
+
     @media (max-width: 768px) {
         width: 90%;
 
         td {
-            width: 150px;
             vertical-align: middle;
+            width: 30%;
         }
 
         h1 {
             font-size: 32px;
-        }
-
-        h3 {
-            font-size: 20px;
-            line-height: 1.6;
         }
     }
 }
@@ -189,6 +193,7 @@
     vertical-align: middle;
     padding: 8px 2px;
     border-left: 1px dashed white;
+    width: 20%;
 
     @media (max-width: 768px) {
         padding: 0 8px;
