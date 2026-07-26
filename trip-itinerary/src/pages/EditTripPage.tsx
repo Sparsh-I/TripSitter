@@ -96,7 +96,7 @@ export default function EditTripPage() {
     return (
         <div>
             <button className="back-button" onClick={() => navigate("/my-trips")}>← Return to My Trips</button>
-            <div style={{ margin: "0 25%", justifyContent: "space-around"}}>
+            <div className="edit-trip-layout">
                 <h1 className="input-labels">Edit Trip</h1>
 
                 <h3 className="input-labels">Title</h3>

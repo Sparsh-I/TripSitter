@@ -17,6 +17,11 @@
     height: 560px;
 
     overflow-y: auto;
+
+    @media (max-width: 768px) {
+        min-width: 120px;
+        width: 80%
+    }
 }
 
 .popup-labels {
