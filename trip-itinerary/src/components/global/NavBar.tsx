@@ -1,8 +1,12 @@
 import { NavLink } from "react-router-dom";
 import '../../styles/NavBar.css';
 import menuIcon from '../../assets/menu-icon.png';
+import {useState} from "react";
+import Sidebar from "./Sidebar.tsx";
 
 export default function NavBar() {
+    const [showSidebar, setShowSidebar] = useState(false);
+
     return (
         <div>
             <div className="navbar">
@@ -14,11 +18,13 @@ export default function NavBar() {
                     <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Map</h3></NavLink></li>
                 </ul>
                 <span className="navbar-profile"></span>
-                <button>
+                <button onClick={() => setShowSidebar(true)}>
                     <img src={menuIcon} className="menu-icon" alt="Menu"></img>
                 </button>
             </div>
             <br/>
+
+            {showSidebar && <Sidebar onClose={() => setShowSidebar(false)} />}
         </div>
     );
 }

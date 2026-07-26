@@ -101,3 +101,33 @@
         display: none;
     }
 }
+
+.sidebar {
+    position: fixed;
+    right: 0;
+    height: 100vh;
+    width: 200px;
+
+    background-color: var(--background-colour);
+    z-index: 1005;
+    text-align: right;
+    padding: 0 50px 0 0;
+
+    ul {
+        list-style: none;
+    }
+
+    h3 {
+        line-height: 3;
+    }
+
+    li:hover {
+        text-decoration: underline;
+        text-decoration-color: var(--secondary-colour);
+    }
+
+    .active-link h3 {
+        text-decoration: underline;
+        text-decoration-color: var(--primary-colour-alt);
+    }
+}
