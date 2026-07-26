@@ -18,6 +18,11 @@
             opacity: 1;
         }
     }
+
+    @media (max-width: 768px) {
+        width: 225px;
+        flex-direction: column;
+    }
 }
 
 .trip-preview img {
@@ -26,6 +31,11 @@
     height: 175px;
     object-fit: contain;
     display: flex;
+
+    @media (max-width: 768px) {
+        width: 225px;
+        height: 150px;
+    }
 }
 
 .trip-options {
@@ -36,6 +46,11 @@
     img {
         display: flex;
         border-radius: 0;
+    }
+
+    @media (max-width: 768px) {
+        margin: 5px 0;
+        flex-direction: row;
     }
 }
 
@@ -71,4 +86,13 @@
 .swiper {
     padding: 0 100px;
     margin: auto auto;
+
+    @media (max-width: 768px) {
+        padding: 0;
+    }
+
+    h3 {
+        margin: 0;
+        width: 80%;
+    }
 }

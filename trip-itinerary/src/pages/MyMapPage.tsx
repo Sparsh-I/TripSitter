@@ -3,10 +3,11 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
-import {useRef} from "react";
+import { useRef } from "react";
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import '../styles/MyMap.css';
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -31,7 +32,7 @@ export default function MyMapPage() {
                 center={[20, 0] as [number, number]}
                 zoom={3}
                 minZoom={2}
-                style={{ display: 'inline-flex', height: '750px' , width: '1020px' }}
+                className="my-map-container"
                 maxBounds={[[-90, -180], [90, 180]]}
                 maxBoundsViscosity={1.0}
             >
