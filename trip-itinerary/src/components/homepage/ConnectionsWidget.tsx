@@ -1,5 +1,6 @@
 import '../../styles/Homepage.css';
 import { NavLink } from "react-router-dom";
+import placeholder from '../../assets/trip_preview/placeholder.jpg'
 
 export default function ConnectionsWidget() {
     return (
@@ -11,7 +12,7 @@ export default function ConnectionsWidget() {
 
             <div className="connections-side">
                 <div className="connections-link"><NavLink className="connections-text" to="/connections">GO TO CONNECTIONS</NavLink></div>
-                <img className="placeholder-img" alt="placeholder" src="/src/assets/trip_preview/placeholder.jpg"/>
+                <img className="placeholder-img" alt="placeholder" src={placeholder}/>
             </div>
         </div>
     );
