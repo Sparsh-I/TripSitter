@@ -15,7 +15,6 @@
 
 .date-picker-dropdown {
     position: relative;
-    top: 100%;
     left: 25px;
     right: auto;
     z-index: 1001;
@@ -27,8 +26,9 @@
     width: 75%;
 
     @media (max-width: 768px) {
+        top: 100%;
         position: absolute;
-        width: 85%;
+        width: 310px;
     }
 }
 
