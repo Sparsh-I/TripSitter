@@ -37,7 +37,7 @@ export default function UpcomingTripWidget() {
                     <tr>
                         <td><h3 className="white-text">No Upcoming Trips!</h3></td>
                         <td><h3 className="white-text">{startLocCode}➜{endLocCode}</h3></td>
-                        <td rowSpan={2} style={{ verticalAlign: "middle", padding: "8px 20px", borderLeft: "1px dashed white" }}>
+                        <td rowSpan={2} className="upcoming-trip-date">
                             <h3 className="white-text">{month.toUpperCase()}</h3>
                             <h1 className="white-text" style={{ margin: "-5px 0" }}>{day}</h1>
                             <h3 className="white-text">{year}</h3>

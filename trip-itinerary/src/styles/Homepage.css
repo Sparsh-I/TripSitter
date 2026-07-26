@@ -7,12 +7,39 @@
     background-position: top;
     padding: 2em 2em;
     box-sizing: border-box;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        height: 33em;
+    }
 }
 
 .new-trip {
     display: flex;
     gap: 1.3em;
     padding: 4em 0;
+
+    @media (max-width: 768px) {
+        flex-direction: column;;
+        padding: 0;
+    }
+
+    .date-picker-input {
+        justify-content: normal;
+    }
+}
+
+.submit-button {
+    position: absolute;
+    top: 200px;
+    left: 10px;
+
+    @media (max-width: 768px) {
+        position: absolute;
+        text-align: start;
+        top: 240px;
+        left: 10px;
+    }
 }
 
 .title-input {
@@ -24,6 +51,12 @@
     justify-content: space-around;
     padding: 2.5em 0.5em;
     margin: 40px 0 0 0;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 40px;
+        margin: 20px 0 0 0;
+    }
 }
 
 .connections-widget {
@@ -31,6 +64,10 @@
     height: 150px;
     display: flex;
     align-items: stretch;
+
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 }
 
 .recently-label {
@@ -90,6 +127,24 @@
     border-radius: 15px;
     overflow: visible;
     padding: 0 1em;
+
+    @media (max-width: 768px) {
+        width: 90%;
+
+        td {
+            width: 150px;
+            vertical-align: middle;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        h3 {
+            font-size: 20px;
+            line-height: 1.6;
+        }
+    }
 }
 
 .upcoming-trips-widget::before,
@@ -124,4 +179,18 @@
     white-space: break-spaces;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    @media (max-width: 768px) {
+        margin: 0;
+    }
+}
+
+.upcoming-trip-date {
+    vertical-align: middle;
+    padding: 8px 2px;
+    border-left: 1px dashed white;
+
+    @media (max-width: 768px) {
+        padding: 0 8px;
+    }
 }

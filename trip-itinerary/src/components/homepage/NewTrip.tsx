@@ -3,6 +3,7 @@ import { useState } from "react";
 import type {DateRange} from "react-day-picker";
 // import { formatDate } from "../utils/DateUtils.tsx";
 import NewTripPopup from "./NewTripPopup.tsx";
+import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
 export default function NewTrip() {
     const [range, setRange] = useState<DateRange | undefined>(undefined);
@@ -22,8 +23,10 @@ export default function NewTrip() {
         setRange(undefined);
     }
 
+    const isMobile = useIsMobile();
+
     return (
-        <div className="new-trip">
+        <div className="new-trip" style={{ position: "relative" }}>
             <div style={{ display: "flex", flexDirection: "column"}}>
                 <div className="black-label">
                     <h3>Title</h3>
@@ -36,13 +39,15 @@ export default function NewTrip() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
-                <button style={{ margin: "30px 0" }} onClick={submitTrip}>Submit</button>
             </div>
-            <div>
+            <div style={{ display: "flex", flexDirection: "column"}}>
                 <div className="black-label">
                     <h3>Dates</h3>
                 </div>
-                <DatePicker selected={range} onSelect={setRange} fieldSize={21}/>
+                <DatePicker selected={range} onSelect={setRange} fieldSize={21} numMonths={isMobile ? 1 : 2}/>
+            </div>
+            <div style={{ textAlign: "start" }}>
+                <button className="submit-button" onClick={submitTrip}>Submit</button>
             </div>
 
             {showPopup && (
