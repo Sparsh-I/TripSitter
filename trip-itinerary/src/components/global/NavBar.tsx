@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import '../../styles/NavBar.css';
+import menuIcon from '../../assets/menu-icon.png';
 
 export default function NavBar() {
     return (
@@ -13,6 +14,9 @@ export default function NavBar() {
                     <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Map</h3></NavLink></li>
                 </ul>
                 <span className="navbar-profile"></span>
+                <button>
+                    <img src={menuIcon} className="menu-icon"></img>
+                </button>
             </div>
             <br/>
         </div>

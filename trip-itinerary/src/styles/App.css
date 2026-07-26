@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
 
 #root {
-  min-width: 1200px;
-  width: 1920px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
+
+  @media (max-width: 768px) {
+  }
 }
 
 :root {
@@ -125,8 +127,8 @@ h3 {
   width: fit-content;
   background: var(--background-colour);
   border-radius: 10px;
-  padding: 0 10px;
-  margin-bottom: 40px;
+  padding: 0 18px;
+  margin-bottom: 20px;
 }
 
 .grey-label {
@@ -136,8 +138,8 @@ h3 {
   width: fit-content;
   background: var(--background-colour-alt);
   border-radius: 10px;
-  padding: 0 10px;
-  margin-bottom: 40px;
+  padding: 0 18px;
+  margin-bottom: 20px;
 }
 
 .black-label {
@@ -180,12 +182,6 @@ h3 {
   color: var(--background-colour);
 }
 
-.new-trip {
-  display: flex;
-  gap: 1.3em;
-  padding: 4em 0;
-}
-
 .title-input {
   width: 250px;
 }
@@ -198,8 +194,4 @@ h3 {
   background-size: 100%;
   background-position: top;
   background-repeat: no-repeat;
-}
-
-.leaflet-container {
-  width: 400px
 }
