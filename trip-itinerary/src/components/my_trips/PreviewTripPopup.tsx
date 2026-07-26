@@ -18,6 +18,7 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
     const [, setLocation] = useState<TripLocation | null>(null);
     const [, setTitle] = useState("");
     const [, setRange] = useState<DateRange | undefined>(undefined);
+    const [, setLink] = useState("");
 
     useEffect(() => {
         setTitle(trip.title);
@@ -30,6 +31,7 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
             lng: trip.lng,
             label: trip.locationLabel,
         });
+        if (trip.link) setLink(trip.link);
     }, [trip]);
 
     return createPortal(

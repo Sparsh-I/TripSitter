@@ -16,7 +16,7 @@
   --secondary-colour: #3c3c3c;
   --secondary-colour-alt: #252525;
   --background-colour: #F8F8F8;
-  --background-colour-alt: #A0A0A0;
+  --background-colour-alt: #E1E1E1;
   background-color: white;
 }
 
@@ -119,10 +119,22 @@ h3 {
 }
 
 .white-label {
-
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--secondary-colour-alt);
+  }
   width: fit-content;
   background: var(--background-colour);
-  color: var(--secondary-colour);
+  border-radius: 10px;
+  padding: 0 10px;
+  margin-bottom: 40px;
+}
+
+.grey-label {
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--secondary-colour-alt);
+  }
+  width: fit-content;
+  background: var(--background-colour-alt);
   border-radius: 10px;
   padding: 0 10px;
   margin-bottom: 40px;
