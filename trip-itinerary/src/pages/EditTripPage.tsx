@@ -16,10 +16,12 @@ import { type Trip } from "../types/Trip";
 export default function EditTripPage() {
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [title, setTitle] = useState("");
+    const [link, setLink] = useState("");
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     const { id } = useParams<{ id: string }>();
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const notesRef = useRef<HTMLTextAreaElement>(null);
+    const linkRef = useRef<HTMLInputElement>(null);
 
     // const [entries, setEntries] = useState<LocationEntry[]>([
     //     { range: undefined, location: "" },
@@ -45,6 +47,8 @@ export default function EditTripPage() {
                 lng: tripDetails.lng,
                 label: tripDetails.locationLabel,
             });
+
+            if (tripDetails.link) setLink(tripDetails.link);
         }
     }, [tripDetails]);
 
@@ -64,6 +68,7 @@ export default function EditTripPage() {
             locationLabel: location.label,
             startDate: range.from,
             endDate: range.to,
+            link: linkRef.current?.value,
             notes: notesRef.current?.value
         }
 
@@ -100,8 +105,11 @@ export default function EditTripPage() {
                     placeholder="What are we calling this?"
                     value={title}
                     onChange={e => setTitle(e.target.value)}
-                    style={{width: "95%", margin: "10px 0"}}
+                    className="text-input"
                 />
+
+                {/*<h3 className="input-labels">Photos</h3>*/}
+                {/*<input type="file" id="photo-upload" multiple />*/}
                 <br/>
                 <hr/>
 
@@ -116,6 +124,19 @@ export default function EditTripPage() {
 
                 <h3 className="input-labels">Location</h3>
                 <LocationSearch onLocationSelect={setLocation} defaultVal={tripDetails.locationLabel} />
+
+                <br/>
+                <hr/>
+
+                <h3 className="input-labels">Relevant Links</h3>
+                <input
+                    type="text"
+                    placeholder="Any bookings you'd like to store?"
+                    value={link}
+                    onChange={e => setLink(e.target.value)}
+                    ref={linkRef}
+                    className="text-input"
+                />
 
                 <br/>
                 <hr/>

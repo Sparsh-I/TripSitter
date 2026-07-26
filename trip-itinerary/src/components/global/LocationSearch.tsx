@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { OpenStreetMapProvider } from "leaflet-geosearch";
 
 export interface TripLocation {
@@ -25,24 +25,26 @@ export default function LocationSearch({ onLocationSelect, defaultVal = "" }: Lo
     const provider = useRef(new OpenStreetMapProvider());
     const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    useEffect(() => {
+    function runSearch(value: string) {
         if (debounceRef.current) clearTimeout(debounceRef.current);
 
-        if (query.trim().length < 3) {
+        if (value.trim().length < 3) {
             setResults([]);
             return;
         }
 
         debounceRef.current = setTimeout(async () => {
-            const res = await provider.current.search({ query });
+            const res = await provider.current.search({ query: value });
             setResults(res as SearchSuggestion[]);
             setOpen(true);
         }, 300);
+    }
 
-        return () => {
-            if (debounceRef.current) clearTimeout(debounceRef.current);
-        };
-    }, [query]);
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const value = e.target.value;
+        setQuery(value);
+        runSearch(value);
+    }
 
     function handleSelect(result: SearchSuggestion) {
         onLocationSelect({ lat: result.y, lng: result.x, label: result.label });
@@ -56,7 +58,7 @@ export default function LocationSearch({ onLocationSelect, defaultVal = "" }: Lo
             <input
                 type="text"
                 value={query}
-                onChange={e => setQuery(e.target.value)}
+                onChange={handleChange}
                 onFocus={() => results.length > 0 && setOpen(true)}
                 onBlur={() => setOpen(false)}
                 placeholder="Search for a location..."

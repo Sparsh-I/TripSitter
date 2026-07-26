@@ -25,3 +25,8 @@ input, textarea {
     justify-content: center;
     min-height: 100vh;
 }
+
+.text-input {
+    width: 95%;
+    margin: 10px 0;
+}
