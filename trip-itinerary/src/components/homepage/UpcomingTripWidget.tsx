@@ -19,7 +19,7 @@ export default function UpcomingTripWidget() {
         }
     }, []);
 
-    const startLocCode = "CAN";
+    const startLocCode = "CAN"; // This will later be set by the user as their default starting location
 
     let day = "DD", month = "MMM", year = "YYYY";
     if (upcomingTrip) {
@@ -27,6 +27,31 @@ export default function UpcomingTripWidget() {
         day = startDate.toLocaleDateString("en-GB", { day: "numeric" });
         month = startDate.toLocaleDateString("en-GB", { month: "short" });
         year = startDate.toLocaleDateString("en-GB", { year: "numeric" });
+    }
+
+    if (!upcomingTrip) {
+        return (
+            <div className="upcoming-trips-widget">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td><h3 className="white-text">No Upcoming Trips!</h3></td>
+                        <td><h3 className="white-text">{startLocCode}➜{endLocCode}</h3></td>
+                        <td rowSpan={2} style={{ verticalAlign: "middle", padding: "8px 20px", borderLeft: "1px dashed white" }}>
+                            <h3 className="white-text">{month.toUpperCase()}</h3>
+                            <h1 className="white-text" style={{ margin: "-5px 0" }}>{day}</h1>
+                            <h3 className="white-text">{year}</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colSpan={2}>
+                            <p id="upcoming-trip-desc">Time to start planning! Where are you thinking of going next?</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        );
     }
 
     return (
