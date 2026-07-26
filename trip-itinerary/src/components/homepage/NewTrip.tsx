@@ -9,19 +9,9 @@ export default function NewTrip() {
     const [title, setTitle] = useState("");
     const [showPopup, setShowPopup] = useState(false);
 
-    // function parseDateRange(dateRange: DateRange | undefined): string {
-    //     if (!dateRange) return "";
-    //     return `${formatDate(dateRange.from)} ➜ ${formatDate(dateRange.to)}`;
-    // }
-
     const isFilled = title.trim() !== "" && range?.from && range?.to;
 
     function submitTrip() {
-        // const title = document.getElementById("title-input-home") as HTMLInputElement;
-        // console.log(`Title: ${title.value}, Dates: ${parseDateRange(range)}`);
-        // title.value = "";
-        // setRange(undefined);
-
         if (!isFilled) return;
         setShowPopup(true);
     }
