@@ -4,6 +4,7 @@ import type { Trip } from "../types/Trip.ts";
 import { currentTrips, futureTrips, pastTrips } from "../utils/TripDateUtils";
 import { getTrips } from "../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function MyTripsPage() {
     const [trips, setTrips] = useState<Trip[]>([]);
@@ -16,11 +17,16 @@ export default function MyTripsPage() {
     const upcoming = futureTrips(trips);
     const past = pastTrips(trips);
 
+    const navigate = useNavigate();
+
     return (
         <div>
             <NavBar/>
             <div className="trips-carousels">
-                <h2 style={{textAlign: "left", padding: "20px 0"}}>My Trips</h2>
+                <div className="my-trips-header">
+                    <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
+                    <button onClick={() => navigate("/new-trip/" + `${new Date().toISOString()}`)}>+ New trip</button>
+                </div>
                 <div className="current-trips">
                     <div className="green-label">
                         <h3 className="black-text">Current</h3>

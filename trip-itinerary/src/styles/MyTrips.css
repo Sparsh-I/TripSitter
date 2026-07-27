@@ -96,3 +96,14 @@
         width: 80%;
     }
 }
+
+.my-trips-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        margin-bottom: 30px;
+    }
+}

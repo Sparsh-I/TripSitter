@@ -1,6 +1,6 @@
 import "../styles/EditTrip.css";
 import DatePicker from "../components/global/DatePicker.tsx";
-import {useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
 import LocationSearch, { type TripLocation } from "../components/global/LocationSearch.tsx";
@@ -14,13 +14,12 @@ import {useIsMobile} from "../hooks/useIsMobile.ts";
 //     location: string;
 // }
 
-export default function EditTripPage() {
+export default function NewTripPage() {
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [title, setTitle] = useState("");
     const [link, setLink] = useState("");
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     const { id } = useParams<{ id: string }>();
-    const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const notesRef = useRef<HTMLTextAreaElement>(null);
     const linkRef = useRef<HTMLInputElement>(null);
 
@@ -31,39 +30,16 @@ export default function EditTripPage() {
     const navigate = useNavigate();
     const isMobile = useIsMobile();
 
-    useEffect(() => {
-        const trips = getTrips();
-        const found = trips.find(t => t.id === id);
-        setTripDetails(found ?? null);
-    }, [id]);
-
-    useEffect(() => {
-        if (tripDetails) {
-            setTitle(tripDetails.title);
-            setRange({
-                from: new Date(tripDetails.startDate),
-                to: new Date(tripDetails.endDate),
-            });
-            setLocation({
-                lat: tripDetails.lat,
-                lng: tripDetails.lng,
-                label: tripDetails.locationLabel,
-            });
-
-            if (tripDetails.link) setLink(tripDetails.link);
-        }
-    }, [tripDetails]);
-
-    if (!tripDetails) return <div className="no-trip-found"><h1>No Trip Found :(</h1></div>
+    if (!id) return <div className="no-trip-found"><h1>No Trip Found :(</h1></div>
 
     function saveEdit(): void {
-        if (!tripDetails || !location || !range?.from || !range.to) {
+        if (!location || !range?.from || !range.to) {
             alert("Please fill in dates and a location before saving.");
             return;
         }
 
-        const updatedTrip: Trip = {
-            ...tripDetails,
+        const newTrip: Trip = {
+            id: id!,
             title: title,
             lat: location.lat,
             lng: location.lng,
@@ -75,8 +51,8 @@ export default function EditTripPage() {
         }
 
         const trips = getTrips();
-        const updatedList = trips.map(t => t.id === updatedTrip.id ? updatedTrip : t);
-        saveTrips(updatedList);
+        trips.push(newTrip);
+        saveTrips(trips);
 
         navigate("/my-trips");
     }
@@ -99,7 +75,7 @@ export default function EditTripPage() {
         <div>
             <button className="back-button" onClick={() => navigate("/my-trips")}>← Return to My Trips</button>
             <div className="edit-trip-layout">
-                <h1 className="input-labels">Edit Trip</h1>
+                <h1 className="input-labels">New Trip</h1>
 
                 <h3 className="input-labels">Title</h3>
                 <input
@@ -126,7 +102,7 @@ export default function EditTripPage() {
                 </div>
 
                 <h3 className="input-labels">Location</h3>
-                <LocationSearch onLocationSelect={setLocation} defaultVal={tripDetails.locationLabel} />
+                <LocationSearch onLocationSelect={setLocation} />
 
                 <br/>
                 <hr/>
@@ -164,9 +140,7 @@ export default function EditTripPage() {
                 {/*<button className="edit-trip-button" onClick={addEntry}>+ Add Another Location</button>*/}
 
                 <h3 className="input-labels">Additional Notes</h3>
-                <textarea style={{width: "100%", margin: "10px 0"}} ref={notesRef} placeholder="Anything extra...">
-                    {tripDetails.notes ? tripDetails.notes : ""}
-                </textarea>
+                <textarea style={{width: "100%", margin: "10px 0"}} ref={notesRef} placeholder="Anything extra..."></textarea>
 
                 <div style={{marginTop: "20px"}}>
                     <button className="edit-trip-button" onClick={saveEdit}>Save</button>

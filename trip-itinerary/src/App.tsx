@@ -5,6 +5,7 @@ import MyTripsPage from "./pages/MyTripsPage.tsx";
 import ConnectionsPage from "./pages/ConnectionsPage.tsx";
 import MyMapPage from "./pages/MyMapPage.tsx";
 import EditTripPage from "./pages/EditTripPage.tsx";
+import NewTripPage from "./pages/NewTripPage.tsx";
 
 // Styling, components and function imports
 import "./styles/App.css";
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/my-map" element={<MyMapPage/>}/>
 
         <Route path="/edit-trip/:id" element={<EditTripPage/>}></Route>
+        <Route path="/new-trip/:id" element={<NewTripPage/>}></Route>
     </Routes>
   )
 }
