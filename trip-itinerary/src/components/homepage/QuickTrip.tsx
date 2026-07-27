@@ -2,10 +2,10 @@ import DatePicker from "../global/DatePicker.tsx";
 import { useState } from "react";
 import type {DateRange} from "react-day-picker";
 // import { formatDate } from "../utils/DateUtils.tsx";
-import NewTripPopup from "./NewTripPopup.tsx";
+import QuickTripPopup from "./QuickTripPopup.tsx";
 import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
-export default function NewTrip() {
+export default function QuickTrip() {
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     const [title, setTitle] = useState("");
     const [showPopup, setShowPopup] = useState(false);
@@ -51,7 +51,7 @@ export default function NewTrip() {
             </div>
 
             {showPopup && (
-                <NewTripPopup
+                <QuickTripPopup
                     title={title}
                     dateLabel={range}
                     onClose={closePopup}

@@ -12,7 +12,7 @@ interface NewTripPopupProps {
     onClose: () => void;
 }
 
-export default function NewTripPopup({ title, dateLabel, onClose }: NewTripPopupProps) {
+export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPopupProps) {
     const [range, setRange] = useState<DateRange | undefined>(dateLabel);
     const [tripTitle, setTitle] = useState<string>(title);
     const [location, setLocation] = useState<TripLocation | null>(null);
