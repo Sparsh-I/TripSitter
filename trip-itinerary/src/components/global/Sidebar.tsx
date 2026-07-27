@@ -17,6 +17,10 @@ export default function Sidebar({ onClose }: SidebarProps) {
                     <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>Connections</h3></NavLink></li>
                     <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>My Map</h3></NavLink></li>
                 </ul>
+                <div id="profile-small-screen">
+                    <span className="navbar-profile"></span>
+                    <h4>User Name</h4>
+                </div>
             </div>
         </div>,
         document.body

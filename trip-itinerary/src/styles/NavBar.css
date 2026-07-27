@@ -98,20 +98,50 @@
     flex-shrink: 0;
 
     @media (max-width: 768px) {
+        bottom: 100px;
+        right: 10px;
+        z-index: 1005;
+        display: block;
+    }
+}
+
+#profile-large-screen {
+    display: block;
+
+    @media (max-width: 768px) {
         display: none;
+    }
+}
+
+#profile-small-screen {
+    display: none;
+
+    @media (max-width: 768px) {
+        margin: 20px;
+        display: flex;
+        flex-direction: row;
+
+        h4 {
+            margin: auto auto auto 18px;
+        }
     }
 }
 
 .sidebar {
     position: fixed;
     right: 0;
-    height: 100vh;
+    height: 60vh;
     width: 200px;
 
     background-color: var(--background-colour);
     z-index: 1005;
     text-align: right;
-    padding: 100px 50px 0 0;
+    padding: 30px 30px 30px 0;
+    border-radius: 75px 0 0 75px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     ul {
         list-style: none;

@@ -105,6 +105,11 @@
     .connections-text {
         color: var(--background-colour);
         font-size: 0.75em;
+
+        @media (max-width: 768px) {
+            font-size: 0.65em;
+
+        }
     }
 
     .connections-text:hover {

@@ -17,7 +17,7 @@ export default function NavBar() {
                     <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Connections</h3></NavLink></li>
                     <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Map</h3></NavLink></li>
                 </ul>
-                <span className="navbar-profile"></span>
+                <span id="profile-large-screen" className="navbar-profile"></span>
                 <button onClick={() => setShowSidebar(true)}>
                     <img src={menuIcon} className="menu-icon" alt="Menu"></img>
                 </button>
