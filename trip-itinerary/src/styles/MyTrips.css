@@ -19,6 +19,14 @@
         }
     }
 
+    button.alt.delete {
+        border: solid 2px var(--custom-red);
+    }
+
+    button.alt.delete:hover {
+        background-color: var(--custom-red);
+    }
+
     @media (max-width: 768px) {
         width: 225px;
         flex-direction: column;
