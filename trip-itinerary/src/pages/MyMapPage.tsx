@@ -4,20 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import {getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
 import { useRef } from "react";
-import L from 'leaflet';
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
 import '../styles/MyMap.css';
-
-interface IconDefaultPrototype {
-    _getIconUrl?: () => string;
-}
-
-delete (L.Icon.Default.prototype as IconDefaultPrototype)._getIconUrl;
-L.Icon.Default.mergeOptions({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-});
 
 const places = getTrips().map(({ lat, lng, title }) => ({ lat, lng, title }));
 
