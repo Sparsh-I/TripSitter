@@ -1,0 +1,24 @@
+.main-image {
+    width: 35%;
+    background-size: cover;
+    background-position: center;
+}
+
+.main-container {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.login-background {
+    width: 90%;
+    height: 100%;
+    margin: -24px auto;
+}
+
+.login-page {
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+}

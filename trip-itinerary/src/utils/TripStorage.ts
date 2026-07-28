@@ -1,10 +1,30 @@
 import type { Trip } from '../types/Trip';
+import {supabase} from "./SupabaseClient";
 
-const STORAGE_KEY = 'trips';
+// const STORAGE_KEY = 'trips';
 
-export function getTrips(): Trip[] {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+function fromRow(row: any): Trip {
+    return {
+        id: row.id,
+        ownerId: row.owner_id,
+        title: row.title,
+        lat: row.lat,
+        lng: row.lng,
+        locationLabel: row.location_label,
+        startDate: row.start_date,
+        endDate: row.end_date,
+        notes: row.notes ?? undefined,
+        links : row.links ?? undefined,
+    }
+}
+
+export async function getTrips(): Promise<Trip[]> {
+    const {data, error} = await supabase.from('trips').select('*');
+    if (error) throw error;
+    return data.map(fromRow);
+
+    // const raw = localStorage.getItem(STORAGE_KEY);
+    // return raw ? JSON.parse(raw) : [];
     // return [
     //     {
     //         id: "2026-07-22T10:00:00.000Z",
@@ -58,6 +78,61 @@ export function getTrips(): Trip[] {
     // ];
 }
 
-export function saveTrips(trips: Trip[]): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
+export async function getTripById(id: string): Promise<Trip | null> {
+    const {data, error} = await supabase
+        .from('trips')
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+
+    if (error) throw error;
+    if (!data) return null;
+
+    return fromRow(data);
 }
+
+export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId'>): Promise<void> {
+    const {data : {user}} = await supabase.auth.getUser();
+    if (!user) throw new Error("Not logged in!");
+
+    const { error } = await supabase
+        .from('trips')
+        .insert({
+            owner_id: user.id,
+            title: trip.title,
+            lat: trip.lat,
+            lng: trip.lng,
+            location_label: trip.locationLabel,
+            start_date: trip.startDate,
+            end_date: trip.endDate,
+            notes: trip.notes ?? undefined,
+            links: trip.links ?? undefined,
+        });
+    if (error) throw error;
+}
+
+export async function updateTrip(trip: Trip): Promise<void> {
+    const { error } = await supabase
+        .from('trips')
+        .update({
+            title: trip.title,
+            lat: trip.lat,
+            lng: trip.lng,
+            location_label: trip.locationLabel,
+            start_date: trip.startDate,
+            end_date: trip.endDate,
+            notes: trip.notes ?? undefined,
+            links: trip.links ?? undefined,
+        })
+        .eq('id', trip.id);
+    if (error) throw error;
+}
+
+export async function deleteTrip(trip: Trip): Promise<void> {
+    const { error } = await supabase.from('trips').delete().eq('id', trip.id);
+    if (error) throw error;
+}
+
+// export function saveTrips(trips: Trip[]): void {
+//     localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
+// }

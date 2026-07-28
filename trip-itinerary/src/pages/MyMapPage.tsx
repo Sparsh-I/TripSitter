@@ -6,7 +6,8 @@ import type { Map as LeafletMap } from "leaflet";
 import { useRef } from "react";
 import '../styles/MyMap.css';
 
-const places = getTrips().map(({ lat, lng, title }) => ({ lat, lng, title }));
+const places = await getTrips()
+    .then(trips => trips.map(({ lat, lng, title }) => ({ lat, lng, title })));
 
 export default function MyMapPage() {
     const mapRef = useRef<LeafletMap | null>(null);

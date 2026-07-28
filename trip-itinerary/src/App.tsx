@@ -9,17 +9,21 @@ import NewTripPage from "./pages/NewTripPage.tsx";
 // Styling, components and function imports
 import "./styles/App.css";
 import { Route, Routes } from "react-router-dom";
+import MainPage from "./pages/MainPage.tsx";
+import ProtectedRoute from "./components/global/ProtectedRoute.tsx";
 
 export default function App() {
   return (
     <Routes>
-        <Route path="/" element={<HomePage/>}/>
-        <Route path="/my-trips" element={<MyTripsPage/>}/>
-        <Route path="/connections" element={<ConnectionsPage/>}/>
-        <Route path="/my-map" element={<MyMapPage/>}/>
+        <Route path="/" element={<MainPage/>}/>
 
-        <Route path="/edit-trip/:id" element={<EditTripPage/>}></Route>
-        <Route path="/new-trip/:id" element={<NewTripPage/>}></Route>
+        <Route path="/home" element={<ProtectedRoute><HomePage/></ProtectedRoute>}/>
+        <Route path="/my-trips" element={<ProtectedRoute><MyTripsPage/></ProtectedRoute>}/>
+        <Route path="/connections" element={<ProtectedRoute><ConnectionsPage/></ProtectedRoute>}/>
+        <Route path="/my-map" element={<ProtectedRoute><MyMapPage/></ProtectedRoute>}/>
+
+        <Route path="/my-trips/edit-trip/:id" element={<ProtectedRoute><EditTripPage/></ProtectedRoute>}></Route>
+        <Route path="/my-trips/new-trip/:id" element={<ProtectedRoute><NewTripPage/></ProtectedRoute>}></Route>
     </Routes>
   )
 }

@@ -5,7 +5,7 @@ import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
 import LocationSearch, { type TripLocation } from "../components/global/LocationSearch.tsx";
 import { useParams } from "react-router-dom";
-import {getTrips, saveTrips} from "../utils/TripStorage";
+import {addTrip} from "../utils/TripStorage";
 import { type Trip } from "../types/Trip";
 import {useIsMobile} from "../hooks/useIsMobile.ts";
 
@@ -17,11 +17,10 @@ import {useIsMobile} from "../hooks/useIsMobile.ts";
 export default function NewTripPage() {
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [title, setTitle] = useState("");
-    const [link, setLink] = useState("");
+    const [links, setLinks] = useState<string[]>([""]);
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     const { id } = useParams<{ id: string }>();
     const notesRef = useRef<HTMLTextAreaElement>(null);
-    const linkRef = useRef<HTMLInputElement>(null);
 
     // const [entries, setEntries] = useState<LocationEntry[]>([
     //     { range: undefined, location: "" },
@@ -32,29 +31,42 @@ export default function NewTripPage() {
 
     if (!id) return <div className="no-trip-found"><h1>No Trip Found :(</h1></div>
 
-    function saveEdit(): void {
-        if (!location || !range?.from || !range.to) {
-            alert("Please fill in dates and a location before saving.");
+    async function saveEdit(): Promise<void> {
+        if (!location || !range?.from || !range?.to) {
+            alert("Please fill in dates and a location before saving!");
             return;
         }
 
-        const newTrip: Trip = {
-            id: id!,
+        const trip: Omit<Trip, 'id' | 'ownerId'> = {
             title: title,
             lat: location.lat,
             lng: location.lng,
             locationLabel: location.label,
             startDate: range.from,
             endDate: range.to,
-            link: linkRef.current?.value,
-            notes: notesRef.current?.value
+            notes: notesRef.current?.value || undefined,
+            links: links.filter(l => l.trim() !== ""),
         }
 
-        const trips = getTrips();
-        trips.push(newTrip);
-        saveTrips(trips);
+        try {
+            await addTrip(trip);
+            navigate("/my-trips");
+        } catch (error) {
+            console.error("Failed to save trip: ", error);
+            alert("Something went wrong saving your trip. Please try again.");
+        }
+    }
 
-        navigate("/my-trips");
+    function addLink() {
+        setLinks(prev => [...prev, ""]);
+    }
+
+    function updateLinkAt(index: number, value: string) {
+        setLinks(prev => prev.map((link, i) => (i === index ? value : link)));
+    }
+
+    function removeLinkAt(index: number) {
+        setLinks(prev => prev.filter((_, i) => i !== index));
     }
 
     // function addEntry() {
@@ -108,14 +120,21 @@ export default function NewTripPage() {
                 <hr/>
 
                 <h3 className="input-labels">Relevant Links</h3>
-                <input
-                    type="text"
-                    placeholder="Any bookings you'd like to store?"
-                    value={link}
-                    onChange={e => setLink(e.target.value)}
-                    ref={linkRef}
-                    className="text-input"
-                />
+                {links.map((link, index) => (
+                    <div key={index} style={{ display: "flex", gap: "8px", margin: "8px 0" }}>
+                        <input
+                            type="text"
+                            placeholder="Any bookings you'd like to store?"
+                            value={link}
+                            onChange={e => updateLinkAt(index, e.target.value)}
+                            className="text-input"
+                        />
+                        {links.length > 1 && (
+                            <button onClick={() => removeLinkAt(index)}>Remove</button>
+                        )}
+                    </div>
+                ))}
+                <button onClick={addLink}>+ Add Another Link</button>
 
                 <br/>
                 <hr/>

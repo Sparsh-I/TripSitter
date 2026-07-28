@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types/Trip.ts";
 import PreviewTripPopup from "./PreviewTripPopup.tsx";
 import {useState} from "react";
-import {getTrips, saveTrips} from "../../utils/TripStorage.ts";
+import {deleteTrip} from "../../utils/TripStorage.ts";
 
 interface TripPreviewProps {
     tripDetails: Trip
@@ -30,15 +30,16 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
         setShowPopup(false);
     }
 
-    function deleteTrip(): void {
-        const trips = getTrips();
+    async function handleDelete() {
         if (confirm("Are you sure you want to delete this trip?")) {
-            const newTrips = trips.filter(trip => trip.id !== tripDetails.id);
-            saveTrips(newTrips);
-        } else {
-            return;
+            try {
+                await deleteTrip(tripDetails);
+                window.location.reload();
+            } catch (error) {
+                console.error("Failed to delete trip:", error);
+                alert("Something went wrong deleting this trip.");
+            }
         }
-        location.reload();
     }
 
     return (
@@ -59,7 +60,7 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                                 <img className="img-hover" src={editHover} alt="Edit Hovered"/>
                             </div>
                         </button>
-                        <button className="alt delete" onClick={deleteTrip}>
+                        <button className="alt delete" onClick={handleDelete}>
                             <div className="image-container">
                                 <img className="img-main" src={trash} alt="Delete"/>
                                 <img className="img-hover" src={trashHover} alt="Delete Hovered"/>

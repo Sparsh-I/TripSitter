@@ -10,7 +10,11 @@ export default function MyTripsPage() {
     const [trips, setTrips] = useState<Trip[]>([]);
 
     useEffect(() => {
-        setTrips(getTrips());
+        getTrips()
+            .then(trips => setTrips(trips))
+            .catch(e => {
+                console.error("Failed to load trips: ", e);
+        });
     }, [])
 
     const current = currentTrips(trips);
