@@ -10,7 +10,7 @@ export default function NavBar() {
     return (
         <div>
             <div className="navbar">
-                <h1 className="green-label">TripSitter</h1>
+                <NavLink to="/"><h1 className="green-label">TripSitter</h1></NavLink>
                 <ul>
                     <li><NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Home</h3></NavLink></li>
                     <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Trips</h3></NavLink></li>

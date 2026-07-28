@@ -86,6 +86,10 @@
     li.active {
         background-color: var(--primary-colour);
     }
+
+    a {
+        color: #1a1a1a;
+    }
 }
 
 .navbar-profile {
