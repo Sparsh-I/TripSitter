@@ -64,6 +64,10 @@
 
 .trips-carousels {
     margin: 10px 100px;
+
+    @media (max-width: 768px) {
+        margin: 10px 50px;
+    }
 }
 
 .image-container {
@@ -96,13 +100,20 @@
     margin: auto auto;
 
     @media (max-width: 768px) {
-        padding: 0;
-    }
+        padding: 0 0 0 15%;
 
-    h3 {
-        margin: 0;
-        width: 80%;
+        h3 {
+            margin: 0;
+            width: 80%;
+        }
     }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: var(--primary-colour-alt);
+    width: 30px;
+    height: 30px;
 }
 
 .my-trips-header {

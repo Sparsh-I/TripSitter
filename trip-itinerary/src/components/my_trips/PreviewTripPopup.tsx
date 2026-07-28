@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import '../../styles/PopupWindow.css';
 import image from '../../assets/trip_preview/placeholder.jpg';
 import EmbedWidget from "./EmbedWidget.tsx";
+import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
 interface PreviewPopupProps {
     trip: Trip;
@@ -34,6 +35,8 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
         if (trip.link) setLink(trip.link);
     }, [trip]);
 
+    const isMobile = useIsMobile();
+
     return createPortal(
         <div className="popup-overlay" onClick={onClose}>
             <div className="popup-content" onClick={e => e.stopPropagation()}>
@@ -59,10 +62,15 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                         </tr>
                         <tr>
                             <td><p className="popup-labels"><strong>Relevant Links</strong></p></td>
-                            <td><EmbedWidget link={trip.link}/></td>
+                            {!isMobile && (
+                                <td><EmbedWidget link={trip.link}/></td>
+                            )}
                         </tr>
                     </tbody>
                 </table>
+                {isMobile && (
+                    <EmbedWidget link={trip.link}/>
+                )}
             </div>
         </div>,
         document.body

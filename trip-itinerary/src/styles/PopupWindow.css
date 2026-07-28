@@ -89,3 +89,14 @@ td {
     background-position: center;
     margin: 5px 0 10px 0;
 }
+
+.embed-widget {
+    width: 450px;
+    height: 300px;
+    margin: auto;
+
+    @media (max-width: 768px) {
+        margin: -30px 0;
+        width: 100%;
+    }
+}

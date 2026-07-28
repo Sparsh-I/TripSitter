@@ -18,7 +18,7 @@ export default function TripCarousel({ trips }: TripCarouselProps) {
         <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={24}
-            slidesPerView={isMobile ? 1 : 4}
+            slidesPerView={isMobile ? 1 : 3}
             navigation
             pagination={{ clickable: true }}
             breakpoints={{

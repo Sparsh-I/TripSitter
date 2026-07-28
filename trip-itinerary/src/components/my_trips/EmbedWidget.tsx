@@ -28,11 +28,10 @@ export default function EmbedWidget({ link }: EmbedWidgetProps) {
 
     return (
         <div
-            className="airbnb-embed-frame"
+            className="airbnb-embed-frame embed-widget"
             data-id={airbnbId}
             data-view="home"
             data-hide-price="true"
-            style={{ width: "450px", height: "300px", margin: "auto" }}
         />
     );
 }

@@ -5,7 +5,8 @@
   margin: 0 auto;
   text-align: center;
 
-  @media (max-width: 768px) {
+  @media (min-width: 768px) {
+    min-width: 1200px;
   }
 }
 
@@ -192,7 +193,7 @@ h3 {
   width: 90%;
   height: 100%;
   margin: -24px auto;
-  background-image: url("../assets/login-background.jpg");
+  background-image: url("../assets/castle.jpg");
   background-size: 100%;
   background-position: top;
   background-repeat: no-repeat;
