@@ -3,6 +3,7 @@ import QuickTrip from "../components/homepage/QuickTrip.tsx";
 import ConnectionsWidget from "../components/homepage/ConnectionsWidget.tsx";
 import UpcomingTripWidget from "../components/homepage/UpcomingTripWidget.tsx";
 import "../styles/Homepage.css";
+import Footer from "../components/Footer.tsx";
 
 export default function HomePage() {
     return (
@@ -18,6 +19,7 @@ export default function HomePage() {
                 <ConnectionsWidget/>
                 <UpcomingTripWidget/>
             </div>
+            <Footer/>
         </div>
     );
 }

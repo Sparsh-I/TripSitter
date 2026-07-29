@@ -1,5 +1,6 @@
 import NavBar from '../components/global/NavBar.tsx';
 import construction from '../assets/under-construction.png';
+import Footer from "../components/Footer.tsx";
 
 export default function ConnectionsPage() {
     return (
@@ -11,6 +12,7 @@ export default function ConnectionsPage() {
             <div>
                 <h1>This page is still under construction.</h1>
             </div>
+            <div style={{position: "fixed", bottom: 0, width: "100%"}}><Footer/></div>
         </div>
     );
 }

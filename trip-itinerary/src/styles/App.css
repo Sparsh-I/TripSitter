@@ -194,3 +194,12 @@ h3 {
   height: 100%;
   margin: -24px auto;
 }
+
+.footer {
+  padding: 30px;
+  background-color: var(--secondary-colour);
+
+  p {
+    color: var(--background-colour);
+  }
+}
