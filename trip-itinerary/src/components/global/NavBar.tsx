@@ -21,10 +21,10 @@ export default function NavBar() {
                 <table>
                     <tbody>
                         <tr>
-                            <NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>Home</p></td></NavLink>
-                            <NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>My Trips</p></td></NavLink>
-                            <NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>Connections</p></td></NavLink>
-                            <NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>My Map</p></td></NavLink>
+                            <td><NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><p>Home</p></NavLink></td>
+                            <td><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Trips</p></NavLink></td>
+                            <td><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><p>Connections</p></NavLink></td>
+                            <td><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Map</p></NavLink></td>
                         </tr>
                     </tbody>
                 </table>

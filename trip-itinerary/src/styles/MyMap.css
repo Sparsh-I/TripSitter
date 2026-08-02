@@ -17,3 +17,14 @@
         height: 700px;
     }
 }
+
+.map-filter {
+    display: inline-flex;
+    justify-content: space-around;
+    width: 50%;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+}

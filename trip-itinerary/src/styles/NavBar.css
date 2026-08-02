@@ -62,12 +62,12 @@
     }
 
     td {
-        cursor: pointer;
         padding: 0 0.75em;
         transition: background-color 0.2s ease;
     }
 
-    td:hover p {
+    p:hover {
+        cursor: pointer;
         color: var(--primary-colour);
     }
 
@@ -138,11 +138,6 @@
 
     h3 {
         line-height: 3;
-    }
-
-    li:hover {
-        text-decoration: underline;
-        text-decoration-color: var(--secondary-colour);
     }
 
     .active-link h3 {
