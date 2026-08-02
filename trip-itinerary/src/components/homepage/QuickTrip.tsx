@@ -28,7 +28,7 @@ export default function QuickTrip() {
     return (
         <div className="new-trip" style={{ position: "relative" }}>
             <div style={{ display: "flex", flexDirection: "column"}}>
-                <div className="black-label">
+                <div className="label black">
                     <h3>Title</h3>
                 </div>
                 <input
@@ -41,7 +41,7 @@ export default function QuickTrip() {
                 />
             </div>
             <div style={{ display: "flex", flexDirection: "column"}}>
-                <div className="black-label">
+                <div className="label black">
                     <h3>Dates</h3>
                 </div>
                 <DatePicker selected={range} onSelect={setRange} fieldSize={21} numMonths={isMobile ? 1 : 2}/>
