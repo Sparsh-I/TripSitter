@@ -4,19 +4,24 @@ import 'leaflet/dist/leaflet.css';
 import {getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
 import L from "leaflet";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import '../styles/MyMap.css';
 import Footer from "../components/Footer.tsx";
-import customPin from "../assets/logo/logo-pin.svg";
 import {currentTrips, futureTrips, pastTrips} from "../utils/TripDateUtils.ts";
 import type {Trip} from "../types/Trip.ts";
+import currentPin from "../assets/my_map/current-pin.svg";
+import upcomingPin from "../assets/my_map/upcoming-pin.svg";
+import pastPin from "../assets/my_map/past-pin.svg";
 
-const customIcon = L.icon({
-    iconUrl: customPin,
-    iconSize: [90, 90],
-    iconAnchor: [45, 65],
-    popupAnchor: [0, -40],
-});
+const iconOptions = {
+    iconSize: [80, 80] as [number, number],
+    iconAnchor: [40, 60] as [number, number],
+    popupAnchor: [0, -40] as [number, number],
+};
+
+const currentIcon = L.icon({...iconOptions, iconUrl: currentPin});
+const upcomingIcon = L.icon({...iconOptions, iconUrl: upcomingPin});
+const pastIcon = L.icon({...iconOptions, iconUrl: pastPin});
 
 type FilterType = "all" | "current" | "upcoming" | "past";
 
@@ -34,13 +39,11 @@ export default function MyMapPage() {
         setAllTrips(getTrips());
     }, []);
 
-    const filteredTrips =
+    const places =
         filter === "current" ? currentTrips(allTrips)
         : filter === "upcoming" ? futureTrips(allTrips)
         : filter === "past" ? pastTrips(allTrips)
         : allTrips;
-
-    const places = filteredTrips.map(({ lat, lng, title }) => ({ lat, lng, title }));
 
     function handleMarkerClick(lat: number, lng: number) {
         mapRef.current?.setView([lat, lng], 10)
@@ -48,6 +51,23 @@ export default function MyMapPage() {
 
     function handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
         setFilter(e.target.value as FilterType);
+    }
+
+    function getTripCategory(trip: Trip): FilterType {
+        const now = new Date();
+        const start = new Date(trip.startDate);
+        const end = new Date(trip.endDate);
+
+        if (now >= start && now <= end) return "current";
+        if (start > now) return "upcoming";
+        return "past";
+    }
+
+    const iconMap: Record<FilterType, L.Icon> = {
+        current: currentIcon,
+        upcoming: upcomingIcon,
+        past: pastIcon,
+        all: currentIcon,
     }
 
     return (
@@ -92,17 +112,21 @@ export default function MyMapPage() {
                 maxBoundsViscosity={1.0}
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" noWrap={true}/>
-                    {places.map((place) => (
-                        <Marker
-                            key={place.title}
-                            title={place.title}
-                            position={[place.lat, place.lng]}
-                            icon={customIcon}
-                            eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
-                        >
-                            <Popup>{place.title}</Popup>
-                        </Marker>
-                    ))}
+                    {places.map((place) => {
+                            const category = getTripCategory(place);
+                            return (
+                                <Marker
+                                    key={place.title}
+                                    title={place.title}
+                                    position={[place.lat, place.lng]}
+                                    icon={iconMap[category]}
+                                    eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
+                                >
+                                    <Popup>{place.title}</Popup>
+                                </Marker>
+                            )
+                        }
+                    )};
             </MapContainer>
             <Footer/>
         </div>

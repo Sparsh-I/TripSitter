@@ -20,7 +20,12 @@
   --secondary-colour-alt: #252525;
   --background-colour: #F8F8F8;
   --background-colour-alt: #E1E1E1;
+
   --custom-red: #F96E6E;
+
+  --green-pin: #48C199;
+  --red-pin: #C14848;
+  --blue-pin: #494381;
 
   background-color: white;
 }
