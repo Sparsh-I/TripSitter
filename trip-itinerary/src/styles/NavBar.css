@@ -87,8 +87,8 @@
     background-position: center;
 
     @media (max-width: 768px) {
-        bottom: 100px;
-        right: 10px;
+        position: relative;
+        right: 0;
         z-index: 1005;
         display: block;
     }
