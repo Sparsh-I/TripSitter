@@ -62,14 +62,14 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                         </tr>
                         <tr>
                             <td><p className="popup-labels"><strong>Relevant Links</strong></p></td>
-                            {!isMobile && links.map((link) => (
-                                <td><EmbedWidget link={link}/></td>
+                            {!isMobile && links.map((link, index) => (
+                                <td key={index}><EmbedWidget link={link}/></td>
                             ))}
                         </tr>
                     </tbody>
                 </table>
-                {isMobile && links.map((link) => (
-                    <td><EmbedWidget link={link}/></td>
+                {isMobile && links.map((link, index) => (
+                    <td key={index}><EmbedWidget link={link}/></td>
                 ))}
             </div>
         </div>,

@@ -49,7 +49,7 @@ export default function App() {
         <Route path="/my-map" element={<ProtectedRoute><MyMapPage/></ProtectedRoute>}/>
 
         <Route path="/my-trips/edit-trip/:id" element={<ProtectedRoute><EditTripPage/></ProtectedRoute>}></Route>
-        <Route path="/my-trips/new-trip/:id" element={<ProtectedRoute><NewTripPage/></ProtectedRoute>}></Route>
+        <Route path="/my-trips/new-trip" element={<ProtectedRoute><NewTripPage/></ProtectedRoute>}></Route>
     </Routes>
   )
 }

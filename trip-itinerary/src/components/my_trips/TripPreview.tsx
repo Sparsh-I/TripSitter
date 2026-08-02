@@ -54,7 +54,7 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                                 <img className="img-hover" src={eyeHover} alt="Preview Hovered"/>
                             </div>
                         </button>
-                        <button className="alt" onClick={() => navigate(`/edit-trip/${tripDetails.id}`)}>
+                        <button className="alt" onClick={() => navigate(`/my-trips/edit-trip/${tripDetails.id}`)}>
                             <div className="image-container">
                                 <img className="img-main" src={edit} alt="Edit"/>
                                 <img className="img-hover" src={editHover} alt="Edit Hovered"/>

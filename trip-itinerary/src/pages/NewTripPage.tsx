@@ -4,7 +4,6 @@ import {useRef, useState} from "react";
 import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
 import LocationSearch, { type TripLocation } from "../components/global/LocationSearch.tsx";
-import { useParams } from "react-router-dom";
 import {addTrip} from "../utils/TripStorage";
 import { type Trip } from "../types/Trip";
 import {useIsMobile} from "../hooks/useIsMobile.ts";
@@ -19,7 +18,6 @@ export default function NewTripPage() {
     const [title, setTitle] = useState("");
     const [links, setLinks] = useState<string[]>([""]);
     const [range, setRange] = useState<DateRange | undefined>(undefined);
-    const { id } = useParams<{ id: string }>();
     const notesRef = useRef<HTMLTextAreaElement>(null);
 
     // const [entries, setEntries] = useState<LocationEntry[]>([
@@ -28,8 +26,6 @@ export default function NewTripPage() {
 
     const navigate = useNavigate();
     const isMobile = useIsMobile();
-
-    if (!id) return <div className="no-trip-found"><h1>No Trip Found :(</h1></div>
 
     async function saveEdit(): Promise<void> {
         if (!location || !range?.from || !range?.to) {
