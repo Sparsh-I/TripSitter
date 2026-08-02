@@ -5,6 +5,7 @@ import {getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
 import {useEffect, useRef, useState} from "react";
 import '../styles/MyMap.css';
+import Footer from "../components/Footer.tsx";
 
 type Place = { lat: number; lng: number; title: string };
 
@@ -60,6 +61,7 @@ export default function MyMapPage() {
                         </Marker>
                     ))}
             </MapContainer>
+            <Footer/>
         </div>
     );
 }
