@@ -18,12 +18,22 @@ export default function NavBar() {
                         <img id="text" src={logoText} alt="Logo text" />
                     </div>
                 </NavLink>
-                <ul>
-                    <li><NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Home</h3></NavLink></li>
-                    <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Trips</h3></NavLink></li>
-                    <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Connections</h3></NavLink></li>
-                    <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Map</h3></NavLink></li>
-                </ul>
+                <table>
+                    <tbody>
+                        <tr>
+                            <NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>Home</p></td></NavLink>
+                            <NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>My Trips</p></td></NavLink>
+                            <NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>Connections</p></td></NavLink>
+                            <NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><td><p>My Map</p></td></NavLink>
+                        </tr>
+                    </tbody>
+                </table>
+                {/*<ul>*/}
+                {/*    <li><NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><p>Home</p></NavLink></li>*/}
+                {/*    <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Trips</p></NavLink></li>*/}
+                {/*    <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><p>Connections</p></NavLink></li>*/}
+                {/*    <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Map</p></NavLink></li>*/}
+                {/*</ul>*/}
                 <span id="profile-large-screen" className="navbar-profile"></span>
                 <button onClick={() => setShowSidebar(true)}>
                     <img src={menuIcon} className="menu-icon" alt="Menu"></img>
