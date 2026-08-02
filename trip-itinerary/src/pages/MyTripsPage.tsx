@@ -29,7 +29,7 @@ export default function MyTripsPage() {
                     <button onClick={() => navigate("/new-trip/" + `${new Date().toISOString()}`)}>+ New trip</button>
                 </div>
                 <div className="current-trips">
-                    <div className="green-label">
+                    <div className="primary-label">
                         <h3 className="black-text">Current</h3>
                     </div>
                     {current.length === 0 ? (

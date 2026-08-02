@@ -13,8 +13,8 @@
 :root {
   --font: 'Space Grotesk', sans-serif;
   /* colour palette */
-  --primary-colour: #74E8C5;
-  --primary-colour-alt: #4FB697;
+  --primary-colour: #ff9a3e;
+  --primary-colour-alt: #f47a1e;
   --primary-colour-alt2: #E2FFF7;
   --secondary-colour: #3c3c3c;
   --secondary-colour-alt: #252525;
@@ -157,7 +157,7 @@ h3 {
   margin-bottom: 10px;
 }
 
-.green-label {
+.primary-label {
   h1, h2, h3, h4, h5, h6 {
     color: var(--secondary-colour-alt);
   }
