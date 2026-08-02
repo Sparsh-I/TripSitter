@@ -11,7 +11,11 @@ export default function MyTripsPage() {
     const [trips, setTrips] = useState<Trip[]>([]);
 
     useEffect(() => {
-        setTrips(getTrips());
+        getTrips()
+            .then(trips => setTrips(trips))
+            .catch(e => {
+                console.error("Failed to load trips: ", e);
+        });
     }, [])
 
     const current = currentTrips(trips);
@@ -26,7 +30,7 @@ export default function MyTripsPage() {
             <div className="trips-carousels">
                 <div className="my-trips-header">
                     <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
-                    <button onClick={() => navigate("/new-trip/" + `${new Date().toISOString()}`)}>+ New trip</button>
+                    <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                 </div>
                 <div className="current-trips">
                     <div className="green-label">

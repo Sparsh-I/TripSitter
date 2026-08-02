@@ -3,7 +3,7 @@ import {useRef, useState} from "react";
 import type { DateRange } from "react-day-picker";
 import '../../styles/PopupWindow.css';
 import LocationSearch, {type TripLocation} from "../global/LocationSearch.tsx";
-import {getTrips, saveTrips} from "../../utils/TripStorage.ts";
+import {addTrip} from "../../utils/TripStorage.ts";
 import type {Trip} from "../../types/Trip.ts";
 
 interface NewTripPopupProps {
@@ -18,14 +18,13 @@ export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPop
     const [location, setLocation] = useState<TripLocation | null>(null);
     const notesRef = useRef<HTMLTextAreaElement>(null);
 
-    function addTrip(): void {
+    async function saveTrip(): Promise<void> {
         if (!location || !range?.from || !range?.to) {
             alert("Please fill in dates and a location before saving!");
             return;
         }
 
-        const trip: Trip = {
-            id: new Date().toISOString(),
+        const trip: Omit<Trip, 'id' | 'ownerId'> = {
             title: tripTitle,
             lat: location.lat,
             lng: location.lng,
@@ -34,11 +33,14 @@ export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPop
             endDate: range.to,
             notes: notesRef.current?.value || undefined,
         }
-        const tripList = getTrips();
-        tripList.push(trip);
-        saveTrips(tripList);
 
-        onClose();
+        try {
+            await addTrip(trip);
+            onClose();
+        } catch (error) {
+            console.error("Failed to save trip: ", error);
+            alert("Something went wrong saving your trip. Please try again.");
+        }
     }
 
     return (
@@ -89,7 +91,7 @@ export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPop
                 <textarea ref={notesRef} placeholder="Anything extra..." style={{width: "460px", height: "170px"}}></textarea>
 
                 <div style={{marginTop: "20px"}}>
-                    <button onClick={addTrip}>Save</button>
+                    <button onClick={saveTrip}>Save</button>
                 </div>
             </div>
         </div>

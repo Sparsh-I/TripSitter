@@ -5,7 +5,7 @@ import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
 import LocationSearch, { type TripLocation } from "../components/global/LocationSearch.tsx";
 import { useParams } from "react-router-dom";
-import {getTrips, saveTrips} from "../utils/TripStorage";
+import {getTripById, updateTrip} from "../utils/TripStorage";
 import { type Trip } from "../types/Trip";
 import {useIsMobile} from "../hooks/useIsMobile.ts";
 
@@ -17,12 +17,11 @@ import {useIsMobile} from "../hooks/useIsMobile.ts";
 export default function EditTripPage() {
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [title, setTitle] = useState("");
-    const [link, setLink] = useState("");
+    const [links, setLinks] = useState<string[]>([""]);
     const [range, setRange] = useState<DateRange | undefined>(undefined);
     const { id } = useParams<{ id: string }>();
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const notesRef = useRef<HTMLTextAreaElement>(null);
-    const linkRef = useRef<HTMLInputElement>(null);
 
     // const [entries, setEntries] = useState<LocationEntry[]>([
     //     { range: undefined, location: "" },
@@ -32,9 +31,14 @@ export default function EditTripPage() {
     const isMobile = useIsMobile();
 
     useEffect(() => {
-        const trips = getTrips();
-        const found = trips.find(t => t.id === id);
-        setTripDetails(found ?? null);
+        if (!id) return;
+
+        getTripById(id)
+            .then(trip => setTripDetails(trip))
+            .catch(e => {
+                console.error("Failed to load trip: ", e);
+                setTripDetails(null);
+            });
     }, [id]);
 
     useEffect(() => {
@@ -50,13 +54,13 @@ export default function EditTripPage() {
                 label: tripDetails.locationLabel,
             });
 
-            if (tripDetails.link) setLink(tripDetails.link);
+            if (tripDetails.links) setLinks(tripDetails.links);
         }
     }, [tripDetails]);
 
     if (!tripDetails) return <div className="no-trip-found"><h1>No Trip Found :(</h1></div>
 
-    function saveEdit(): void {
+    async function saveEdit(): Promise<void> {
         if (!tripDetails || !location || !range?.from || !range.to) {
             alert("Please fill in dates and a location before saving.");
             return;
@@ -70,15 +74,29 @@ export default function EditTripPage() {
             locationLabel: location.label,
             startDate: range.from,
             endDate: range.to,
-            link: linkRef.current?.value,
-            notes: notesRef.current?.value
+            notes: notesRef.current?.value || undefined,
+            links: links.filter(l => l.trim() !== ""),
+        };
+
+        try {
+            await updateTrip(updatedTrip);
+            navigate("/my-trips");
+        } catch (error) {
+            console.error("Failed to update trip:", error);
+            alert("Something went wrong saving your changes. Please try again.");
         }
+    }
 
-        const trips = getTrips();
-        const updatedList = trips.map(t => t.id === updatedTrip.id ? updatedTrip : t);
-        saveTrips(updatedList);
+    function addLink() {
+        setLinks(prev => [...prev, ""]);
+    }
 
-        navigate("/my-trips");
+    function updateLinkAt(index: number, value: string) {
+        setLinks(prev => prev.map((link, i) => (i === index ? value : link)));
+    }
+
+    function removeLinkAt(index: number) {
+        setLinks(prev => prev.filter((_, i) => i !== index));
     }
 
     // function addEntry() {
@@ -110,8 +128,6 @@ export default function EditTripPage() {
                     className="text-input"
                 />
 
-                {/*<h3 className="input-labels">Photos</h3>*/}
-                {/*<input type="file" id="photo-upload" multiple />*/}
                 <br/>
                 <hr/>
 
@@ -132,14 +148,21 @@ export default function EditTripPage() {
                 <hr/>
 
                 <h3 className="input-labels">Relevant Links</h3>
-                <input
-                    type="text"
-                    placeholder="Any bookings you'd like to store?"
-                    value={link}
-                    onChange={e => setLink(e.target.value)}
-                    ref={linkRef}
-                    className="text-input"
-                />
+                {links.map((link, index) => (
+                    <div key={index} style={{ display: "flex", gap: "8px", margin: "8px 0" }}>
+                        <input
+                            type="text"
+                            placeholder="Any bookings you'd like to store?"
+                            value={link}
+                            onChange={e => updateLinkAt(index, e.target.value)}
+                            className="text-input"
+                        />
+                        {links.length > 1 && (
+                            <button onClick={() => removeLinkAt(index)}>Remove</button>
+                        )}
+                    </div>
+                ))}
+                <button onClick={addLink}>+ Add Another Link</button>
 
                 <br/>
                 <hr/>

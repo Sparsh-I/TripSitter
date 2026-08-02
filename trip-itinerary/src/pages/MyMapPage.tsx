@@ -3,14 +3,36 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
-import { useRef } from "react";
+import {useEffect, useRef, useState} from "react";
 import '../styles/MyMap.css';
 import Footer from "../components/Footer.tsx";
 
-const places = getTrips().map(({ lat, lng, title }) => ({ lat, lng, title }));
+type Place = { lat: number; lng: number; title: string };
 
 export default function MyMapPage() {
     const mapRef = useRef<LeafletMap | null>(null);
+    const [places, setPlaces] = useState<Place[]>([]);
+    const [, setLoading] = useState(true);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        getTrips()
+            .then(trips => {
+                if (cancelled) return;
+                setPlaces(trips.map(({ lat, lng, title }) => ({ lat, lng, title })));
+            })
+            .catch(err => {
+                console.error("Failed to load trips: ", err);
+            })
+            .finally(() => {
+                if (!cancelled) setLoading(false);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
 
     function handleMarkerClick(lat: number, lng: number) {
         mapRef.current?.setView([lat, lng], 10)
