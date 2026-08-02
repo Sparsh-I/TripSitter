@@ -10,7 +10,7 @@ export default function HomePage() {
         <div>
             <NavBar/>
             <div id="banner">
-                <div className="white-label">
+                <div className="label white">
                     <h2>Welcome back, User! Planning a trip?</h2>
                 </div>
                 <QuickTrip/>
