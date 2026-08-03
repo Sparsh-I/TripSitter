@@ -81,61 +81,63 @@ export default function MyMapPage() {
     return (
         <div>
             <NavBar/>
-            <div className="map-filter">
-                {places && (
-                    <p>Number of trips: {places.length}</p>
-                )}
-                <div style={{display: "flex", justifyContent: "space-around"}}>
-                    <div className="radio-group">
-                        <input
-                            type="radio" name="map-filter" id="map-filter-all"
-                            value="all" onChange={handleFilterChange} defaultChecked/>
-                        <label htmlFor="map-filter-all">All</label>
-                    </div>
-                    <div className="radio-group">
-                        <input type="radio" name="map-filter" id="map-filter-current"
-                               value="current" onChange={handleFilterChange} />
-                        <label htmlFor="map-filter-current">Current</label>
-                    </div>
-                    <div className="radio-group">
-                        <input type="radio" name="map-filter" id="map-filter-upcoming"
-                               value="upcoming" onChange={handleFilterChange} />
-                        <label htmlFor="map-filter-upcoming">Upcoming</label>
-                    </div>
-                    <div className="radio-group">
-                        <input type="radio" name="map-filter" id="map-filter-past"
-                               value="past" onChange={handleFilterChange} />
-                        <label htmlFor="map-filter-past">Past</label>
+            <div className="map">
+                <div className="map-filter">
+                    {places && (
+                        <p>Number of trips: {places.length}</p>
+                    )}
+                    <div className="map-radio-groups">
+                        <div className="radio-group">
+                            <input
+                                type="radio" name="map-filter" id="map-filter-all"
+                                value="all" onChange={handleFilterChange} defaultChecked/>
+                            <label htmlFor="map-filter-all">All</label>
+                        </div>
+                        <div className="radio-group">
+                            <input type="radio" name="map-filter" id="map-filter-current"
+                                   value="current" onChange={handleFilterChange} />
+                            <label htmlFor="map-filter-current">Current</label>
+                        </div>
+                        <div className="radio-group">
+                            <input type="radio" name="map-filter" id="map-filter-upcoming"
+                                   value="upcoming" onChange={handleFilterChange} />
+                            <label htmlFor="map-filter-upcoming">Upcoming</label>
+                        </div>
+                        <div className="radio-group">
+                            <input type="radio" name="map-filter" id="map-filter-past"
+                                   value="past" onChange={handleFilterChange} />
+                            <label htmlFor="map-filter-past">Past</label>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <MapContainer
-                ref={mapRef}
-                center={[20, 0] as [number, number]}
-                zoom={2}
-                minZoom={2}
-                className="my-map-container"
-                maxBounds={[[-90, -180], [90, 180]]}
-                maxBoundsViscosity={1.0}
-            >
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" noWrap={true}/>
-                    {places.map((place) => {
-                            const category = getTripCategory(place);
-                            return (
-                                <Marker
-                                    key={place.title}
-                                    title={place.title}
-                                    position={[place.lat, place.lng]}
-                                    icon={iconMap[category]}
-                                    eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
-                                >
-                                    <Popup>{place.title}</Popup>
-                                </Marker>
-                            )
-                        }
-                    )};
-            </MapContainer>
+                <MapContainer
+                    ref={mapRef}
+                    center={[20, 0] as [number, number]}
+                    zoom={2}
+                    minZoom={2}
+                    className="my-map-container"
+                    maxBounds={[[-90, -180], [90, 180]]}
+                    maxBoundsViscosity={1.0}
+                >
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" noWrap={true}/>
+                        {places.map((place) => {
+                                const category = getTripCategory(place);
+                                return (
+                                    <Marker
+                                        key={place.title}
+                                        title={place.title}
+                                        position={[place.lat, place.lng]}
+                                        icon={iconMap[category]}
+                                        eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
+                                    >
+                                        <Popup>{place.title}</Popup>
+                                    </Marker>
+                                )
+                            }
+                        )};
+                </MapContainer>
+            </div>
             <Footer/>
         </div>
     );

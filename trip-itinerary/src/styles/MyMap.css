@@ -1,3 +1,10 @@
+.map {
+    @media (max-width: 768px) {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+
 .my-map-container {
     display: inline-flex;
     height: 750px;
@@ -60,9 +67,25 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+        flex-direction: column-reverse;
+        width: 100%;
+        padding-top: 20px;
+    }
+}
+
+.map-radio-groups {
+    display: flex;
+    justify-content: space-around;
 }
 
 .radio-group {
     display: flex;
     align-items: center;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
