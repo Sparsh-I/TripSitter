@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <Routes>
-        <Route path="/" element={loggedIn ? <MainPage/> : <HomePage/>}/>
+        <Route path="/" element={loggedIn ? <HomePage/> : <MainPage/>}/>
 
         <Route path="/home" element={<HomePage/>}/>
         <Route path="/my-trips" element={<MyTripsPage/>}/>
