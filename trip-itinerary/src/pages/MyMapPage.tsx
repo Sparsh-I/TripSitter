@@ -29,14 +29,20 @@ export default function MyMapPage() {
     const mapRef = useRef<LeafletMap | null>(null);
     const [allTrips, setAllTrips] = useState<Trip[]>([]);
     const [filter, setFilter] = useState<FilterType>("all");
+    const [, setLoading] = useState(true);
 
     // use this for when supabase storage is being used
-    // useEffect(() => {
-    //     getTrips().then(setAllTrips).catch(console.error);
-    // }, []);
-
     useEffect(() => {
-        setAllTrips(getTrips());
+        getTrips()
+          .then(setAllTrips)
+          .catch(err => {
+            console.error("Failed to load trips: ", err);
+          }).finally(() => {
+            if (!cancelled) setLoading(false);
+          });
+      return () => {
+        cancelled = true;
+      };
     }, []);
 
     const places =

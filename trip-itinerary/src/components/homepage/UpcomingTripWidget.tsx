@@ -9,14 +9,23 @@ export default function UpcomingTripWidget() {
     const [endLocCode, setEndLocCode] = useState("XXX");
 
     useEffect(() => {
-        const trip = closestUpcomingTrip(getTrips());
-        setUpcomingTrip(trip);
+        async function loadUpcomingTrip() {
+            try {
+                const trips = await getTrips();
+                const trip = closestUpcomingTrip(trips);
+                setUpcomingTrip(trip);
 
-        if (trip) {
-            getCountryCode(trip.lat, trip.lng).then(code2 => {
-                setEndLocCode(code2 ? (getAlpha3(code2) ?? "XXX") : "XXX");
-            });
+                if (trip) {
+                    getCountryCode(trip.lat, trip.lng).then(code2 => {
+                        setEndLocCode(code2 ? (getAlpha3(code2) ?? "XXX") : "XXX");
+                    });
+                }
+            } catch (e) {
+                console.error("Failed to load upcoming trip: ", e);
+            }
         }
+
+        loadUpcomingTrip();
     }, []);
 
     const startLocCode = "CAN"; // This will later be set by the user as their default starting location
