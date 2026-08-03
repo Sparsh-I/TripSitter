@@ -35,19 +35,6 @@ export default function NavBar() {
                         </tr>
                     </tbody>
                 </table>
-                {/*<ul>*/}
-                {/*    <li><NavLink to="/" className={({ isActive }) => isActive ? "active-link" : ""}><p>Home</p></NavLink></li>*/}
-                {/*    <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Trips</p></NavLink></li>*/}
-                {/*    <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><p>Connections</p></NavLink></li>*/}
-                {/*    <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Map</p></NavLink></li>*/}
-                {/*</ul>*/}
-                <NavLink to="/home"><h1 className="green-label">TripSitter</h1></NavLink>
-                <ul>
-                    <li><NavLink to="/home" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Home</h3></NavLink></li>
-                    <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Trips</h3></NavLink></li>
-                    <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Connections</h3></NavLink></li>
-                    <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Map</h3></NavLink></li>
-                </ul>
                 <span id="profile-large-screen" className="navbar-profile"></span>
                 { session ? (
                     <button onClick={handleLogout}>Log Out</button>

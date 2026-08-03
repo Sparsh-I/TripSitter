@@ -33,6 +33,8 @@ export default function MyMapPage() {
 
     // use this for when supabase storage is being used
     useEffect(() => {
+        let cancelled = false;
+
         getTrips()
           .then(setAllTrips)
           .catch(err => {
