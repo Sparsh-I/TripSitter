@@ -4,7 +4,7 @@ import {Navigate} from "react-router-dom";
 export default function ProtectedRoute({children}: {children: React.ReactNode}) {
     const { session, loading } = useAuthContext();
 
-    if (loading) return <p>Loading...</p>
+    if (loading) return <p>Testing...</p>
     if (!session) return <Navigate to="/" />;
 
     return <>{children}</>
