@@ -6,7 +6,7 @@ import type { Map as LeafletMap } from "leaflet";
 import L from "leaflet";
 import React, {useEffect, useRef, useState} from "react";
 import '../styles/MyMap.css';
-import Footer from "../components/Footer.tsx";
+import Footer from "../components/global/Footer.tsx";
 import {currentTrips, futureTrips, pastTrips} from "../utils/TripDateUtils.ts";
 import type {Trip} from "../types/Trip.ts";
 import currentPin from "../assets/my_map/current-pin.svg";

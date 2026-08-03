@@ -5,7 +5,7 @@ import { currentTrips, futureTrips, pastTrips } from "../utils/TripDateUtils";
 import { getTrips } from "../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
-import Footer from "../components/Footer.tsx";
+import Footer from "../components/global/Footer.tsx";
 
 export default function MyTripsPage() {
     const [trips, setTrips] = useState<Trip[]>([]);

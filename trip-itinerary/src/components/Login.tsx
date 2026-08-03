@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {supabase} from "../utils/SupabaseClient.ts";
+import {useIsMobile} from "../hooks/useIsMobile.ts";
 
 export default function Login() {
     const [email, setEmail] = useState("");
@@ -24,27 +25,37 @@ export default function Login() {
         else setSent(true);
     }
 
+
+    const isMobile = useIsMobile();
+
     return (
-        <div className="login-page">
-            <h2>Your Plan, Your Adventure</h2>
-            <p>Plan, manage, and log trips and follow your friends' journeys too. Join TripSitter today completely for free.</p>
-            <h4>Log in or sign up to continue</h4>
-            {!sent ? (
-                <form onSubmit={handleMagicLink}>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        placeholder="you@example.com"
-                        required
-                    />
-                    <button type="submit" disabled={sending}>
-                        {sending ? "Sending..." : "Send Login Link"}
-                    </button>
-                    {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
-                </form>
-                ) : (
-                <p>Check your email for a login link!</p>
+        <div style={{ display: "inline-flex" }}>
+            <div className="login-page">
+                <h2>Your Plan, Your Adventure</h2>
+                {!isMobile && (
+                    <p>Plan, manage, and log trips and follow your friends' journeys too. Join TripSitter today completely for free.</p>
+                )}
+                <h4>Log in or sign up to continue</h4>
+                {!sent ? (
+                    <form onSubmit={handleMagicLink}>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            placeholder="you@example.com"
+                            required
+                        />
+                        <button type="submit" disabled={sending}>
+                            {sending ? "Sending..." : "Send Login Link"}
+                        </button>
+                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+                    </form>
+                    ) : (
+                    <p>Check your email for a login link!</p>
+                )}
+            </div>
+            {isMobile && (
+                <p style={{fontSize: "larger", padding: "10px 30px"}}>Plan, manage, and log trips and follow your friends' journeys too. Join TripSitter today completely for free.</p>
             )}
         </div>
     );

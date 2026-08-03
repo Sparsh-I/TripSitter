@@ -1,6 +1,6 @@
 import NavBar from '../components/global/NavBar.tsx';
 import construction from '../assets/under-construction.png';
-import Footer from "../components/Footer.tsx";
+import Footer from "../components/global/Footer.tsx";
 
 export default function ConnectionsPage() {
     return (
