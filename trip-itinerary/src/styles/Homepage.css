@@ -73,6 +73,7 @@
     writing-mode: vertical-rl;
     transform: rotate(180deg);
     background-color: var(--secondary-colour);
+    color: var(--background-colour);
     border-radius: 0 11px 11px 0;
     width: 35px;
 

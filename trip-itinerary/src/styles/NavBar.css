@@ -22,7 +22,7 @@
         }
     }
 
-    .active-link td {
+    td:has(.active-link) {
         border-bottom: 3px solid var(--primary-colour);
     }
 
