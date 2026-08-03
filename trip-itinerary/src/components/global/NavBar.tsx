@@ -1,8 +1,10 @@
 import { NavLink } from "react-router-dom";
 import '../../styles/NavBar.css';
-import menuIcon from '../../assets/menu-icon.png';
+import menuIcon from '../../assets/menu-icon.svg';
 import {useState} from "react";
 import Sidebar from "./Sidebar.tsx";
+import logoTent from '../../assets/logo/logo-tent.svg'
+import logoText from '../../assets/logo/logo-text.svg'
 import {useAuthContext} from "../../context/AuthContext.tsx";
 import {supabase} from "../../utils/SupabaseClient.ts";
 
@@ -17,13 +19,22 @@ export default function NavBar() {
     return (
         <div>
             <div className="navbar">
-                <NavLink to="/home"><h1 className="green-label">TripSitter</h1></NavLink>
-                <ul>
-                    <li><NavLink to="/home" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Home</h3></NavLink></li>
-                    <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Trips</h3></NavLink></li>
-                    <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><h3>Connections</h3></NavLink></li>
-                    <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><h3>My Map</h3></NavLink></li>
-                </ul>
+                <NavLink to="/home">
+                    <div className="logo">
+                        <img id="icon" src={logoTent} alt="Logo icon" />
+                        <img id="text" src={logoText} alt="Logo text" />
+                    </div>
+                </NavLink>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><NavLink to="/home" className={({ isActive }) => isActive ? "active-link" : ""}><p>Home</p></NavLink></td>
+                            <td><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Trips</p></NavLink></td>
+                            <td><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""}><p>Connections</p></NavLink></td>
+                            <td><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""}><p>My Map</p></NavLink></td>
+                        </tr>
+                    </tbody>
+                </table>
                 <span id="profile-large-screen" className="navbar-profile"></span>
                 { session ? (
                     <button onClick={handleLogout}>Log Out</button>

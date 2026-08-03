@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_4" data-name="Layer 4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.05 25">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: .03em;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6 {
+        fill: #f47a1e;
+      }
+
+      .cls-7, .cls-3 {
+        letter-spacing: .02em;
+      }
+
+      .cls-7, .cls-8, .cls-9, .cls-10 {
+        fill: #ff9a3e;
+      }
+
+      .cls-2 {
+        letter-spacing: .03em;
+      }
+
+      .cls-4 {
+        letter-spacing: 0em;
+      }
+
+      .cls-5 {
+        letter-spacing: .02em;
+      }
+
+      .cls-8 {
+        letter-spacing: .03em;
+      }
+
+      .cls-11 {
+        font-family: 'Cubao_Free_Wide', 'Cubao Free';
+        font-size: 6px;
+      }
+
+      .cls-9 {
+        letter-spacing: .02em;
+      }
+
+      .cls-6 {
+        letter-spacing: .02em;
+      }
+
+      .cls-10 {
+        letter-spacing: .03em;
+      }
+    </style>
+  </defs>
+  <text class="cls-11" transform="translate(.68 14.58) scale(.91 1)"><tspan class="cls-7" x="0" y="0">T</tspan><tspan class="cls-10" x="5.47" y="0">r</tspan><tspan class="cls-8" x="11" y="0">i</tspan><tspan class="cls-9" x="14.19" y="0">p</tspan><tspan class="cls-1" x="19.69" y="0">S</tspan><tspan class="cls-5" x="25.21" y="0">i</tspan><tspan class="cls-6" x="28.3" y="0">t</tspan><tspan class="cls-3" x="33.78" y="0">t</tspan><tspan class="cls-2" x="39.25" y="0">e</tspan><tspan class="cls-4" x="44.83" y="0">r</tspan></text>
+</svg>

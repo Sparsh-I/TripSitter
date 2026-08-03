@@ -17,3 +17,52 @@
         height: 700px;
     }
 }
+
+.map-filter {
+    display: inline-flex;
+    justify-content: space-around;
+    width: 50%;
+
+    input[type="radio"] {
+        &#map-filter-current {
+            &::before {
+                border: 2px solid var(--green-pin);
+            }
+
+            &:checked {
+                &::before {
+                    background-color: var(--green-pin);
+                }
+            }
+        }
+
+        &#map-filter-upcoming {
+            &::before {
+                border: 2px solid var(--red-pin);
+            }
+
+            &:checked {
+                &::before {
+                    background-color: var(--red-pin);
+                }
+            }
+        }
+
+        &#map-filter-past {
+            &::before {
+                border: 2px solid var(--blue-pin);
+            }
+
+            &:checked {
+                &::before {
+                    background-color: var(--blue-pin);
+                }
+            }
+        }
+    }
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+}

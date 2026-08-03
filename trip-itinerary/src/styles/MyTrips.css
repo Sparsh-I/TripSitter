@@ -8,7 +8,7 @@
     justify-content: space-evenly;
 
     button:hover {
-        background-color: var(--primary-colour-alt);
+        background-color: var(--primary-colour);
 
         .img-main {
             opacity: 0;
@@ -19,12 +19,16 @@
         }
     }
 
-    button.alt.delete {
-        border: solid 2px var(--custom-red);
-    }
+    button.alt {
+        border: solid 2px var(--primary-colour);
 
-    button.alt.delete:hover {
-        background-color: var(--custom-red);
+        &.delete {
+            border: solid 2px var(--custom-red);
+
+            &:hover {
+                background-color: var(--custom-red);
+            }
+        }
     }
 
     @media (max-width: 768px) {

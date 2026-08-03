@@ -33,8 +33,8 @@ export default function MyTripsPage() {
                     <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                 </div>
                 <div className="current-trips">
-                    <div className="green-label">
-                        <h3 className="black-text">Current</h3>
+                    <div className="label primary">
+                        <h3>Current</h3>
                     </div>
                     {current.length === 0 ? (
                         <div className="no-trips-display">
@@ -45,8 +45,8 @@ export default function MyTripsPage() {
                     )}
                 </div>
                 <div className="upcoming-trips">
-                    <div className="black-label">
-                        <h3 className="black-text">Upcoming</h3>
+                    <div className="label black">
+                        <h3>Upcoming</h3>
                     </div>
                     {upcoming.length === 0 ? (
                         <div className="no-trips-display">
@@ -57,7 +57,7 @@ export default function MyTripsPage() {
                     )}
                 </div>
                 <div className="past-trips">
-                    <div className="grey-label">
+                    <div className="label grey">
                         <h3>Past</h3>
                     </div>
                     {past.length === 0 ? (

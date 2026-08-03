@@ -13,8 +13,8 @@
 :root {
   --font: 'Space Grotesk', sans-serif;
   /* colour palette */
-  --primary-colour: #74E8C5;
-  --primary-colour-alt: #4FB697;
+  --primary-colour: #ff9a3e;
+  --primary-colour-alt: #f47a1e;
   --primary-colour-alt2: #E2FFF7;
   --secondary-colour: #3c3c3c;
   --secondary-colour-alt: #252525;
@@ -22,25 +22,18 @@
   --background-colour-alt: #E1E1E1;
 
   --custom-red: #F96E6E;
+
+  --green-pin: #48C199;
+  --red-pin: #C14848;
+  --blue-pin: #494381;
+
   background-color: white;
 }
 
 body {
-  background: #ffffff
+  background: #ffffff;
+  color: var(--secondary-colour);
 }
-
-/*.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}*/
 
 @keyframes logo-spin {
   from {
@@ -72,13 +65,13 @@ button {
   height: fit-content;
   background-color: var(--primary-colour-alt);
   color: var(--background-colour);
-}
 
-button.alt {
-  background-color: transparent;
-  color: var(--primary-colour-alt);
-  border-color: var(--primary-colour-alt);
-  border-width: 2px;
+  &.alt {
+    background-color: transparent;
+    color: var(--primary-colour-alt);
+    border-color: var(--primary-colour-alt);
+    border-width: 2px;
+  }
 }
 
 input, textarea {
@@ -95,6 +88,35 @@ input, textarea {
 textarea {
   border-radius: 10px;
   padding: 0.5em 0.5em;
+}
+
+input[type="radio"] {
+  appearance: none;
+
+  width: 1.25em;
+  height: 1.25em;
+
+  border: 2px solid white;
+
+  background-color: transparent;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+
+  &::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    border: 2px solid var(--primary-colour);
+    background-color: transparent;
+  }
+
+  &:checked {
+    &::before {
+      background-color: var(--primary-colour);
+    }
+  }
 }
 
 p, li, h1, h2, h3, h4 {
@@ -123,50 +145,37 @@ h3 {
   font-size: 24px;
 }
 
-.white-label {
+.label {
   h1, h2, h3, h4, h5, h6 {
     color: var(--secondary-colour-alt);
   }
+
   width: fit-content;
-  background: var(--background-colour);
   border-radius: 10px;
   padding: 0 18px;
   margin-bottom: 20px;
-}
 
-.grey-label {
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--secondary-colour-alt);
-  }
-  width: fit-content;
-  background: var(--background-colour-alt);
-  border-radius: 10px;
-  padding: 0 18px;
-  margin-bottom: 20px;
-}
-
-.black-label {
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--background-colour);
+  &.primary {
+    background: var(--primary-colour);
+    margin: 10px 0;
   }
 
-  width: fit-content;
-  background: var(--secondary-colour);
-  border-radius: 10px;
-  padding: 0 18px;
-  margin-bottom: 10px;
-}
-
-.green-label {
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--secondary-colour-alt);
+  &.white {
+    background: var(--background-colour);
   }
 
-  width: fit-content;
-  background: var(--primary-colour);
-  border-radius: 10px;
-  padding: 0 18px;
-  margin: 10px 0;
+  &.grey {
+    background: var(--background-colour-alt);
+  }
+
+  &.black {
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--background-colour);
+    }
+
+    background: var(--secondary-colour);
+    margin-bottom: 10px;
+  }
 }
 
 .primary-text {

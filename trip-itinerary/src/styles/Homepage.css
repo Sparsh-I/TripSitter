@@ -1,7 +1,6 @@
 #banner {
     width: 100%;
     height: 29em;
-    background: var(--primary-colour-alt);
     background-image: url("../assets/images/lake.jpg");
     background-size: cover;
     background-position: top;
