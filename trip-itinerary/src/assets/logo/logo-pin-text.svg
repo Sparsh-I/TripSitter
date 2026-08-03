@@ -2,8 +2,13 @@
 <svg id="Layer_4" data-name="Layer 4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58.66 25">
   <defs>
     <style>
+      @font-face {
+        font-family: 'Cubao Free';
+        src: url('../fonts/Cubao_Free_Wide.otf') format('opentype');
+      }
+
       .cls-1, .cls-2 {
-        font-family: 'Cubao_Free_Wide', 'Cubao Free';
+        font-family: 'Cubao Free';
         font-size: 6px;
       }
 

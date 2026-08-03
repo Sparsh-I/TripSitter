@@ -34,8 +34,13 @@
         letter-spacing: .03em;
       }
 
+      @font-face {
+        font-family: 'Cubao Free';
+        src: url('../fonts/Cubao_Free_Wide.otf') format('opentype');
+      }
+
       .cls-11 {
-        font-family: 'Cubao_Free_Wide', 'Cubao Free';
+        font-family: 'Cubao Free';
         font-size: 6px;
       }
 
