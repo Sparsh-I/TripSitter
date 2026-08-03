@@ -29,7 +29,7 @@ export default function Login() {
     const isMobile = useIsMobile();
 
     return (
-        <div style={{ display: "inline-flex" }}>
+        <div style={{ display: "inline-flex", flexDirection: "column" }}>
             <div className="login-page">
                 <h2>Your Plan, Your Adventure</h2>
                 {!isMobile && (
