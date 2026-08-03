@@ -5,12 +5,11 @@ import {useState} from "react";
 import Sidebar from "./Sidebar.tsx";
 import logoTent from '../../assets/logo/logo-tent.svg'
 import logoText from '../../assets/logo/logo-text.svg'
-import {useAuthContext} from "../../context/AuthContext.tsx";
 import {supabase} from "../../utils/SupabaseClient.ts";
+import logOutIcon from "../../assets/log-out.svg";
 
 export default function NavBar() {
     const [showSidebar, setShowSidebar] = useState(false);
-    const {session} = useAuthContext();
 
     async function handleLogout() {
         await supabase.auth.signOut();
@@ -36,11 +35,9 @@ export default function NavBar() {
                     </tbody>
                 </table>
                 <span id="profile-large-screen" className="navbar-profile"></span>
-                { session ? (
-                    <button onClick={handleLogout}>Log Out</button>
-                ) : (
-                    <NavLink to="/">Log In</NavLink>
-                )}
+                <button onClick={handleLogout} className="log-out-icon">
+                    <img src={logOutIcon} alt="Log Out" />
+                </button>
                 <button onClick={() => setShowSidebar(true)}>
                     <img src={menuIcon} className="menu-icon" alt="Menu"></img>
                 </button>

@@ -54,6 +54,16 @@
                 display: block;
             }
         }
+
+        &.log-out-icon {
+            margin-top: 10px;
+            right: 100px;
+            display: block;
+
+            @media (max-width: 768px) {
+                display: none;
+            }
+        }
     }
 
     button:hover, button:focus {
@@ -106,7 +116,7 @@
     display: none;
 
     @media (max-width: 768px) {
-        margin: 20px;
+        margin: 20px 20px 0 20px;
         display: flex;
         flex-direction: row;
 
@@ -143,5 +153,15 @@
     .active-link h3 {
         text-decoration: underline;
         text-decoration-color: var(--primary-colour-alt);
+    }
+
+    button {
+        border-radius: 110px;
+        background-color: white;
+
+        &.log-out-icon {
+            margin-top: 10px;
+            display: contents;
+        }
     }
 }
