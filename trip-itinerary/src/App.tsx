@@ -10,7 +10,7 @@ import NewTripPage from "./pages/NewTripPage.tsx";
 import "./styles/App.css";
 import { Route, Routes } from "react-router-dom";
 import MainPage from "./pages/MainPage.tsx";
-// import ProtectedRoute from "./components/global/ProtectedRoute.tsx";
+import ProtectedRoute from "./components/global/ProtectedRoute.tsx";
 import {supabase} from "./utils/SupabaseClient.ts";
 import {useEffect, useState} from "react";
 
@@ -41,15 +41,15 @@ export default function App() {
 
   return (
     <Routes>
-        <Route path="/" element={loggedIn ? <HomePage/> : <MainPage/>}/>
+        <Route path="/" element={loggedIn ? <ProtectedRoute><HomePage/></ProtectedRoute> : <MainPage/> }/>
 
-        <Route path="/home" element={<HomePage/>}/>
-        <Route path="/my-trips" element={<MyTripsPage/>}/>
-        <Route path="/connections" element={<ConnectionsPage/>}/>
-        <Route path="/my-map" element={<MyMapPage/>}/>
+        <Route path="/home" element={<ProtectedRoute><HomePage/></ProtectedRoute>}/>
+        <Route path="/my-trips" element={<ProtectedRoute><MyTripsPage/></ProtectedRoute>}/>
+        <Route path="/connections" element={<ProtectedRoute><ConnectionsPage/></ProtectedRoute>}/>
+        <Route path="/my-map" element={<ProtectedRoute><MyMapPage/></ProtectedRoute>}/>
 
-        <Route path="/my-trips/edit-trip/:id" element={<EditTripPage/>}></Route>
-        <Route path="/my-trips/new-trip" element={<NewTripPage/>}></Route>
+        <Route path="/my-trips/edit-trip/:id" element={<ProtectedRoute><EditTripPage/></ProtectedRoute>}></Route>
+        <Route path="/my-trips/new-trip" element={<ProtectedRoute><NewTripPage/></ProtectedRoute>}></Route>
     </Routes>
   )
 }
