@@ -32,7 +32,7 @@
 
 @font-face {
   font-family: 'Cubao Free';
-  src: url('../assets/fonts/Cubao_Free_Wide.otf') format('opentype');
+  src: url('../../public/fonts/Cubao_Free_Wide.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
 }
