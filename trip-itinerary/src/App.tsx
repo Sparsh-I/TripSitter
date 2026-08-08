@@ -68,7 +68,7 @@ export default function App() {
     return (
         <Routes>
             <Route path="/" element={homeRoute()}/>
-            <Route path="/sign-up" element={<ProtectedRoute><SignUpPage/></ProtectedRoute>}/>
+            <Route path="/sign-up" element={<SignUpPage/>}/>
 
             <Route path="/home" element={<ProtectedRoute><HomePage/></ProtectedRoute>}/>
             <Route path="/my-trips" element={<ProtectedRoute><MyTripsPage/></ProtectedRoute>}/>
