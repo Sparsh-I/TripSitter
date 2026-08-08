@@ -61,7 +61,7 @@ export default function App() {
 
     function homeRoute() {
         if (!loggedIn) return <MainPage/>;
-        if (loggedIn && profileComplete === false) return <SignUpPage/>;
+        if (loggedIn && !profileComplete) return <SignUpPage/>;
         return <ProtectedRoute><HomePage/></ProtectedRoute>;
     }
 
