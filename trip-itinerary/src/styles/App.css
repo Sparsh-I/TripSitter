@@ -81,7 +81,7 @@ button {
   }
 }
 
-input, textarea {
+input, textarea, select {
   font-family: var(--font), sans-serif;
   font-size: medium;
   background-color: var(--background-colour);
@@ -95,6 +95,10 @@ input, textarea {
 textarea {
   border-radius: 10px;
   padding: 0.5em 0.5em;
+}
+
+select {
+  height: 50px;
 }
 
 input[type="radio"] {
