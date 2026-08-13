@@ -5,4 +5,5 @@ export interface Profile {
     username: string;
     photoUrl?: string;
     email: string;
+    residenceCountry: string;
 }

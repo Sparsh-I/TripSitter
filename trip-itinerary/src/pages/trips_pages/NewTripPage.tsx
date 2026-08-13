@@ -1,12 +1,12 @@
-import "../styles/EditTrip.css";
-import DatePicker from "../components/global/DatePicker.tsx";
+import "../../styles/EditTrip.css";
+import DatePicker from "../../components/global/DatePicker.tsx";
 import {useRef, useState} from "react";
 import type {DateRange} from "react-day-picker";
 import { useNavigate } from "react-router-dom";
-import LocationSearch, { type TripLocation } from "../components/global/LocationSearch.tsx";
-import {addTrip} from "../utils/TripStorage";
-import { type Trip } from "../types/Trip";
-import {useIsMobile} from "../hooks/useIsMobile.ts";
+import LocationSearch, { type TripLocation } from "../../components/global/LocationSearch.tsx";
+import {addTrip} from "../../utils/TripStorage.ts";
+import { type Trip } from "../../types/Trip.ts";
+import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
 // interface LocationEntry {
 //     range: DateRange | undefined;

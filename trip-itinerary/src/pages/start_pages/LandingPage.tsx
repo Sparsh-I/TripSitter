@@ -1,14 +1,14 @@
-import image from '../assets/images/double-rainbow.jpg';
-import image2 from '../assets/images/path.png';
+import image from '../../assets/images/double-rainbow.jpg';
+import image2 from '../../assets/images/path.png';
 import {NavLink} from "react-router-dom";
-import Login from "../components/Login.tsx";
-import '../styles/Main.css';
-import logoTent from "../assets/logo/logo-tent.svg";
-import logoText from "../assets/logo/logo-text.svg";
-import Footer from "../components/global/Footer.tsx";
-import {useIsMobile} from "../hooks/useIsMobile.ts";
+import Login from "../../components/Login.tsx";
+import '../../styles/Landing.css';
+import logoTent from "../../assets/logo/logo-tent.svg";
+import logoText from "../../assets/logo/logo-text.svg";
+import Footer from "../../components/global/Footer.tsx";
+import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
-export default function MainPage() {
+export default function LandingPage() {
     const isMobile = useIsMobile();
 
     return (

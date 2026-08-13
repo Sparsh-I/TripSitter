@@ -1,9 +1,9 @@
-import NavBar from '../components/global/NavBar.tsx';
-import QuickTrip from "../components/homepage/QuickTrip.tsx";
-import ConnectionsWidget from "../components/homepage/ConnectionsWidget.tsx";
-import UpcomingTripWidget from "../components/homepage/UpcomingTripWidget.tsx";
-import "../styles/Homepage.css";
-import Footer from "../components/global/Footer.tsx";
+import NavBar from '../../components/global/NavBar.tsx';
+import QuickTrip from "../../components/homepage/QuickTrip.tsx";
+import ConnectionsWidget from "../../components/homepage/ConnectionsWidget.tsx";
+import UpcomingTripWidget from "../../components/homepage/UpcomingTripWidget.tsx";
+import "../../styles/Homepage.css";
+import Footer from "../../components/global/Footer.tsx";
 
 export default function HomePage() {
     return (

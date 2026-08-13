@@ -18,6 +18,7 @@ export async function getProfile(userId: string): Promise<Profile | null> {
         username: data.username,
         photoUrl: data.photo_url,
         email: data.email,
+        residenceCountry: data.residence_country,
     };
 }
 
@@ -29,6 +30,7 @@ export async function updateProfile(profile: Partial<Profile> & {id: string}): P
             last_name: profile.lastName,
             username: profile.username,
             photo_url: profile.photoUrl,
+            residence_country: profile.residenceCountry,
         })
         .eq('id', profile.id);
 

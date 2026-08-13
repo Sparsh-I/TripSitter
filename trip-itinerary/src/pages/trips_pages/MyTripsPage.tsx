@@ -1,11 +1,11 @@
-import NavBar from '../components/global/NavBar.tsx';
-import TripCarousel from "../components/my_trips/TripCarousel.tsx";
-import type { Trip } from "../types/Trip.ts";
-import { currentTrips, futureTrips, pastTrips } from "../utils/TripDateUtils";
-import { getTrips } from "../utils/TripStorage.ts";
+import NavBar from '../../components/global/NavBar.tsx';
+import TripCarousel from "../../components/my_trips/TripCarousel.tsx";
+import type { Trip } from "../../types/Trip.ts";
+import { currentTrips, futureTrips, pastTrips } from "../../utils/TripDateUtils.ts";
+import { getTrips } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
-import Footer from "../components/global/Footer.tsx";
+import Footer from "../../components/global/Footer.tsx";
 
 export default function MyTripsPage() {
     const [trips, setTrips] = useState<Trip[]>([]);

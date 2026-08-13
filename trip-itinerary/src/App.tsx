@@ -1,14 +1,14 @@
-import HomePage from "./pages/HomePage.tsx";
-import MyTripsPage from "./pages/MyTripsPage.tsx";
+import HomePage from "./pages/start_pages/HomePage.tsx";
+import MyTripsPage from "./pages/trips_pages/MyTripsPage.tsx";
 import ConnectionsPage from "./pages/ConnectionsPage.tsx";
 import MyMapPage from "./pages/MyMapPage.tsx";
-import EditTripPage from "./pages/EditTripPage.tsx";
-import NewTripPage from "./pages/NewTripPage.tsx";
-import SignUpPage from "./pages/SignUpPage.tsx";
+import EditTripPage from "./pages/trips_pages/EditTripPage.tsx";
+import NewTripPage from "./pages/trips_pages/NewTripPage.tsx";
+import SignUpPage from "./pages/start_pages/SignUpPage.tsx";
 
 import "./styles/App.css";
 import { Route, Routes } from "react-router-dom";
-import MainPage from "./pages/MainPage.tsx";
+import LandingPage from "./pages/start_pages/LandingPage.tsx";
 import ProtectedRoute from "./components/global/ProtectedRoute.tsx";
 import { supabase } from "./utils/SupabaseClient.ts";
 import { useEffect, useState } from "react";
@@ -60,7 +60,7 @@ export default function App() {
     }, []);
 
     function homeRoute() {
-        if (!loggedIn) return <MainPage/>;
+        if (!loggedIn) return <LandingPage/>;
         if (loggedIn && !profileComplete) return <SignUpPage/>;
         return <ProtectedRoute><HomePage/></ProtectedRoute>;
     }
