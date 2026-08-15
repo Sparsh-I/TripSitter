@@ -88,6 +88,7 @@
 
 .navbar-profile {
     position: absolute;
+    top: 10px;
     right : 50px;
     height: 50px;
     width: 50px;
@@ -99,6 +100,7 @@
     @media (max-width: 768px) {
         position: relative;
         right: 0;
+        top: 5px;
         z-index: 1005;
         display: block;
     }
@@ -116,13 +118,9 @@
     display: none;
 
     @media (max-width: 768px) {
-        margin: 20px 20px 0 20px;
         display: flex;
         flex-direction: row;
-
-        h4 {
-            margin: auto auto auto 18px;
-        }
+        justify-content: space-between;
     }
 }
 
@@ -135,7 +133,7 @@
     background-color: var(--background-colour);
     z-index: 1005;
     text-align: right;
-    padding: 30px 30px 30px 0;
+    padding: 30px 0;
     border-radius: 75px 0 0 75px;
 
     display: flex;
@@ -160,8 +158,24 @@
         background-color: white;
 
         &.log-out-icon {
-            margin-top: 10px;
-            display: contents;
+            margin-top: 6px;
+            padding: 0.5em
         }
+    }
+}
+
+.profile-options {
+    align-self: center;
+    width: 85%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    h4 {
+        margin-left: 0.5em;
+        margin-top: 0.6em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }

@@ -34,7 +34,9 @@ export default function NavBar() {
                         </tr>
                     </tbody>
                 </table>
-                <span id="profile-large-screen" className="navbar-profile"></span>
+                <NavLink to="/profile">
+                    <span id="profile-large-screen" className="navbar-profile"></span>
+                </NavLink>
                 <button onClick={handleLogout} className="log-out-icon">
                     <img src={logOutIcon} alt="Log Out" />
                 </button>

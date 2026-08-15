@@ -1,14 +1,22 @@
-.sign-up-page {
+.profile-page {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url("../assets/images/mountains_and_field.jpg");
+
+    &.sign-up {
+        background-image: url("../assets/images/mountains_and_field.jpg");
+    }
+
+    &.update {
+        background-image: url("../assets/images/castle.jpg");
+    }
+
     background-position: center;
     background-size: cover;
 }
 
-.sign-up-form {
+.profile-form {
     padding: 50px;
     background-color: #fff;
     border-radius: 30px;

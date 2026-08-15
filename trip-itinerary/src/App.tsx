@@ -1,4 +1,5 @@
 import HomePage from "./pages/start_pages/HomePage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 import MyTripsPage from "./pages/trips_pages/MyTripsPage.tsx";
 import ConnectionsPage from "./pages/ConnectionsPage.tsx";
 import MyMapPage from "./pages/MyMapPage.tsx";
@@ -77,6 +78,8 @@ export default function App() {
 
             <Route path="/my-trips/edit-trip/:id" element={<ProtectedRoute><EditTripPage/></ProtectedRoute>}/>
             <Route path="/my-trips/new-trip" element={<ProtectedRoute><NewTripPage/></ProtectedRoute>}/>
+
+            <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}/>
         </Routes>
     );
 }
