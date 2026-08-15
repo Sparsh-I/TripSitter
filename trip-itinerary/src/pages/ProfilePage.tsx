@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import type {Profile} from "../types/Profile.ts";
-import {useNavigate} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {supabase} from "../utils/SupabaseClient.ts";
 import {getProfile, updateProfile} from "../utils/ProfileUtils.ts";
 import {countryList} from "../utils/LocationUtils.ts";
@@ -73,7 +73,11 @@ export default function ProfilePage () {
     return (
         <div>
             <div className="profile-page update">
-                <button style={{ position: "fixed", top: "30px", left: "30px" }}>←</button>
+                <button style={{ position: "fixed", top: "30px", left: "30px" }}>
+                    <NavLink to="/home">
+                        ←
+                    </NavLink>
+                </button>
                 <div className="profile-form">
                     <h1>Update your profile</h1>
 
