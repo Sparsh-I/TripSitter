@@ -25,14 +25,15 @@ export async function getProfile(userId: string): Promise<Profile | null> {
 export async function updateProfile(profile: Partial<Profile> & {id: string}): Promise<void> {
     const { error } = await supabase
         .from('profiles')
-        .update({
+        .upsert({
+            id: profile.id,
             first_name: profile.firstName,
             last_name: profile.lastName,
             username: profile.username,
             photo_url: profile.photoUrl,
+            email: profile.email,
             residence_country: profile.residenceCountry,
-        })
-        .eq('id', profile.id);
+        });
 
     if (error) throw error;
 }

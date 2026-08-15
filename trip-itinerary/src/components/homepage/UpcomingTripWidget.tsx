@@ -1,12 +1,39 @@
 import { useEffect, useState } from "react";
 import { closestUpcomingTrip } from "../../utils/TripDateUtils.ts";
 import { getTrips } from "../../utils/TripStorage.ts";
-import { getAlpha3, getCountryCode } from "../../utils/LocationUtils.ts";
+import {getAlpha3, getCountryCode, getCountryCodeFromName} from "../../utils/LocationUtils.ts";
 import type { Trip } from "../../types/Trip.ts";
+import {supabase} from "../../utils/SupabaseClient.ts";
+import {getProfile} from "../../utils/ProfileUtils.ts";
 
 export default function UpcomingTripWidget() {
     const [upcomingTrip, setUpcomingTrip] = useState<Trip | null>(null);
+    const [startLocCode, setStartLocCode] = useState<string>("XXX");
     const [endLocCode, setEndLocCode] = useState("XXX");
+
+    useEffect(() => {
+        let cancelled = false;
+
+        async function getProfileDetails() {
+            const {data: {user}} = await supabase.auth.getUser();
+            if (!user || cancelled) return;
+
+            const profile = await getProfile(user.id);
+            if (!profile) return;
+
+            const alpha2Code = getCountryCodeFromName(profile.residenceCountry);
+            if (!alpha2Code) return;
+            const code = getAlpha3(alpha2Code);
+            if (!code) setStartLocCode("N/A");
+            else setStartLocCode(code);
+        }
+
+        void getProfileDetails();
+
+        return () => {
+            cancelled = true;
+        };
+    });
 
     useEffect(() => {
         async function loadUpcomingTrip() {
@@ -27,8 +54,6 @@ export default function UpcomingTripWidget() {
 
         loadUpcomingTrip();
     }, []);
-
-    const startLocCode = "CAN"; // This will later be set by the user as their default starting location
 
     let day = "DD", month = "MMM", year = "YYYY";
     if (upcomingTrip) {

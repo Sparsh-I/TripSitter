@@ -308,6 +308,8 @@ export default function SignUpPage() {
         username: usernameRef.current?.value || undefined,
         firstName: firstNameRef.current?.value || undefined,
         lastName: lastNameRef.current?.value || undefined,
+        email: email,
+        residenceCountry: countryRef.current?.value || undefined,
       });
 
       navigate("/home");
