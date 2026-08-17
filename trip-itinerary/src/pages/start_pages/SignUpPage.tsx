@@ -119,7 +119,7 @@ export default function SignUpPage() {
               <div className="form-group">
                 <label htmlFor="residenceCountry">Country of Origin</label>
                 <select id="residenceCountry" ref={countryRef} defaultValue={profile?.residenceCountry ?? ""}>
-                  <option value="">Where would you usually start trips from?</option>
+                  <option value="">Where's home?</option>
                   {countryList.map(country => (
                       <option key={country} value={country}>{country}</option>
                   ))}

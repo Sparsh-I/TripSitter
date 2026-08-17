@@ -41,7 +41,7 @@ export default function App() {
             }
         }
 
-        checkAuthAndProfile();
+        void checkAuthAndProfile();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setLoggedIn(!!session?.user);
@@ -62,14 +62,13 @@ export default function App() {
 
     function homeRoute() {
         if (!loggedIn) return <LandingPage/>;
-        if (loggedIn && !profileComplete) return <SignUpPage/>;
+        if (loggedIn && !profileComplete) return <ProtectedRoute><SignUpPage/></ProtectedRoute>;
         return <ProtectedRoute><HomePage/></ProtectedRoute>;
     }
 
     return (
         <Routes>
             <Route path="/" element={homeRoute()}/>
-            <Route path="/sign-up" element={<ProtectedRoute><SignUpPage/></ProtectedRoute>}/>
 
             <Route path="/home" element={<ProtectedRoute><HomePage/></ProtectedRoute>}/>
             <Route path="/my-trips" element={<ProtectedRoute><MyTripsPage/></ProtectedRoute>}/>

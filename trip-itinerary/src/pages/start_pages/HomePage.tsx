@@ -10,6 +10,7 @@ import {getProfile} from "../../utils/ProfileUtils.ts";
 
 export default function HomePage() {
     const [name, setName] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         let cancelled = false;
@@ -20,6 +21,8 @@ export default function HomePage() {
             const profile = await getProfile(user.id);
             if (!profile) return;
             setName(profile.firstName);
+
+            if (!cancelled) setLoading(false);
         }
 
         void getProfileDetails();
@@ -34,7 +37,7 @@ export default function HomePage() {
             <NavBar/>
             <div id="banner">
                 <div className="label white">
-                    <h2>Welcome back, {name}! Planning a trip?</h2>
+                    <h2>Welcome back{!loading && `, ${name}`}! Planning a trip?</h2>
                 </div>
                 <QuickTrip/>
             </div>

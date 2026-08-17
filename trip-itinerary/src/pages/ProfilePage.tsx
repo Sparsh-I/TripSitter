@@ -6,7 +6,7 @@ import {getProfile, updateProfile} from "../utils/ProfileUtils.ts";
 import {countryList} from "../utils/LocationUtils.ts";
 
 export default function ProfilePage () {
-    const [, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [email, setEmail] = useState<string>("");
@@ -69,6 +69,9 @@ export default function ProfilePage () {
         }
     }
 
+    if (loading) {
+        return (<div>Loading...</div>)
+    }
 
     return (
         <div>
@@ -125,7 +128,7 @@ export default function ProfilePage () {
                         <div className="form-group">
                             <label htmlFor="residenceCountry">Country of Origin</label>
                             <select id="residenceCountry" ref={countryRef} defaultValue={profile?.residenceCountry ?? ""}>
-                                <option value="">Where would you usually start trips from?</option>
+                                <option value="">Where's home?</option>
                                 {countryList.map(country => (
                                     <option key={country} value={country}>{country}</option>
                                 ))}

@@ -6,6 +6,10 @@
 
     &.sign-up {
         background-image: url("../assets/images/mountains_and_field.jpg");
+
+        @media (max-width: 768px) {
+            background-image: url("../assets/images/road_to_mountains.jpg");
+        }
     }
 
     &.update {
@@ -14,12 +18,25 @@
 
     background-position: center;
     background-size: cover;
+
+    a {
+        color: var(--background-colour);
+    }
 }
 
 .profile-form {
     padding: 50px;
     background-color: #fff;
     border-radius: 30px;
+
+    @media (max-width: 768px) {
+        width: 60%;
+        padding: 30px;
+
+        h1 {
+            font-size: 1.7rem;
+        }
+    }
 
     form {
         margin-top: 40px;
@@ -43,6 +60,10 @@
         grid-template-columns: 150px 400px;
         align-items: center;
         gap: 3rem;
+
+        @media (max-width: 768px) {
+            display: flow;
+        }
     }
 
     .form-group label {
@@ -52,5 +73,12 @@
 
     input:read-only {
         color: #A6A6A6;
+    }
+
+    @media (max-width: 768px) {
+        input, select {
+            width: 200px;
+            font-size: 14px;
+        }
     }
 }
