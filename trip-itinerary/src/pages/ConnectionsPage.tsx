@@ -4,9 +4,18 @@ import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
 
 export default function ConnectionsPage() {
+    function openTab(tabName: string) {
+        return undefined;
+    }
+
     return (
         <div>
             <NavBar/>
+            <div className="connections-tabs">
+                <button className="tab-button" onClick={openTab("Connections")}>Connections</button>
+                <button className="tab-button" onClick={openTab("Requests")}>Requests</button>
+                <button className="tab-button-alt" onClick={openTab("Add Connection")}>Add Connection</button>
+            </div>
             <div className="connections-search">
                 <h2>Make a new connection</h2>
                 <br></br>

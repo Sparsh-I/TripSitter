@@ -16,3 +16,27 @@
 .username-input {
     width: 100%;
 }
+
+.connections-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.tab-button {
+    border: #ffffff 1px solid;
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+
+    &:hover {
+        border: #ffffff 1px solid;
+        background-color: #FFBE88;
+        color: black;
+        border-radius: 10px;
+    }
+}
+
+.tab-button-alt {
+    border-radius: 15px;
+}
