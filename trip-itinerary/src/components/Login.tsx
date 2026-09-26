@@ -4,62 +4,27 @@ import {useIsMobile} from "../hooks/useIsMobile.ts";
 
 export default function Login() {
     const [email, setEmail] = useState("");
-    const [otp, setOtp] = useState("");
     const [sent, setSent] = useState(false);
     const [sending, setSending] = useState(false);
-    const [verifying, setVerifying] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    async function sendOtp(e: React.FormEvent) {
+    async function handleMagicLink(e: React.FormEvent) {
         e.preventDefault();
         setSending(true);
         setErrorMsg(null);
 
-        const { error } = await supabase.auth.signInWithOtp({ email });
-
-        if (error) {
-            console.error("Error sending OTP:", error.message);
-            setErrorMsg("Couldn't send OTP");
-        } else {
-            setSent(true);
-        }
-        setSending(false);
-    }
-
-    async function verifyWithOtp(e: React.FormEvent) {
-        e.preventDefault();
-        setVerifying(true);
-        setErrorMsg(null);
-
-        const { data, error } = await supabase.auth.verifyOtp({
+        const { error } = await supabase.auth.signInWithOtp({
             email,
-            token: otp,
-            type: "email",
+            options: { emailRedirectTo: `${window.location.origin}/` },
         });
 
         if (error) {
-            console.error("Error verifying OTP:", error.message);
-            setErrorMsg("Invalid code, please try again");
-        } else {
-            console.log("User logged in:", data.user);
-            // e.g. redirect or update auth context here
+            console.error("Couldn't send email link: ", error);
+            setErrorMsg("Couldn't send email link");
         }
-        setVerifying(false);
+        else setSent(true);
     }
 
-    // async function handleMagicLink(e: React.FormEvent) {
-    //     e.preventDefault();
-    //     setSending(true);
-    //     setErrorMsg(null);
-
-    //     const { error } = await supabase.auth.signInWithOtp({ email });
-
-    //     if (error) {
-    //         console.error("Couldn't send OTP: ", error);
-    //         setErrorMsg("Couldn't send OTP");
-    //     }
-    //     else setSent(true);
-    // }
 
     const isMobile = useIsMobile();
 
@@ -72,7 +37,7 @@ export default function Login() {
                 )}
                 <h4>Log in or sign up to continue</h4>
                 {!sent ? (
-                    <form onSubmit={sendOtp}>
+                    <form onSubmit={handleMagicLink}>
                         <input
                             type="email"
                             value={email}
@@ -81,24 +46,12 @@ export default function Login() {
                             required
                         />
                         <button type="submit" disabled={sending}>
-                            {sending ? "Sending..." : "Send OTP"}
+                            {sending ? "Sending..." : "Send Login Link"}
                         </button>
                         {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
                     </form>
                     ) : (
-                    <form onSubmit={verifyWithOtp}>
-                        <input
-                            type="text"
-                            value={otp}
-                            onChange={e => setOtp(e.target.value)}
-                            placeholder="Enter OTP"
-                            required
-                        />
-                        <button type="submit" disabled={sending}>
-                            {verifying ? "Verifying..." : "Verify"}
-                        </button>
-                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
-                    </form>
+                    <p>Check your email for a login link!</p>
                 )}
             </div>
             {isMobile && (
