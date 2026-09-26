@@ -2,16 +2,30 @@ import NavBar from '../components/global/NavBar.tsx';
 // import construction from '../assets/under-construction.png';
 import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getConnections, currentConnections, pendingRequests } from "../utils/ConnectionUtils.ts";
+import type { Connection } from '../types/Connection.ts';
 
 type TabName = "Connections" | "Requests" | "Add Connection";
 
 export default function ConnectionsPage() {
     const [activeTab, setActiveTab] = useState<TabName>("Connections");
+    const [connections, setConnections] = useState<Connection[]>([]);
+    
+        useEffect(() => {
+            getConnections()
+                .then(connections => setConnections(connections))
+                .catch(e => {
+                    console.error("Failed to load connections: ", e);
+            });
+        }, [])
 
     function openTab(tabName: TabName) {
         setActiveTab(tabName);
     }
+
+    const current = currentConnections(connections);
+    const pending = pendingRequests(connections);
 
     return (
         <div>
@@ -42,27 +56,13 @@ export default function ConnectionsPage() {
                     <h2>Your Connections</h2>
                     <br></br>
                     <table>
-                        <tr>
-                            <td>
-                                <div>Connection 1</div>
-                                <div>Location 1</div>
+                        {current.map(connection => (
+                            <tr>
+                                <td>
+                                    <div>{connection.connectionId}</div>
                                 </td>
-                            <td>View Profile</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>Connection 2</div>
-                                <div>Location 2</div>
-                            </td>
-                            <td>View Profile</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>Connection 3</div>
-                                <div>Location 3</div>
-                            </td>
-                            <td>View Profile</td>
-                        </tr>
+                            </tr>
+                        ))}
                     </table>
                 </div>
             )}
@@ -70,10 +70,16 @@ export default function ConnectionsPage() {
             {activeTab === "Requests" && (
                 <div className="connections-requests">
                     <h2>Pending Requests</h2>
-                    <ul>
-                        <li>Request 1</li>
-                        <li>Request 2</li>
-                    </ul>
+                    <br></br>
+                    {/* <h4>Incoming</h4> */}
+                    <table>
+                        {pending.map(connection => (
+                            <tr>
+                                <td><div>{connection.connectionId}</div></td>
+                                <td>View Profile</td>
+                            </tr>
+                        ))}
+                    </table>
                 </div>
             )}
 
