@@ -40,17 +40,27 @@ export default function ConnectionsPage() {
             {activeTab === "Connections" && (
                 <div className="connections-list">
                     <h2>Your Connections</h2>
-                    <table style={{width: "100%", borderCollapse: "collapse"}}>
+                    <br></br>
+                    <table>
                         <tr>
-                            <td>Connection 1</td>
+                            <td>
+                                <div>Connection 1</div>
+                                <div>Location 1</div>
+                                </td>
                             <td>View Profile</td>
                         </tr>
                         <tr>
-                            <td>Connection 2</td>
+                            <td>
+                                <div>Connection 2</div>
+                                <div>Location 2</div>
+                            </td>
                             <td>View Profile</td>
                         </tr>
                         <tr>
-                            <td>Connection 3</td>
+                            <td>
+                                <div>Connection 3</div>
+                                <div>Location 3</div>
+                            </td>
                             <td>View Profile</td>
                         </tr>
                     </table>

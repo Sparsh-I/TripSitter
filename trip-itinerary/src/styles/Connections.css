@@ -7,6 +7,19 @@
     padding: 0 10%;
     width: 100%;
     box-sizing: border-box;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    
+        tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #ffffff;
+        }
+    }
 }
 
 .input-wrapper {
