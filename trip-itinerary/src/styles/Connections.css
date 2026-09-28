@@ -9,6 +9,7 @@
     box-sizing: border-box;
 
     table {
+        table-layout: fixed;
         width: 100%;
         border-collapse: collapse;
     

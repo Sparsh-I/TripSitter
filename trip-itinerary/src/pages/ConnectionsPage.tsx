@@ -48,114 +48,121 @@ export default function ConnectionsPage() {
         return testConnection;
     }
 
-    current.push(makeTestConnection(data, "accepted"));
-    incoming.push(makeTestConnection(data, "pending"));
-    outgoing.push(makeTestConnection(data, "pending"));
+    function generateTestConnections(num: number): void {
+        for (let i = 0; i < num; i++) {
+            const val = Math.random();
+            val > 0.7 ? 
+                current.push(makeTestConnection(data, "accepted")) : 
+                val < 0.4 ? 
+                    incoming.push(makeTestConnection(data, "pending")) : 
+                    outgoing.push(makeTestConnection(data, "pending"));
+        }
+    }
+
+    generateTestConnections(15);
 
     return (
-        <div>
+        <div className="page-layout">
             <NavBar/>
-            <div className="connections-tabs">
-                <button 
-                    className={activeTab === "Connections" ? "tab-button-active" : "tab-button"}
-                    onClick={() => openTab("Connections")}
-                >
-                    Connections
-                </button>
-                <button 
-                    className={activeTab === "Requests" ? "tab-button-active" : "tab-button"}
-                    onClick={() => openTab("Requests")}
-                >
-                    Requests
-                </button>
-                <button 
-                    className={activeTab === "Add Connection" ? "tab-button-active" : "tab-button-alt"}
-                    onClick={() => openTab("Add Connection")}
-                >
-                    Add Connection
-                </button>
-            </div>
-
-            {activeTab === "Connections" && (
-                <div className="connections-list">
-                    <h2>Your Connections</h2>
-                    <br></br>
-                    <table>
-                        {current.map(connection => (
-                            <tr>
-                                <td>
-                                    <div>{connection.connectionId}</div>
-                                </td>
-                            </tr>
-                        ))}
-                    </table>
+            <div className="page-content">
+                <div className="connections-tabs">
+                    <button 
+                        className={activeTab === "Connections" ? "tab-button-active" : "tab-button"}
+                        onClick={() => openTab("Connections")}
+                    >
+                        Connections
+                    </button>
+                    <button 
+                        className={activeTab === "Requests" ? "tab-button-active" : "tab-button"}
+                        onClick={() => openTab("Requests")}
+                    >
+                        Requests
+                    </button>
+                    <button 
+                        className={activeTab === "Add Connection" ? "tab-button-active" : "tab-button-alt"}
+                        onClick={() => openTab("Add Connection")}
+                    >
+                        Add Connection
+                    </button>
                 </div>
-            )}
 
-            {activeTab === "Requests" && (
-                <div className="connections-requests">
-                    <h2>Pending Requests</h2>
-                    <br></br>
-                    <h4>Incoming</h4>
-                    <table>
-                        {incoming.length == 0 ? (
-                            <div className="no-content-display">
-                                <h4>No incoming requests</h4>
-                            </div>
-                        ) : (
-                            incoming.map(connection => (
+                {activeTab === "Connections" && (
+                    <div className="connections-list">
+                        <h2>Your Connections</h2>
+                        <br></br>
+                        <table>
+                            {current.map(connection => (
                                 <tr>
                                     <td className="connection-cell left-aligned-cell">
                                         {connection.connectionId}
                                     </td>
                                     <td className="connection-cell right-aligned-cell">View Profile</td>
                                 </tr>
-                            ))
-                        )}
-                    </table>
-                    <br></br>
-                    <h4>Outgoing</h4>
-                    <table>
-                        {outgoing.length == 0 ?  (
-                            <div className="no-content-display">
-                                <h4>No outgoing requests</h4>
-                            </div>
-                        ) : (
-                            outgoing.map(connection => (
-                                <tr>
-                                    <td className="connection-cell left-aligned-cell">
-                                        {connection.connectionId}
-                                    </td>
-                                    <td className="connection-cell right-aligned-cell">View Profile</td>
-                                </tr>
-                            ))
-                        )}
-                    </table>
-                </div>
-            )}
-
-            {activeTab === "Add Connection" && (
-                <div className="connections-search">
-                    <h2>Make a new connection</h2>
-                    <br></br>
-                    <div className="input-wrapper">
-                        <input
-                            className="username-input"
-                            type="text"
-                            placeholder="Enter a username"
-                        />
-                        <button style={{whiteSpace: "nowrap", marginLeft: "40px"}}>Send Request</button>    
+                            ))}
+                        </table>
                     </div>
-                </div>
-            )}
+                )}
 
-            {/* <div style={{display: "flex", justifyContent: "center", alignItems: "center", paddingTop: "10%"}}>
-                <img src={construction} alt="Under construction" style={{ maxWidth: "150px" }} />
+                {activeTab === "Requests" && (
+                    <div className="connections-requests">
+                        <h2>Pending Requests</h2>
+                        <br></br>
+                        <h4>Incoming</h4>
+                        <table>
+                            {incoming.length == 0 ? (
+                                <div className="no-content-display">
+                                    <h4>No incoming requests</h4>
+                                </div>
+                            ) : (
+                                incoming.map(connection => (
+                                    <tr>
+                                        <td className="connection-cell left-aligned-cell">
+                                            {connection.connectionId}
+                                        </td>
+                                        <td className="connection-cell">View Profile</td>
+                                        <td className="connection-cell right-aligned-cell">Accept | Ignore</td>
+                                    </tr>
+                                ))
+                            )}
+                        </table>
+                        <br></br>
+                        <h4>Outgoing</h4>
+                        <table>
+                            {outgoing.length == 0 ?  (
+                                <div className="no-content-display">
+                                    <h4>No outgoing requests</h4>
+                                </div>
+                            ) : (
+                                outgoing.map(connection => (
+                                    <tr>
+                                        <td className="connection-cell left-aligned-cell">
+                                            {connection.connectionId}
+                                        </td>
+                                        <td className="connection-cell">View Profile</td>
+                                        <td className="connection-cell right-aligned-cell">Cancel</td>
+                                    </tr>
+                                ))
+                            )}
+                        </table>
+                    </div>
+                )}
+
+                {activeTab === "Add Connection" && (
+                    <div className="connections-search">
+                        <h2>Make a new connection</h2>
+                        <br></br>
+                        <div className="input-wrapper">
+                            <input
+                                className="username-input"
+                                type="text"
+                                placeholder="Enter a username"
+                            />
+                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}}>Send Request</button>    
+                        </div>
+                    </div>
+                )}
             </div>
-            <div>
-                <h1>This page is still under construction.</h1>
-            </div> */}
-            <div style={{position: "fixed", bottom: 0, width: "100%"}}><Footer/></div>
+            <Footer/>
         </div>
     );
 }
