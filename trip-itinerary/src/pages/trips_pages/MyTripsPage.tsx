@@ -37,8 +37,8 @@ export default function MyTripsPage() {
                         <h3>Current</h3>
                     </div>
                     {current.length === 0 ? (
-                        <div className="no-trips-display">
-                            <h3>No trips to show</h3>
+                        <div className="no-content-display">
+                            <h4>No trips to show</h4>
                         </div>
                     ) : (
                         <TripCarousel trips={current} />
@@ -49,8 +49,8 @@ export default function MyTripsPage() {
                         <h3>Upcoming</h3>
                     </div>
                     {upcoming.length === 0 ? (
-                        <div className="no-trips-display">
-                            <h3>No trips to show</h3>
+                        <div className="no-content-display">
+                            <h4>No trips to show</h4>
                         </div>
                     ) : (
                         <TripCarousel trips={upcoming} />
@@ -61,8 +61,8 @@ export default function MyTripsPage() {
                         <h3>Past</h3>
                     </div>
                     {past.length === 0 ? (
-                        <div className="no-trips-display">
-                            <h3>No trips to show</h3>
+                        <div className="no-content-display">
+                            <h4>No trips to show</h4>
                         </div>
                     ) : (
                         <TripCarousel trips={past} />

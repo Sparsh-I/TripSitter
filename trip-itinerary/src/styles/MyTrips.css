@@ -92,13 +92,6 @@
     opacity: 0;
 }
 
-.no-trips-display {
-    background-color: var(--background-colour);
-    border-radius: 15px;
-    padding: 60px;
-    margin: 40px 0;
-}
-
 .swiper {
     padding: 0 100px;
     margin: auto auto;

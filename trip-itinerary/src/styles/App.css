@@ -223,3 +223,10 @@ h3 {
     color: var(--background-colour);
   }
 }
+
+.no-content-display {
+    background-color: var(--background-colour);
+    border-radius: 15px;
+    padding: 30px;
+    margin: 20px 0;
+}
