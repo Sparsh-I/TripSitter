@@ -216,12 +216,23 @@ h3 {
 }
 
 .footer {
+  margin-top: 30px;
   padding: 30px;
   background-color: var(--secondary-colour);
 
   p {
     color: var(--background-colour);
   }
+}
+
+.page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  flex: 1;
 }
 
 .no-content-display {

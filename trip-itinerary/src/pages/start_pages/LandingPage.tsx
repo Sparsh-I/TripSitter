@@ -12,27 +12,29 @@ export default function LandingPage() {
     const isMobile = useIsMobile();
 
     return (
-        <div>
-            <div className="navbar" id="main-page-nav">
-                <NavLink to="/">
-                    <div className="logo">
-                        <img id="icon" src={logoTent} alt="Logo icon" />
-                        <img id="text" src={logoText} alt="Logo text" />
+        <div className="page-layout">
+            <div className="page-content">
+                <div className="navbar" id="main-page-nav">
+                    <NavLink to="/">
+                        <div className="logo">
+                            <img id="icon" src={logoTent} alt="Logo icon" />
+                            <img id="text" src={logoText} alt="Logo text" />
+                         </div>
+                    </NavLink>
+                </div>
+                {isMobile && (
+                    <div className="main-container">
+                        <Login />
                     </div>
-                </NavLink>
+                )}
+                {!isMobile && (
+                    <div className="main-container">
+                        <img className="main-image" src={image} alt="Double rainbow" />
+                        <Login />
+                        <img className="main-image" src={image2} alt="Path in a field" />
+                    </div>
+                )}
             </div>
-            {isMobile && (
-                <div className="main-container">
-                    <Login />
-                </div>
-            )}
-            {!isMobile && (
-                <div className="main-container">
-                    <img className="main-image" src={image} alt="Double rainbow" />
-                    <Login />
-                    <img className="main-image" src={image2} alt="Path in a field" />
-                </div>
-            )}
             <Footer/>
         </div>
     );

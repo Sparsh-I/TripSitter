@@ -33,17 +33,19 @@ export default function HomePage() {
     });
 
     return (
-        <div>
+        <div className="page-layout">
             <NavBar/>
-            <div id="banner">
-                <div className="label white">
-                    <h2>Welcome back{!loading && `, ${name}`}! Planning a trip?</h2>
+            <div className="page-content">
+                <div id="banner">
+                    <div className="label white">
+                        <h2>Welcome back{!loading && `, ${name}`}! Planning a trip?</h2>
+                    </div>
+                    <QuickTrip/>
                 </div>
-                <QuickTrip/>
-            </div>
-            <div className="notifications" id="notifications">
-                <ConnectionsWidget/>
-                <UpcomingTripWidget/>
+                <div className="notifications" id="notifications">
+                    <ConnectionsWidget/>
+                    <UpcomingTripWidget/>
+                </div>
             </div>
             <Footer/>
         </div>

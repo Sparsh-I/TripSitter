@@ -25,48 +25,50 @@ export default function MyTripsPage() {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <div className="page-layout">
             <NavBar/>
-            <div className="trips-carousels">
-                <div className="my-trips-header">
-                    <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
-                    <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
-                </div>
-                <div className="current-trips">
-                    <div className="label primary">
-                        <h3>Current</h3>
+            <div className="page-content">
+                <div className="trips-carousels">
+                    <div className="my-trips-header">
+                        <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
+                        <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                     </div>
-                    {current.length === 0 ? (
-                        <div className="no-content-display">
-                            <h4>No trips to show</h4>
+                    <div className="current-trips">
+                        <div className="label primary">
+                            <h3>Current</h3>
                         </div>
-                    ) : (
-                        <TripCarousel trips={current} />
-                    )}
-                </div>
-                <div className="upcoming-trips">
-                    <div className="label black">
-                        <h3>Upcoming</h3>
+                        {current.length === 0 ? (
+                            <div className="no-content-display">
+                                <h4>No trips to show</h4>
+                            </div>
+                        ) : (
+                            <TripCarousel trips={current} />
+                        )}
                     </div>
-                    {upcoming.length === 0 ? (
-                        <div className="no-content-display">
-                            <h4>No trips to show</h4>
+                    <div className="upcoming-trips">
+                        <div className="label black">
+                            <h3>Upcoming</h3>
                         </div>
-                    ) : (
-                        <TripCarousel trips={upcoming} />
-                    )}
-                </div>
-                <div className="past-trips">
-                    <div className="label grey">
-                        <h3>Past</h3>
+                        {upcoming.length === 0 ? (
+                            <div className="no-content-display">
+                                <h4>No trips to show</h4>
+                            </div>
+                        ) : (
+                            <TripCarousel trips={upcoming} />
+                        )}
                     </div>
-                    {past.length === 0 ? (
-                        <div className="no-content-display">
-                            <h4>No trips to show</h4>
+                    <div className="past-trips">
+                        <div className="label grey">
+                            <h3>Past</h3>
                         </div>
-                    ) : (
-                        <TripCarousel trips={past} />
-                    )}
+                        {past.length === 0 ? (
+                            <div className="no-content-display">
+                                <h4>No trips to show</h4>
+                            </div>
+                        ) : (
+                            <TripCarousel trips={past} />
+                        )}
+                    </div>
                 </div>
             </div>
             <Footer/>
