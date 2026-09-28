@@ -3,8 +3,9 @@ import NavBar from '../components/global/NavBar.tsx';
 import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
 import { useState, useEffect } from 'react';
-import { getConnections, currentConnections, pendingRequests } from "../utils/ConnectionUtils.ts";
-import type { Connection } from '../types/Connection.ts';
+import { getConnections, currentConnections, outgoingRequests, incomingRequests } from "../utils/ConnectionUtils.ts";
+import type { Connection, ConnectionStatus } from '../types/Connection.ts';
+import { useAuthContext } from '../context/AuthContext.tsx';
 
 type TabName = "Connections" | "Requests" | "Add Connection";
 
@@ -12,20 +13,44 @@ export default function ConnectionsPage() {
     const [activeTab, setActiveTab] = useState<TabName>("Connections");
     const [connections, setConnections] = useState<Connection[]>([]);
     
-        useEffect(() => {
-            getConnections()
-                .then(connections => setConnections(connections))
-                .catch(e => {
-                    console.error("Failed to load connections: ", e);
-            });
-        }, [])
+    const { session } = useAuthContext();
+    const userId = session?.user.id;
+    
+    useEffect(() => {
+        getConnections()
+            .then(connections => setConnections(connections))
+            .catch(e => {
+                console.error("Failed to load connections: ", e);
+        });
+    }, [])
 
     function openTab(tabName: TabName) {
         setActiveTab(tabName);
     }
 
     const current = currentConnections(connections);
-    const pending = pendingRequests(connections);
+    const incoming = incomingRequests(connections, userId || "");
+    const outgoing = outgoingRequests(connections, userId || "");
+
+    const data = {
+        userId : "user1",
+        connectionId: "user2",
+    };
+
+    function makeTestConnection(data: any, status: string): Connection {
+        const testConnection: Connection = {
+            userId: data.userId,
+            connectionId: data.connectionId,
+            status: status as ConnectionStatus,
+            updatedAt: new Date().getDate().toString(),
+            createdAt: new Date().getDate().toString(),
+        };
+        return testConnection;
+    }
+
+    current.push(makeTestConnection(data, "accepted"));
+    incoming.push(makeTestConnection(data, "pending"));
+    outgoing.push(makeTestConnection(data, "pending"));
 
     return (
         <div>
@@ -71,14 +96,40 @@ export default function ConnectionsPage() {
                 <div className="connections-requests">
                     <h2>Pending Requests</h2>
                     <br></br>
-                    {/* <h4>Incoming</h4> */}
+                    <h4>Incoming</h4>
                     <table>
-                        {pending.map(connection => (
-                            <tr>
-                                <td><div>{connection.connectionId}</div></td>
-                                <td>View Profile</td>
-                            </tr>
-                        ))}
+                        {incoming.length == 0 ? (
+                            <div className="no-content-display">
+                                <h4>No incoming requests</h4>
+                            </div>
+                        ) : (
+                            incoming.map(connection => (
+                                <tr>
+                                    <td className="connection-cell left-aligned-cell">
+                                        {connection.connectionId}
+                                    </td>
+                                    <td className="connection-cell right-aligned-cell">View Profile</td>
+                                </tr>
+                            ))
+                        )}
+                    </table>
+                    <br></br>
+                    <h4>Outgoing</h4>
+                    <table>
+                        {outgoing.length == 0 ?  (
+                            <div className="no-content-display">
+                                <h4>No outgoing requests</h4>
+                            </div>
+                        ) : (
+                            outgoing.map(connection => (
+                                <tr>
+                                    <td className="connection-cell left-aligned-cell">
+                                        {connection.connectionId}
+                                    </td>
+                                    <td className="connection-cell right-aligned-cell">View Profile</td>
+                                </tr>
+                            ))
+                        )}
                     </table>
                 </div>
             )}

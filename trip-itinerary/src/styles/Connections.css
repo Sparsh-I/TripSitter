@@ -68,3 +68,15 @@ button {
     color: black;
     border-radius: 10px;
 }
+
+.connection-cell {
+    padding: 1% 5%;
+}
+
+.left-aligned-cell {
+    text-align: left;
+}
+
+.right-aligned-cell {
+    text-align: right;
+}
