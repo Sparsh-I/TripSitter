@@ -28,6 +28,8 @@ export async function getConnections(): Promise<Connection[]> {
     return data.map(fromRow);
 }
 
+// Functions pertaining to returning connection statuses
+
 function pendingRequests(connections: Connection[]): Connection[] {
     return connections.filter(c => c.status === 'pending');
 }
@@ -44,6 +46,47 @@ export function currentConnections(connections: Connection[]): Connection[] {
     return connections.filter(c => c.status === 'accepted');
 }
 
+// Functions related to adding/view connections
+
+export async function sendConnectionRequest(currentUserId: string, otherUserId: string): Promise<Connection> {
+    if (currentUserId === otherUserId) {
+        throw new Error("Cannot send connection request to self");
+    }
+    
+    try {
+        const userExists = await checkUserExists(otherUserId);
+        if (!userExists) {
+            throw new Error("User does not exist");
+        }
+    } catch (e: any) {
+        throw new Error(`Failed to check if user exists: ${e.message}`);
+    }
+    
+    const { data, error } = await supabase
+        .from('connections')
+        .insert([
+            { user_id: currentUserId, connection_id: otherUserId, status: 'pending' }
+        ]);
+
+    if (error) {
+        throw new Error(`Failed to send connection request: ${error.message}`);
+    }
+
+    return fromRow(data);
+}
+
+async function checkUserExists(userId: string): Promise<boolean> {
+    const { data, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', userId);
+        
+        if (error) throw error;
+
+        return data.length != 0;
+}
+
 export function otherUserId(connection: Connection, currentUserId: string): string {
     return connection.userId === currentUserId ? connection.connectionId : connection.userId;
 }
+
