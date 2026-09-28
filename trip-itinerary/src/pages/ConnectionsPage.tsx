@@ -8,9 +8,11 @@ import type { Connection, ConnectionStatus } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
 
 type TabName = "Connections" | "Requests" | "Add Connection";
+type SubTabName = "Incoming" | "Outgoing";
 
 export default function ConnectionsPage() {
     const [activeTab, setActiveTab] = useState<TabName>("Connections");
+    const [activeSubTab, setActiveSubTab] = useState<SubTabName>("Incoming");
     const [connections, setConnections] = useState<Connection[]>([]);
     
     const { session } = useAuthContext();
@@ -26,6 +28,10 @@ export default function ConnectionsPage() {
 
     function openTab(tabName: TabName) {
         setActiveTab(tabName);
+    }
+
+    function openSubTab(subTabName: SubTabName) {
+        setActiveSubTab(subTabName);
     }
 
     const current = currentConnections(connections);
@@ -60,7 +66,6 @@ export default function ConnectionsPage() {
     }
 
     generateTestConnections(15);
-
 
     return (
         <div className="page-layout">
@@ -113,9 +118,25 @@ export default function ConnectionsPage() {
                 {activeTab === "Requests" && (
                     <div className="connections-requests">
                         <h2>Pending Requests</h2>
+                        <div className="sub-tabs">
+                            <button 
+                                className={activeSubTab === "Incoming" ? "tab-button-active" : "tab-button"}
+                                onClick={() => openSubTab("Incoming")}
+                            >
+                                Incoming
+                            </button>
+                            <button 
+                                className={activeSubTab === "Outgoing" ? "tab-button-active" : "tab-button"}
+                                onClick={() => openSubTab("Outgoing")}
+                            >
+                                Outgoing
+                            </button>
+                        </div>
+
                         <br></br>
-                        <h4>Incoming</h4>
-                        <table>
+
+                        {activeSubTab === "Incoming" && (
+                            <table>
                             {incoming.length == 0 ? (
                                 <div className="no-content-display">
                                     <h4>No incoming requests</h4>
@@ -126,14 +147,20 @@ export default function ConnectionsPage() {
                                         <td className="connection-cell left-aligned-cell">
                                             {connection.connectionId}
                                         </td>
-                                        <td className="connection-cell">View Profile</td>
-                                        <td className="connection-cell right-aligned-cell">Accept | Ignore</td>
+                                        <td className="connection-cell">
+                                            <button>View Profile</button>
+                                        </td>
+                                        <td className="connection-cell right-aligned-cell">
+                                            <button className="green">✓</button>
+                                            <button className="red">✘</button>
+                                        </td>
                                     </tr>
                                 ))
                             )}
                         </table>
-                        <br></br>
-                        <h4>Outgoing</h4>
+                        )}
+
+                        {activeSubTab === "Outgoing" && (
                         <table>
                             {outgoing.length == 0 ?  (
                                 <div className="no-content-display">
@@ -145,12 +172,17 @@ export default function ConnectionsPage() {
                                         <td className="connection-cell left-aligned-cell">
                                             {connection.connectionId}
                                         </td>
-                                        <td className="connection-cell">View Profile</td>
-                                        <td className="connection-cell right-aligned-cell">Cancel</td>
+                                        <td className="connection-cell">
+                                            <button>View Profile</button>
+                                        </td>
+                                        <td className="connection-cell right-aligned-cell">
+                                            <button className="red">⏎</button>
+                                        </td>
                                     </tr>
                                 ))
                             )}
                         </table>
+                        )}
                     </div>
                 )}
 
