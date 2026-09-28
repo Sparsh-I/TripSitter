@@ -32,35 +32,6 @@ export default function ConnectionsPage() {
     const incoming = incomingRequests(connections, userId || "");
     const outgoing = outgoingRequests(connections, userId || "");
 
-    const data = {
-        userId : "user1",
-        connectionId: "user2",
-    };
-
-    function makeTestConnection(data: any, status: string): Connection {
-        const testConnection: Connection = {
-            userId: data.userId,
-            connectionId: data.connectionId,
-            status: status as ConnectionStatus,
-            updatedAt: new Date().getDate().toString(),
-            createdAt: new Date().getDate().toString(),
-        };
-        return testConnection;
-    }
-
-    function generateTestConnections(num: number): void {
-        for (let i = 0; i < num; i++) {
-            const val = Math.random();
-            val > 0.7 ? 
-                current.push(makeTestConnection(data, "accepted")) : 
-                val < 0.4 ? 
-                    incoming.push(makeTestConnection(data, "pending")) : 
-                    outgoing.push(makeTestConnection(data, "pending"));
-        }
-    }
-
-    generateTestConnections(15);
-
     return (
         <div className="page-layout">
             <NavBar/>
@@ -91,14 +62,20 @@ export default function ConnectionsPage() {
                         <h2>Your Connections</h2>
                         <br></br>
                         <table>
-                            {current.map(connection => (
-                                <tr>
-                                    <td className="connection-cell left-aligned-cell">
-                                        {connection.connectionId}
-                                    </td>
-                                    <td className="connection-cell right-aligned-cell">View Profile</td>
-                                </tr>
-                            ))}
+                            { current.length == 0 ? (
+                                <div className="no-content-display">
+                                    <h4>No connections yet</h4>
+                                </div>
+                            ) : (
+                                current.map(connection => (
+                                    <tr>
+                                        <td className="connection-cell left-aligned-cell">
+                                            {connection.connectionId}
+                                        </td>
+                                        <td className="connection-cell right-aligned-cell">View Profile</td>
+                                    </tr>
+                                ))
+                            )}
                         </table>
                     </div>
                 )}
