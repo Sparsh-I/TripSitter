@@ -52,7 +52,7 @@ button {
 
     &:hover {
         border: #ffffff 1px solid;
-        background-color: #FFBE88;
+        background-color: var(--primary-colour-alt2);
         color: black;
         border-radius: 10px;
     }
@@ -65,7 +65,7 @@ button {
 
 .tab-button-active {
     border: #ffffff 1px solid;
-    background-color: #ffa154;
+    background-color: var(--primary-colour);
     color: black;
     border-radius: 10px;
 }
