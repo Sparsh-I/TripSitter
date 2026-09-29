@@ -3,7 +3,7 @@ import NavBar from '../components/global/NavBar.tsx';
 import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
 import { useState, useEffect } from 'react';
-import { getConnections, currentConnections, outgoingRequests, incomingRequests } from "../utils/ConnectionUtils.ts";
+import * as ConnUtils from "../utils/ConnectionUtils.ts";
 import type { Connection, ConnectionStatus } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
 
@@ -19,7 +19,7 @@ export default function ConnectionsPage() {
     const userId = session?.user.id;
     
     useEffect(() => {
-        getConnections()
+        ConnUtils.getConnections()
             .then(connections => setConnections(connections))
             .catch(e => {
                 console.error("Failed to load connections: ", e);
@@ -34,9 +34,9 @@ export default function ConnectionsPage() {
         setActiveSubTab(subTabName);
     }
 
-    const current = currentConnections(connections);
-    const incoming = incomingRequests(connections, userId || "");
-    const outgoing = outgoingRequests(connections, userId || "");
+    const current = ConnUtils.currentConnections(connections);
+    const incoming = ConnUtils.incomingRequests(connections, userId || "");
+    const outgoing = ConnUtils.outgoingRequests(connections, userId || "");
 
     const data = {
         userId : "user1",
@@ -107,7 +107,9 @@ export default function ConnectionsPage() {
                                         <td className="connection-cell left-aligned-cell">
                                             {connection.connectionId}
                                         </td>
-                                        <td className="connection-cell right-aligned-cell">View Profile</td>
+                                        <td className="connection-cell right-aligned-cell">
+                                            <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId || ""))} id="view-profile">View Profile</button>
+                                        </td>
                                     </tr>
                                 ))
                             )}
@@ -120,13 +122,13 @@ export default function ConnectionsPage() {
                         <h2>Pending Requests</h2>
                         <div className="sub-tabs">
                             <button 
-                                className={activeSubTab === "Incoming" ? "tab-button-active" : "tab-button"}
+                                className={`sub-tab ${activeSubTab === "Incoming" ? "tab-button-active" : "tab-button"}`}
                                 onClick={() => openSubTab("Incoming")}
                             >
                                 Incoming
                             </button>
                             <button 
-                                className={activeSubTab === "Outgoing" ? "tab-button-active" : "tab-button"}
+                                className={`sub-tab ${activeSubTab === "Outgoing" ? "tab-button-active" : "tab-button"}`}
                                 onClick={() => openSubTab("Outgoing")}
                             >
                                 Outgoing
@@ -143,16 +145,16 @@ export default function ConnectionsPage() {
                                 </div>
                             ) : (
                                 incoming.map(connection => (
-                                    <tr>
+                                    <tr key={`${connection.userId}-${connection.connectionId}`}>
                                         <td className="connection-cell left-aligned-cell">
-                                            {connection.connectionId}
+                                            {ConnUtils.otherUserId(connection, userId || "")}
                                         </td>
                                         <td className="connection-cell">
-                                            <button>View Profile</button>
+                                            <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId || ""))} id="view-profile">View Profile</button>
                                         </td>
                                         <td className="connection-cell right-aligned-cell">
-                                            <button className="green">✓</button>
-                                            <button className="red">✘</button>
+                                            <button onClick={() => ConnUtils.acceptRequest(ConnUtils.otherUserId(connection, userId || ""))} id="accept-req" className="green">✓</button>
+                                            <button onClick={() => ConnUtils.ignoreRequest(ConnUtils.otherUserId(connection, userId || ""))} id="ignore-req" className="red">✘</button>
                                         </td>
                                     </tr>
                                 ))
@@ -173,7 +175,7 @@ export default function ConnectionsPage() {
                                             {connection.connectionId}
                                         </td>
                                         <td className="connection-cell">
-                                            <button>View Profile</button>
+                                            <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId || ""))} id="view-profile">View Profile</button>
                                         </td>
                                         <td className="connection-cell right-aligned-cell">
                                             <button className="red">⏎</button>
@@ -196,7 +198,9 @@ export default function ConnectionsPage() {
                                 type="text"
                                 placeholder="Enter a username"
                             />
-                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}}>Send Request</button>    
+                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}}>
+                                Send Request
+                            </button>    
                         </div>
                     </div>
                 )}
