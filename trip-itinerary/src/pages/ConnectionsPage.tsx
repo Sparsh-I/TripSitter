@@ -38,7 +38,7 @@ export default function ConnectionsPage() {
     const incoming = ConnUtils.incomingRequests(connections, userId || "");
     const outgoing = ConnUtils.outgoingRequests(connections, userId || "");
 
-    const data = {
+    /* const data = {
         userId : "user1",
         connectionId: "user2",
     };
@@ -65,7 +65,7 @@ export default function ConnectionsPage() {
         }
     }
 
-    generateTestConnections(15);
+    generateTestConnections(15); */
 
     return (
         <div className="page-layout">
