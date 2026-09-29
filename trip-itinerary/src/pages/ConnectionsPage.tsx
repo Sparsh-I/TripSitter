@@ -4,7 +4,7 @@ import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
 import { useState, useEffect } from 'react';
 import { getConnections, currentConnections, outgoingRequests, incomingRequests } from "../utils/ConnectionUtils.ts";
-import type { Connection, ConnectionStatus } from '../types/Connection.ts';
+import type { Connection } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
 
 type TabName = "Connections" | "Requests" | "Add Connection";
