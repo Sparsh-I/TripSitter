@@ -54,7 +54,9 @@ export default function MyMapPage() {
         : allTrips;
 
     function handleMarkerClick(lat: number, lng: number) {
-        mapRef.current?.setView([lat, lng], 10)
+        mapRef.current?.flyTo([lat, lng], 10, {
+            duration: 1,
+        })
     }
 
     function handleFilterChange(e: React.ChangeEvent<HTMLInputElement>) {
