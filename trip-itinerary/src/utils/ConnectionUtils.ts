@@ -2,6 +2,8 @@ import type { Connection } from '../types/Connection';
 import type { Profile } from '../types/Profile';
 import {supabase} from "./SupabaseClient";
 
+export type ProfileSummary = { id: string; username: string; first_name: string | null; last_name: string | null  };
+
 function fromRow(row: any): Connection {
     return {
         userId: row.user_id,
@@ -30,15 +32,15 @@ export async function getUserIdByUsername(username: string): Promise<string> {
     return data.id;
 }
 
-export async function getUsernames(ids: string[]): Promise<Record<string, string>> {
+export async function getProfileSummaries(ids: string[]): Promise<Record<string, ProfileSummary>> {
     if (ids.length === 0) return {};
     const { data, error } = await supabase
         .from('profiles')
-        .select('id, username')
+        .select('id, username, first_name, last_name')
         .in('id', ids);
 
     if (error) throw new Error(`Failed to look up users: ${error.message}`);
-    return Object.fromEntries(data.map(p => [p.id, p.username]));
+    return Object.fromEntries(data.map(p => [p.id, p]));
 }
 
 export async function getConnections(): Promise<Connection[]> {

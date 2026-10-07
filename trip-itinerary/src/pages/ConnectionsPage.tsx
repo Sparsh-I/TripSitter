@@ -15,7 +15,9 @@ export default function ConnectionsPage() {
     const [activeSubTab, setActiveSubTab] = useState<SubTabName>("Incoming");
     const [connections, setConnections] = useState<Connection[]>([]);
     const [otherUserId, setOtherUserId] = useState("");
-    const [names, setNames] = useState<Record<string, string>>({});
+    const [profiles, setProfiles] = useState<Record<string, ConnUtils.ProfileSummary>>({});
+    // const [names, setNames] = useState<Record<string, string>>({});
+    // const [usernames, setUsernames] = useState<Record<string, string>>({});
     
     const { session } = useAuthContext();
     const userId = session?.user.id;
@@ -28,10 +30,10 @@ export default function ConnectionsPage() {
             try {
                 const conns = await ConnUtils.getConnections();
                 const ids = conns.map(c => ConnUtils.otherUserId(c, userId!));
-                const lookup = await ConnUtils.getUsernames(ids);
+                const lookup = await ConnUtils.getProfileSummaries(ids);
                 if (cancelled) return;
                 setConnections(conns);
-                setNames(lookup);
+                setProfiles(lookup);
             } catch (err) {
                 console.error(err);
             }
@@ -129,16 +131,23 @@ export default function ConnectionsPage() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    current.map(connection => (
-                                        <tr>
-                                            <td className="connection-cell left-aligned-cell">
-                                                {connection.connectionId}
-                                            </td>
-                                            <td className="connection-cell right-aligned-cell">
-                                                <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId!))} id="view-profile">View Profile</button>
-                                            </td>
-                                        </tr>
-                                    ))
+                                    current.map(connection => {
+                                        const other = profiles[ConnUtils.otherUserId(connection, userId!)];
+                                        const displayName = other
+                                            ? ((other.first_name ?? "") + " " + (other.last_name ?? ""))
+                                            : "Unknown User";
+                                        
+                                        return (
+                                            <tr>
+                                                <td className="connection-cell left-aligned-cell">
+                                                    {displayName}
+                                                </td>
+                                                <td className="connection-cell right-aligned-cell">
+                                                    <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId!))} id="view-profile">View Profile</button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
                                 )}
                             </tbody>
                         </table>
@@ -175,20 +184,27 @@ export default function ConnectionsPage() {
                                             </td>
                                         </tr>
                                     ) : (
-                                        incoming.map(connection => (
-                                            <tr key={`${connection.userId}-${connection.connectionId}`}>
-                                                <td className="connection-cell left-aligned-cell">
-                                                    {names[connection.userId] ?? "Unknown user"}
-                                                </td>
-                                                <td className="connection-cell">
-                                                    <button onClick={() => ConnUtils.viewProfile(connection.userId)} id="view-profile">View Profile</button>
-                                                </td>
-                                                <td className="connection-cell right-aligned-cell">
-                                                    <button onClick={() => ConnUtils.acceptRequest(connection.userId)} id="accept-req" className="green">✓</button>
-                                                    <button onClick={() => ConnUtils.ignoreRequest(connection.userId)} id="ignore-req" className="red">✘</button>
-                                                </td>
-                                            </tr>
-                                        ))
+                                        incoming.map(connection => {
+                                            const other = profiles[connection.userId];
+                                            const displayName = other
+                                                ? ((other.first_name ?? "") + " " + (other.last_name ?? ""))
+                                                : "Unknown User";
+
+                                            return (
+                                                <tr key={`${connection.userId}-${connection.connectionId}`}>
+                                                    <td className="connection-cell left-aligned-cell">
+                                                        {displayName}
+                                                    </td>
+                                                    <td className="connection-cell">
+                                                        <button onClick={() => ConnUtils.viewProfile(connection.userId)} id="view-profile">View Profile</button>
+                                                    </td>
+                                                    <td className="connection-cell right-aligned-cell">
+                                                        <button onClick={() => ConnUtils.acceptRequest(connection.userId)} id="accept-req" className="green">✓</button>
+                                                        <button onClick={() => ConnUtils.ignoreRequest(connection.userId)} id="ignore-req" className="red">✘</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
                                     )}
                                 </tbody>
                             </table>
@@ -204,20 +220,30 @@ export default function ConnectionsPage() {
                                             </td>
                                         </tr>
                                     ) : (
-                                        outgoing.map(connection => (
-                                            <tr key={`${connection.userId}-${connection.connectionId}`}>
-                                                <td className="connection-cell left-aligned-cell">
-                                                    {names[connection.connectionId] ?? "Unknown user"}
-                                                </td>
-                                                <td className="connection-cell">
-                                                    <button onClick={() => ConnUtils.viewProfile(connection.connectionId)}
-                                                    id="view-profile">View Profile</button>
-                                                </td>
-                                                <td className="connection-cell right-aligned-cell">
-                                                    <button className="red">⏎</button>
-                                                </td>
-                                            </tr>
-                                        ))
+                                        outgoing.map(connection => {
+                                            const other = profiles[connection.connectionId];
+                                            const displayName = other
+                                                ? ((other.first_name ?? "") + " " + (other.last_name ?? ""))
+                                                : "Unknown User";
+                                            
+                                            return (
+                                                <tr key={`${connection.userId}-${connection.connectionId}`}>
+                                                    <td className="connection-cell left-aligned-cell">
+                                                        <div>{displayName}</div>
+                                                        {other?.username && (
+                                                            <div style={{color: "#909090", fontSize: "0.8rem"}}>@{other.username}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="connection-cell">
+                                                        <button onClick={() => ConnUtils.viewProfile(connection.connectionId)}
+                                                        id="view-profile">View Profile</button>
+                                                    </td>
+                                                    <td className="connection-cell right-aligned-cell">
+                                                        <button className="red">⏎</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
                                     )}
                                 </tbody>
                             </table>
