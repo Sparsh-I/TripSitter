@@ -14,8 +14,11 @@ export default function ConnectionsPage() {
     const [activeSubTab, setActiveSubTab] = useState<SubTabName>("Incoming");
     
     const [connections, setConnections] = useState<Connection[]>([]);
-    const [otherUserId, setOtherUserId] = useState("");
+    const [otherUsername, setOtherUsername] = useState("");
     const [profiles, setProfiles] = useState<Record<string, ConnUtils.ProfileSummary>>({});
+
+    const [sending, setSending] = useState(false);
+    const [message, setMessage] = useState<{ type: "success" | "error"; text: string} | null>(null);
     
     const { session } = useAuthContext();
     const userId = session?.user.id;
@@ -83,14 +86,27 @@ export default function ConnectionsPage() {
     generateTestConnections(15); */
 
     async function handleSendRequest() {
-        if (!userId || !otherUserId) return;
+        if (!userId || !otherUsername) return;
+        setSending(true);
 
         try {
-            ConnUtils.sendConnectionRequest(otherUserId);
+            await ConnUtils.sendConnectionRequest(otherUsername);
+            setOtherUsername("");
+            setMessage({type: "success", text: `Connection request sent to ${otherUsername}!`})
         } catch (err) {
+            setMessage({type: "error", text: "Connection request failed to send. Please try again."})       
             console.error("Failed to send connection request", err);
+        } finally {
+            setSending(false);
         }
     }
+
+    useEffect(() => {
+        if (!message) return;
+        const t = setTimeout(() => setMessage(null), 3000);
+        return () => clearTimeout(t);
+    }, [message]);
+
     return (
         <div className="page-layout">
             <NavBar/>
@@ -237,7 +253,7 @@ export default function ConnectionsPage() {
                                                         id="view-profile">View Profile</button>
                                                     </td>
                                                     <td className="connection-cell right-aligned-cell">
-                                                        <button className="red">⏎</button>
+                                                        <button onClick={() => ConnUtils.cancelRequest(connection.connectionId)} className="red">⏎</button>
                                                     </td>
                                                 </tr>
                                             );
@@ -255,16 +271,28 @@ export default function ConnectionsPage() {
                         <br></br>
                         <div className="input-wrapper">
                             <input
+                                id="username-input"
                                 className="username-input"
                                 type="text"
                                 placeholder="Enter a username"
-                                value={otherUserId}
-                                onChange={(e) => setOtherUserId(e.target.value)}
+                                value={otherUsername}
+                                onChange={(e) => setOtherUsername(e.target.value)}
                             />
-                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}} onClick={handleSendRequest}>
-                                Send Request
+                            <button disabled={otherUsername.trim() == "" || sending} 
+                                    style={{whiteSpace: "nowrap", marginLeft: "40px",
+                                        backgroundColor: otherUsername.trim() == "" || sending ? "#9a9a9a" : "var(--primary-colour-alt)",
+                                        borderColor: otherUsername.trim() == "" || sending ? "#9a9a9a" : "var(--primary-colour-alt)",
+                                        cursor: otherUsername.trim() == "" || sending ? "not-allowed" : "pointer",
+                                    }} onClick={handleSendRequest}>
+                                {sending ? "Sending..." : "Send Request"}
                             </button>    
                         </div>
+                        {message && (
+                            <p style={{textAlign: "start", color: message.type == "success" ? "var(--custom-green)" : "var(--custom-red)"}}>
+                                {message.text}
+                            </p>
+                        )}
+                        
                     </div>
                 )}
             </div>
