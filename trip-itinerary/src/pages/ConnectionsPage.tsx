@@ -1,5 +1,4 @@
 import NavBar from '../components/global/NavBar.tsx';
-// import construction from '../assets/under-construction.png';
 import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
 import { useState, useEffect } from 'react';
@@ -13,11 +12,10 @@ type SubTabName = "Incoming" | "Outgoing";
 export default function ConnectionsPage() {
     const [activeTab, setActiveTab] = useState<TabName>("Connections");
     const [activeSubTab, setActiveSubTab] = useState<SubTabName>("Incoming");
+    
     const [connections, setConnections] = useState<Connection[]>([]);
     const [otherUserId, setOtherUserId] = useState("");
     const [profiles, setProfiles] = useState<Record<string, ConnUtils.ProfileSummary>>({});
-    // const [names, setNames] = useState<Record<string, string>>({});
-    // const [usernames, setUsernames] = useState<Record<string, string>>({});
     
     const { session } = useAuthContext();
     const userId = session?.user.id;
