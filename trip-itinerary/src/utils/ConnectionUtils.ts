@@ -18,6 +18,29 @@ async function requireUser() {
     return user;
 }   
 
+export async function getUserIdByUsername(username: string): Promise<string> {
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('id')
+        .ilike('username', username.trim())
+        .maybeSingle();
+
+    if (error) throw new Error(`Failed to look up user: ${error.message}`);
+    if (!data) throw new Error("User does not exist");
+    return data.id;
+}
+
+export async function getUsernames(ids: string[]): Promise<Record<string, string>> {
+    if (ids.length === 0) return {};
+    const { data, error } = await supabase
+        .from('profiles')
+        .select('id, username')
+        .in('id', ids);
+
+    if (error) throw new Error(`Failed to look up users: ${error.message}`);
+    return Object.fromEntries(data.map(p => [p.id, p.username]));
+}
+
 export async function getConnections(): Promise<Connection[]> {
     const user = await requireUser();
     const {data, error} = await supabase
@@ -49,8 +72,10 @@ export function currentConnections(connections: Connection[]): Connection[] {
 
 // Functions related to adding/view connections
 
-export async function sendConnectionRequest(currentUserId: string, otherUserId: string): Promise<Connection> {
-    if (currentUserId === otherUserId) {
+export async function sendConnectionRequest(otherUsername: string): Promise<Connection> {
+    const user = await requireUser();
+    const otherUserId = await getUserIdByUsername(otherUsername)
+    if (user.id === otherUserId) {
         throw new Error("Cannot send connection request to self");
     }
     
@@ -66,8 +91,10 @@ export async function sendConnectionRequest(currentUserId: string, otherUserId: 
     const { data, error } = await supabase
         .from('connections')
         .insert([
-            { user_id: currentUserId, connection_id: otherUserId, status: 'pending' }
-        ]);
+            { user_id: user.id, connection_id: otherUserId, status: 'pending' }
+        ])
+        .select()
+        .single();
 
     if (error) {
         throw new Error(`Failed to send connection request: ${error.message}`);

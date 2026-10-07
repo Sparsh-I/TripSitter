@@ -14,17 +14,32 @@ export default function ConnectionsPage() {
     const [activeTab, setActiveTab] = useState<TabName>("Connections");
     const [activeSubTab, setActiveSubTab] = useState<SubTabName>("Incoming");
     const [connections, setConnections] = useState<Connection[]>([]);
+    const [otherUserId, setOtherUserId] = useState("");
+    const [names, setNames] = useState<Record<string, string>>({});
     
     const { session } = useAuthContext();
     const userId = session?.user.id;
-    
+
     useEffect(() => {
-        ConnUtils.getConnections()
-            .then(connections => setConnections(connections))
-            .catch(e => {
-                console.error("Failed to load connections: ", e);
-        });
-    }, [])
+        if (!userId) return; 
+        let cancelled = false;
+        
+        async function load() {
+            try {
+                const conns = await ConnUtils.getConnections();
+                const ids = conns.map(c => ConnUtils.otherUserId(c, userId!));
+                const lookup = await ConnUtils.getUsernames(ids);
+                if (cancelled) return;
+                setConnections(conns);
+                setNames(lookup);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        void load();
+        return () => { cancelled = true };
+}, [userId]);
 
     function openTab(tabName: TabName) {
         setActiveTab(tabName);
@@ -35,8 +50,8 @@ export default function ConnectionsPage() {
     }
 
     const current = ConnUtils.currentConnections(connections);
-    const incoming = ConnUtils.incomingRequests(connections, userId || "");
-    const outgoing = ConnUtils.outgoingRequests(connections, userId || "");
+    const incoming = ConnUtils.incomingRequests(connections, userId!);
+    const outgoing = ConnUtils.outgoingRequests(connections, userId!);
 
     /* const data = {
         userId : "user1",
@@ -67,6 +82,15 @@ export default function ConnectionsPage() {
 
     generateTestConnections(15); */
 
+    async function handleSendRequest() {
+        if (!userId || !otherUserId) return;
+
+        try {
+            ConnUtils.sendConnectionRequest(otherUserId);
+        } catch (err) {
+            console.error("Failed to send connection request", err);
+        }
+    }
     return (
         <div className="page-layout">
             <NavBar/>
@@ -97,22 +121,26 @@ export default function ConnectionsPage() {
                         <h2>Your Connections</h2>
                         <br></br>
                         <table>
-                            { current.length == 0 ? (
-                                <div className="no-content-display">
-                                    <h4>No connections yet</h4>
-                                </div>
-                            ) : (
-                                current.map(connection => (
+                            <tbody>
+                                { current.length == 0 ? (
                                     <tr>
-                                        <td className="connection-cell left-aligned-cell">
-                                            {connection.connectionId}
-                                        </td>
-                                        <td className="connection-cell right-aligned-cell">
-                                            <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId || ""))} id="view-profile">View Profile</button>
+                                        <td colSpan={3} className="no-content-display">
+                                            <h4>No connections yet</h4>
                                         </td>
                                     </tr>
-                                ))
-                            )}
+                                ) : (
+                                    current.map(connection => (
+                                        <tr>
+                                            <td className="connection-cell left-aligned-cell">
+                                                {connection.connectionId}
+                                            </td>
+                                            <td className="connection-cell right-aligned-cell">
+                                                <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId!))} id="view-profile">View Profile</button>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 )}
@@ -139,51 +167,60 @@ export default function ConnectionsPage() {
 
                         {activeSubTab === "Incoming" && (
                             <table>
-                            {incoming.length == 0 ? (
-                                <div className="no-content-display">
-                                    <h4>No incoming requests</h4>
-                                </div>
-                            ) : (
-                                incoming.map(connection => (
-                                    <tr key={`${connection.userId}-${connection.connectionId}`}>
-                                        <td className="connection-cell left-aligned-cell">
-                                            {ConnUtils.otherUserId(connection, userId || "")}
-                                        </td>
-                                        <td className="connection-cell">
-                                            <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId || ""))} id="view-profile">View Profile</button>
-                                        </td>
-                                        <td className="connection-cell right-aligned-cell">
-                                            <button onClick={() => ConnUtils.acceptRequest(ConnUtils.otherUserId(connection, userId || ""))} id="accept-req" className="green">✓</button>
-                                            <button onClick={() => ConnUtils.ignoreRequest(ConnUtils.otherUserId(connection, userId || ""))} id="ignore-req" className="red">✘</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </table>
+                                <tbody>
+                                    {incoming.length == 0 ? (
+                                        <tr>
+                                            <td colSpan={3} className="no-content-display">
+                                                <h4>No incoming requests</h4>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        incoming.map(connection => (
+                                            <tr key={`${connection.userId}-${connection.connectionId}`}>
+                                                <td className="connection-cell left-aligned-cell">
+                                                    {names[connection.userId] ?? "Unknown user"}
+                                                </td>
+                                                <td className="connection-cell">
+                                                    <button onClick={() => ConnUtils.viewProfile(connection.userId)} id="view-profile">View Profile</button>
+                                                </td>
+                                                <td className="connection-cell right-aligned-cell">
+                                                    <button onClick={() => ConnUtils.acceptRequest(connection.userId)} id="accept-req" className="green">✓</button>
+                                                    <button onClick={() => ConnUtils.ignoreRequest(connection.userId)} id="ignore-req" className="red">✘</button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
                         )}
 
                         {activeSubTab === "Outgoing" && (
-                        <table>
-                            {outgoing.length == 0 ?  (
-                                <div className="no-content-display">
-                                    <h4>No outgoing requests</h4>
-                                </div>
-                            ) : (
-                                outgoing.map(connection => (
-                                    <tr>
-                                        <td className="connection-cell left-aligned-cell">
-                                            {connection.connectionId}
-                                        </td>
-                                        <td className="connection-cell">
-                                            <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId || ""))} id="view-profile">View Profile</button>
-                                        </td>
-                                        <td className="connection-cell right-aligned-cell">
-                                            <button className="red">⏎</button>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                        </table>
+                            <table>
+                                <tbody>
+                                    {outgoing.length == 0 ?  (
+                                        <tr>
+                                            <td colSpan={3} className="no-content-display">
+                                                <h4>No outgoing requests</h4>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        outgoing.map(connection => (
+                                            <tr key={`${connection.userId}-${connection.connectionId}`}>
+                                                <td className="connection-cell left-aligned-cell">
+                                                    {names[connection.connectionId] ?? "Unknown user"}
+                                                </td>
+                                                <td className="connection-cell">
+                                                    <button onClick={() => ConnUtils.viewProfile(connection.connectionId)}
+                                                    id="view-profile">View Profile</button>
+                                                </td>
+                                                <td className="connection-cell right-aligned-cell">
+                                                    <button className="red">⏎</button>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
                         )}
                     </div>
                 )}
@@ -197,8 +234,10 @@ export default function ConnectionsPage() {
                                 className="username-input"
                                 type="text"
                                 placeholder="Enter a username"
+                                value={otherUserId}
+                                onChange={(e) => setOtherUserId(e.target.value)}
                             />
-                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}}>
+                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}} onClick={handleSendRequest}>
                                 Send Request
                             </button>    
                         </div>
