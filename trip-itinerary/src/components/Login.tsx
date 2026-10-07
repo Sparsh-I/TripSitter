@@ -44,6 +44,7 @@ export default function Login() {
                             onChange={e => setEmail(e.target.value)}
                             placeholder="you@example.com"
                             required
+                            style={{width: "300px"}}
                         />
                         <button type="submit" disabled={sending}>
                             {sending ? "Sending..." : "Send Login Link"}
