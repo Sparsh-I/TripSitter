@@ -6,9 +6,10 @@ import MyMapPage from "./pages/MyMapPage.tsx";
 import EditTripPage from "./pages/trips_pages/EditTripPage.tsx";
 import NewTripPage from "./pages/trips_pages/NewTripPage.tsx";
 import SignUpPage from "./pages/start_pages/SignUpPage.tsx";
+import SplashScreen from "./components/global/SplashScreen.tsx";
 
 import "./styles/App.css";
-import {Navigate, Route, Routes} from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/start_pages/LandingPage.tsx";
 import ProtectedRoute from "./components/global/ProtectedRoute.tsx";
 import { supabase } from "./utils/SupabaseClient.ts";
@@ -61,6 +62,8 @@ export default function App() {
     }, []);
 
     function homeRoute() {
+        if (loggedIn == null || profileComplete == null) return <SplashScreen/>;
+
         if (!loggedIn) return <LandingPage/>;
         if (!profileComplete) return <ProtectedRoute><SignUpPage/></ProtectedRoute>;
         return <Navigate to="/home" replace/>;
