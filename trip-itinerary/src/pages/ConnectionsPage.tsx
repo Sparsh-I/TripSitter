@@ -1,36 +1,104 @@
 import NavBar from '../components/global/NavBar.tsx';
-// import construction from '../assets/under-construction.png';
 import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
-import { useState, useEffect } from 'react';
-import { getConnections, currentConnections, outgoingRequests, incomingRequests } from "../utils/ConnectionUtils.ts";
+import { useState, useEffect, useCallback } from 'react';
+import * as ConnUtils from "../utils/ConnectionUtils.ts";
 import type { Connection } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
+import { useSearchParams } from 'react-router-dom';
+import { supabase } from '../utils/SupabaseClient.ts';
 
-type TabName = "Connections" | "Requests" | "Add Connection";
+const TABS = ["Connections", "Requests", "Add Connection"] as const;
+const SUB_TABS = ["Incoming", "Outgoing"] as const;
+
+type TabName = typeof TABS[number];
+type SubTabName = typeof SUB_TABS[number];
+
+function parseParams<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
+    return value !== null && (allowed as readonly string[]).includes(value)
+        ? (value as T)
+        : fallback;
+}
 
 export default function ConnectionsPage() {
-    const [activeTab, setActiveTab] = useState<TabName>("Connections");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "Connections");
+    const activeSubTab = parseParams<SubTabName>(searchParams.get("sub"), SUB_TABS, "Incoming");
+    
     const [connections, setConnections] = useState<Connection[]>([]);
+    const [otherUsername, setOtherUsername] = useState("");
+    const [profiles, setProfiles] = useState<Record<string, ConnUtils.ProfileSummary>>({});
+
+    const [sending, setSending] = useState(false);
+    const [message, setMessage] = useState<{ type: "success" | "error"; text: string} | null>(null);
     
     const { session } = useAuthContext();
     const userId = session?.user.id;
-    
+
+    const load = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const conns = await ConnUtils.getConnections();
+            const ids = conns.map(c => ConnUtils.otherUserId(c, userId!));
+            const lookup = await ConnUtils.getProfileSummaries(ids);
+            setConnections(conns);
+            setProfiles(lookup);
+        } catch (err) {
+            console.error(err);
+        }
+    }, [userId]);
+
     useEffect(() => {
-        getConnections()
-            .then(connections => setConnections(connections))
-            .catch(e => {
-                console.error("Failed to load connections: ", e);
-        });
-    }, [])
+        if (!userId) return; 
+
+        const channel = supabase
+            .channel(`connections:${userId}`)
+            .on("postgres_changes",
+                {event: "*", schema: "public", table: "connections", filter: `user_id=eq.${userId}`},
+                () => void load())
+            .on("postgres_changes",
+                {event: "*", schema: "public", table: "connections", filter: `connection_id=eq.${userId}`},
+                () => void load())
+            .subscribe((status, err) => console.log("realtime:", status, err));
+
+        return () => { 
+            void supabase.removeChannel(channel);
+        };
+    }, [userId, load]);
 
     function openTab(tabName: TabName) {
-        setActiveTab(tabName);
+        setSearchParams({tab: tabName})
     }
 
-    const current = currentConnections(connections);
-    const incoming = incomingRequests(connections, userId || "");
-    const outgoing = outgoingRequests(connections, userId || "");
+    function openSubTab(subTabName: SubTabName) {
+        setSearchParams({tab: "Requests", sub: subTabName})
+    }
+
+    const current = ConnUtils.currentConnections(connections);
+    const incoming = ConnUtils.incomingRequests(connections, userId!);
+    const outgoing = ConnUtils.outgoingRequests(connections, userId!);
+
+    async function handleSendRequest() {
+        if (!userId || !otherUsername) return;
+        setSending(true);
+
+        try {
+            await ConnUtils.sendConnectionRequest(otherUsername);
+            setOtherUsername("");
+            setMessage({type: "success", text: `Connection request sent to ${otherUsername}!`})
+        } catch (err) {
+            setMessage({type: "error", text: "Connection request failed to send. Please try again."})       
+            console.error("Failed to send connection request", err);
+        } finally {
+            setSending(false);
+        }
+    }
+
+    useEffect(() => {
+        if (!message) return;
+        const t = setTimeout(() => setMessage(null), 3000);
+        return () => clearTimeout(t);
+    }, [message]);
 
     return (
         <div className="page-layout">
@@ -62,20 +130,33 @@ export default function ConnectionsPage() {
                         <h2>Your Connections</h2>
                         <br></br>
                         <table>
-                            { current.length == 0 ? (
-                                <div className="no-content-display">
-                                    <h4>No connections yet</h4>
-                                </div>
-                            ) : (
-                                current.map(connection => (
+                            <tbody>
+                                { current.length == 0 ? (
                                     <tr>
-                                        <td className="connection-cell left-aligned-cell">
-                                            {connection.connectionId}
+                                        <td colSpan={3} className="no-content-display">
+                                            <h4>No connections yet</h4>
                                         </td>
-                                        <td className="connection-cell right-aligned-cell">View Profile</td>
                                     </tr>
-                                ))
-                            )}
+                                ) : (
+                                    current.map(connection => {
+                                        const other = profiles[ConnUtils.otherUserId(connection, userId!)];
+                                        const displayName = other
+                                            ? ((other.first_name ?? "") + " " + (other.last_name ?? ""))
+                                            : "Unknown User";
+                                        
+                                        return (
+                                            <tr>
+                                                <td className="connection-cell left-aligned-cell">
+                                                    {displayName}
+                                                </td>
+                                                <td className="connection-cell right-aligned-cell">
+                                                    <button onClick={() => ConnUtils.viewProfile(ConnUtils.otherUserId(connection, userId!))} id="view-profile">View Profile</button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                )}
+                            </tbody>
                         </table>
                     </div>
                 )}
@@ -83,44 +164,97 @@ export default function ConnectionsPage() {
                 {activeTab === "Requests" && (
                     <div className="connections-requests">
                         <h2>Pending Requests</h2>
+                        <div className="sub-tabs">
+                            <button 
+                                className={`sub-tab ${activeSubTab === "Incoming" ? "tab-button-active" : "tab-button"}`}
+                                onClick={() => openSubTab("Incoming")}
+                            >
+                                Incoming
+                            </button>
+                            <button 
+                                className={`sub-tab ${activeSubTab === "Outgoing" ? "tab-button-active" : "tab-button"}`}
+                                onClick={() => openSubTab("Outgoing")}
+                            >
+                                Outgoing
+                            </button>
+                        </div>
+
                         <br></br>
-                        <h4>Incoming</h4>
-                        <table>
-                            {incoming.length == 0 ? (
-                                <div className="no-content-display">
-                                    <h4>No incoming requests</h4>
-                                </div>
-                            ) : (
-                                incoming.map(connection => (
-                                    <tr>
-                                        <td className="connection-cell left-aligned-cell">
-                                            {connection.connectionId}
-                                        </td>
-                                        <td className="connection-cell">View Profile</td>
-                                        <td className="connection-cell right-aligned-cell">Accept | Ignore</td>
-                                    </tr>
-                                ))
-                            )}
-                        </table>
-                        <br></br>
-                        <h4>Outgoing</h4>
-                        <table>
-                            {outgoing.length == 0 ?  (
-                                <div className="no-content-display">
-                                    <h4>No outgoing requests</h4>
-                                </div>
-                            ) : (
-                                outgoing.map(connection => (
-                                    <tr>
-                                        <td className="connection-cell left-aligned-cell">
-                                            {connection.connectionId}
-                                        </td>
-                                        <td className="connection-cell">View Profile</td>
-                                        <td className="connection-cell right-aligned-cell">Cancel</td>
-                                    </tr>
-                                ))
-                            )}
-                        </table>
+
+                        {activeSubTab === "Incoming" && (
+                            <table>
+                                <tbody>
+                                    {incoming.length == 0 ? (
+                                        <tr>
+                                            <td colSpan={3} className="no-content-display">
+                                                <h4>No incoming requests</h4>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        incoming.map(connection => {
+                                            const other = profiles[connection.userId];
+                                            const displayName = other
+                                                ? ((other.first_name ?? "") + " " + (other.last_name ?? ""))
+                                                : "Unknown User";
+
+                                            return (
+                                                <tr key={`${connection.userId}-${connection.connectionId}`}>
+                                                    <td className="connection-cell left-aligned-cell">
+                                                        {displayName}
+                                                    </td>
+                                                    <td className="connection-cell">
+                                                        <button onClick={() => ConnUtils.viewProfile(connection.userId)} id="view-profile">View Profile</button>
+                                                    </td>
+                                                    <td className="connection-cell right-aligned-cell">
+                                                        <button onClick={async () => { await ConnUtils.acceptRequest(connection.userId); await load(); }} id="accept-req" className="green">✓</button>
+                                                        <button onClick={async () => { await ConnUtils.ignoreRequest(connection.userId); await load(); }} id="ignore-req" className="red">✘</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
+
+                        {activeSubTab === "Outgoing" && (
+                            <table>
+                                <tbody>
+                                    {outgoing.length == 0 ?  (
+                                        <tr>
+                                            <td colSpan={3} className="no-content-display">
+                                                <h4>No outgoing requests</h4>
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        outgoing.map(connection => {
+                                            const other = profiles[connection.connectionId];
+                                            const displayName = other
+                                                ? ((other.first_name ?? "") + " " + (other.last_name ?? ""))
+                                                : "Unknown User";
+                                            
+                                            return (
+                                                <tr key={`${connection.userId}-${connection.connectionId}`}>
+                                                    <td className="connection-cell left-aligned-cell">
+                                                        <div>{displayName}</div>
+                                                        {other?.username && (
+                                                            <div style={{color: "#909090", fontSize: "0.8rem"}}>@{other.username}</div>
+                                                        )}
+                                                    </td>
+                                                    <td className="connection-cell">
+                                                        <button onClick={() => ConnUtils.viewProfile(connection.connectionId)}
+                                                        id="view-profile">View Profile</button>
+                                                    </td>
+                                                    <td className="connection-cell right-aligned-cell">
+                                                        <button onClick={async () => { await ConnUtils.cancelRequest(connection.connectionId); await load(); }} className="red">⏎</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })
+                                    )}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 )}
 
@@ -130,12 +264,28 @@ export default function ConnectionsPage() {
                         <br></br>
                         <div className="input-wrapper">
                             <input
+                                id="username-input"
                                 className="username-input"
                                 type="text"
                                 placeholder="Enter a username"
+                                value={otherUsername}
+                                onChange={(e) => setOtherUsername(e.target.value)}
                             />
-                            <button style={{whiteSpace: "nowrap", marginLeft: "40px"}}>Send Request</button>    
+                            <button disabled={otherUsername.trim() == "" || sending} 
+                                    style={{whiteSpace: "nowrap", marginLeft: "40px",
+                                        backgroundColor: otherUsername.trim() == "" || sending ? "#9a9a9a" : "var(--primary-colour-alt)",
+                                        borderColor: otherUsername.trim() == "" || sending ? "#9a9a9a" : "var(--primary-colour-alt)",
+                                        cursor: otherUsername.trim() == "" || sending ? "not-allowed" : "pointer",
+                                    }} onClick={handleSendRequest}>
+                                {sending ? "Sending..." : "Send Request"}
+                            </button>    
                         </div>
+                        {message && (
+                            <p style={{textAlign: "start", color: message.type == "success" ? "var(--custom-green)" : "var(--custom-red)"}}>
+                                {message.text}
+                            </p>
+                        )}
+                        
                     </div>
                 )}
             </div>

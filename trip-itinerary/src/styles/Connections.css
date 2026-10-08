@@ -20,6 +20,41 @@
         tr:nth-child(even) {
             background-color: #ffffff;
         }
+
+        td {
+            vertical-align: middle;
+
+            button {
+                margin: 0 5px;
+                cursor: pointer;
+
+                padding: 5px 12px;
+
+                /* border: var(--primary-colour-alt) 2px solid; */
+                background-color: transparent;
+                color: var(--primary-colour-alt);
+
+                &.green {
+                    border: var(--custom-green) 2px solid;
+                    color: var(--custom-green);
+
+                    &:hover {
+                        background-color: var(--custom-green);
+                        color: var(--background-colour);
+                    }
+                }
+
+                &.red {
+                    border: var(--custom-red) 2px solid;
+                    color: var(--custom-red);
+
+                    &:hover {
+                        background-color: var(--custom-red);
+                        color: var(--background-colour);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -36,6 +71,13 @@
     justify-content: center;
     gap: 20px;
     margin-top: 40px;
+}
+
+.sub-tabs {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 10px;
 }
 
 button {
@@ -58,6 +100,9 @@ button {
     }
 }
 
+.sub-tab {
+    width: 50%;
+}
 
 .tab-button-alt {
     border-radius: 15px;
