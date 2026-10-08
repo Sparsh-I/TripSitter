@@ -5,13 +5,24 @@ import { useState, useEffect } from 'react';
 import * as ConnUtils from "../utils/ConnectionUtils.ts";
 import type { Connection } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
+import { useSearchParams } from 'react-router-dom';
 
-type TabName = "Connections" | "Requests" | "Add Connection";
-type SubTabName = "Incoming" | "Outgoing";
+const TABS = ["Connections", "Requests", "Add Connection"] as const;
+const SUB_TABS = ["Incoming", "Outgoing"] as const;
+
+type TabName = typeof TABS[number];
+type SubTabName = typeof SUB_TABS[number];
+
+function parseParams<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
+    return value !== null && (allowed as readonly string[]).includes(value)
+        ? (value as T)
+        : fallback;
+}
 
 export default function ConnectionsPage() {
-    const [activeTab, setActiveTab] = useState<TabName>("Connections");
-    const [activeSubTab, setActiveSubTab] = useState<SubTabName>("Incoming");
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "Connections");
+    const activeSubTab = parseParams<SubTabName>(searchParams.get("sub"), SUB_TABS, "Incoming");
     
     const [connections, setConnections] = useState<Connection[]>([]);
     const [otherUsername, setOtherUsername] = useState("");
@@ -45,11 +56,11 @@ export default function ConnectionsPage() {
 }, [userId]);
 
     function openTab(tabName: TabName) {
-        setActiveTab(tabName);
+        setSearchParams({tab: tabName})
     }
 
     function openSubTab(subTabName: SubTabName) {
-        setActiveSubTab(subTabName);
+        setSearchParams({tab: "Requests", sub: subTabName})
     }
 
     const current = ConnUtils.currentConnections(connections);
