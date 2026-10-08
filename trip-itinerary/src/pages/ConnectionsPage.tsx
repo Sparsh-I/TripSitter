@@ -1,11 +1,12 @@
 import NavBar from '../components/global/NavBar.tsx';
 import Footer from "../components/global/Footer.tsx";
 import '../styles/Connections.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import * as ConnUtils from "../utils/ConnectionUtils.ts";
 import type { Connection } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
 import { useSearchParams } from 'react-router-dom';
+import { supabase } from '../utils/SupabaseClient.ts';
 
 const TABS = ["Connections", "Requests", "Add Connection"] as const;
 const SUB_TABS = ["Incoming", "Outgoing"] as const;
@@ -34,26 +35,36 @@ export default function ConnectionsPage() {
     const { session } = useAuthContext();
     const userId = session?.user.id;
 
+    const load = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const conns = await ConnUtils.getConnections();
+            const ids = conns.map(c => ConnUtils.otherUserId(c, userId!));
+            const lookup = await ConnUtils.getProfileSummaries(ids);
+            setConnections(conns);
+            setProfiles(lookup);
+        } catch (err) {
+            console.error(err);
+        }
+    }, [userId]);
+
     useEffect(() => {
         if (!userId) return; 
-        let cancelled = false;
-        
-        async function load() {
-            try {
-                const conns = await ConnUtils.getConnections();
-                const ids = conns.map(c => ConnUtils.otherUserId(c, userId!));
-                const lookup = await ConnUtils.getProfileSummaries(ids);
-                if (cancelled) return;
-                setConnections(conns);
-                setProfiles(lookup);
-            } catch (err) {
-                console.error(err);
-            }
-        }
 
-        void load();
-        return () => { cancelled = true };
-}, [userId]);
+        const channel = supabase
+            .channel(`connections:${userId}`)
+            .on("postgres_changes",
+                {event: "*", schema: "public", table: "connections", filter: `user_id=eq.${userId}`},
+                () => void load())
+            .on("postgres_changes",
+                {event: "*", schema: "public", table: "connections", filter: `connection_id=eq.${userId}`},
+                () => void load())
+            .subscribe((status, err) => console.log("realtime:", status, err));
+
+        return () => { 
+            void supabase.removeChannel(channel);
+        };
+    }, [userId, load]);
 
     function openTab(tabName: TabName) {
         setSearchParams({tab: tabName})
@@ -195,8 +206,8 @@ export default function ConnectionsPage() {
                                                         <button onClick={() => ConnUtils.viewProfile(connection.userId)} id="view-profile">View Profile</button>
                                                     </td>
                                                     <td className="connection-cell right-aligned-cell">
-                                                        <button onClick={() => ConnUtils.acceptRequest(connection.userId)} id="accept-req" className="green">✓</button>
-                                                        <button onClick={() => ConnUtils.ignoreRequest(connection.userId)} id="ignore-req" className="red">✘</button>
+                                                        <button onClick={async () => { await ConnUtils.acceptRequest(connection.userId); await load(); }} id="accept-req" className="green">✓</button>
+                                                        <button onClick={async () => { await ConnUtils.ignoreRequest(connection.userId); await load(); }} id="ignore-req" className="red">✘</button>
                                                     </td>
                                                 </tr>
                                             );
@@ -235,7 +246,7 @@ export default function ConnectionsPage() {
                                                         id="view-profile">View Profile</button>
                                                     </td>
                                                     <td className="connection-cell right-aligned-cell">
-                                                        <button onClick={() => ConnUtils.cancelRequest(connection.connectionId)} className="red">⏎</button>
+                                                        <button onClick={async () => { await ConnUtils.cancelRequest(connection.connectionId); await load(); }} className="red">⏎</button>
                                                     </td>
                                                 </tr>
                                             );
