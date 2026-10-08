@@ -66,6 +66,16 @@ export default function ConnectionsPage() {
         };
     }, [userId, load]);
 
+    useEffect(() => {
+        void load();
+
+        const onVisible = () => {
+            if (document.visibilityState === "visible") void load();
+        };
+        document.addEventListener("visibilitychange", onVisible);
+        return () => document.removeEventListener("visibilitychange", onVisible);
+    }, [load]);
+
     function openTab(tabName: TabName) {
         setSearchParams({tab: tabName})
     }
@@ -145,7 +155,7 @@ export default function ConnectionsPage() {
                                             : "Unknown User";
                                         
                                         return (
-                                            <tr>
+                                            <tr key={`${connection.userId}-${connection.connectionId}`}>
                                                 <td className="connection-cell left-aligned-cell">
                                                     {displayName}
                                                 </td>
