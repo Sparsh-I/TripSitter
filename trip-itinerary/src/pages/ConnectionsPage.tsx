@@ -67,35 +67,6 @@ export default function ConnectionsPage() {
     const incoming = ConnUtils.incomingRequests(connections, userId!);
     const outgoing = ConnUtils.outgoingRequests(connections, userId!);
 
-    /* const data = {
-        userId : "user1",
-        connectionId: "user2",
-    };
-
-    function makeTestConnection(data: any, status: string): Connection {
-        const testConnection: Connection = {
-            userId: data.userId,
-            connectionId: data.connectionId,
-            status: status as ConnectionStatus,
-            updatedAt: new Date().getDate().toString(),
-            createdAt: new Date().getDate().toString(),
-        };
-        return testConnection;
-    }
-
-    function generateTestConnections(num: number): void {
-        for (let i = 0; i < num; i++) {
-            const val = Math.random();
-            val > 0.7 ? 
-                current.push(makeTestConnection(data, "accepted")) : 
-                val < 0.4 ? 
-                    incoming.push(makeTestConnection(data, "pending")) : 
-                    outgoing.push(makeTestConnection(data, "pending"));
-        }
-    }
-
-    generateTestConnections(15); */
-
     async function handleSendRequest() {
         if (!userId || !otherUsername) return;
         setSending(true);
