@@ -4,12 +4,28 @@ import TripPreview from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { currentTrips, futureTrips, pastTrips } from "../../utils/TripDateUtils.ts";
 import { getTrips } from "../../utils/TripStorage.ts";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
 
 const TABS = ["All", "Ongoing", "Upcoming", "History", "Archive", "Requests"] as const;
 type TabName = typeof TABS[number];
+
+const SIDEBAR_GROUPS: TabName[][] = [
+    ["All", "Ongoing", "Upcoming", "History"],
+    ["Archive", "Requests"],
+]
+
+const EMPTY_MSGS: Record<TabName, string> = {
+    All: "You have no trips yet! Create one?",
+    Ongoing: "",
+    Upcoming: "",
+    History: "",
+    Archive: "",
+    Requests: "",
+}
+
+const NO_NEW_TRIP_BUTTON: TabName[] = ["Archive", "Requests"]
 
 function parseParams<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
     return value !== null && (allowed as readonly string[]).includes(value)
@@ -33,7 +49,17 @@ export default function MyTripsPage() {
     const current = currentTrips(trips);
     const upcoming = futureTrips(trips);
     const past = pastTrips(trips);
-    const all = [...past, ...current, ...upcoming];
+
+    const tripsByTab: Record<TabName, Trip[]> = {
+        All: [...past, ...current, ...upcoming],
+        Ongoing: current,
+        Upcoming: upcoming,
+        History: past,
+        Archive: [],
+        Requests: [],
+    }
+
+    const visibleTrips = tripsByTab[activeTab];
 
     const navigate = useNavigate();
     
@@ -50,72 +76,42 @@ export default function MyTripsPage() {
                     <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                 </div>
                 <div className="page-content flex flex-row justify-between">
-                    <div className="flex flex-col justify-between h-100 w-[10%]">
-                        <div>
-                            <button
-                                className={`w-full text-right ${activeTab === "All" ? "tab-button-active" : "tab-button"}`}
-                                onClick={() => openTab("All")}
-                                >
-                                All
-                            </button>
-                            <button
-                                className={`w-full text-right ${activeTab === "Ongoing" ? "tab-button-active" : "tab-button"}`}
-                                onClick={() => openTab("Ongoing")}
-                                >
-                                Ongoing
-                            </button>
-                            <button
-                                className={`w-full text-right ${activeTab === "Upcoming" ? "tab-button-active" : "tab-button"}`}
-                                onClick={() => openTab("Upcoming")}
-                                >
-                                Upcoming
-                            </button>
-                            <button
-                                className={`w-full text-right ${activeTab === "History" ? "tab-button-active" : "tab-button"}`}
-                                onClick={() => openTab("History")}
-                                >
-                                History
-                            </button>
-                        </div>
-                        <div>
-                            <button
-                                className={`w-full text-right ${activeTab === "Archive" ? "tab-button-active" : "tab-button"}`}
-                                onClick={() => openTab("Archive")}
-                                >
-                                Archive
-                            </button>
-                            <button
-                                className={`w-full text-right ${activeTab === "Requests" ? "tab-button-active" : "tab-button"}`}
-                                onClick={() => openTab("Requests")}
-                                >
-                                Requests
-                            </button>
-                        </div>
+                    <div className="flex flex-col justify-between h-80 w-[10%]">
+                        {SIDEBAR_GROUPS.map((group, i) => (
+                            <div key={i}>
+                                {group.map(tab => (
+                                    <button
+                                        key={tab}
+                                        className={`w-full text-right ${activeTab === tab ? "tab-button-active" : "tab-button"}`}
+                                        onClick={() => openTab(tab)}
+                                    >
+                                        {tab}
+                                    </button>
+                                ))}
+                            </div>
+                        ))}
                     </div>
-                    {activeTab == "All" && (
-                        all.length == 0 ? (
-                            <div className="flex flex-col justify-center items-center">
-                                <p>You have no trips yet!</p>
+                        
+                    {visibleTrips.length == 0 ? (
+                        <div className="flex flex-col w-full justify-center items-center gap-5">
+                            <p>{EMPTY_MSGS[activeTab]}</p>
+                            {!NO_NEW_TRIP_BUTTON.includes(activeTab) && (
                                 <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-4 px-10 h-100 w-[90%] overflow-y-auto">
-                                {all.map(trip =>
-                                    <div key={trip.id}>
-                                        <TripPreview tripDetails={trip}/>
-                                    </div>
-                                )}
-                            </div>
-                        )
+                            )}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-4 px-10 h-100 w-[90%] overflow-y-auto">
+                            {visibleTrips.map(trip =>
+                                <div key={trip.id}>
+                                    <TripPreview tripDetails={trip}/>
+                                </div>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
 
-
-
-
-            
-            <div className="page-content">
+            {/* <div className="page-content">
                 <div className="trips-carousels">
                     <div className="my-trips-header">
                         <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
@@ -158,7 +154,7 @@ export default function MyTripsPage() {
                         )}
                     </div>
                 </div>
-            </div>
+            </div> */}
             <Footer/>
         </div>
     );

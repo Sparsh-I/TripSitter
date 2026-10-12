@@ -73,7 +73,6 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                         </button>
                     </div>
                 </div>
-                {/* <h3>{tripDetails.title}</h3> */}
             </div>
 
             {showPopup && (
