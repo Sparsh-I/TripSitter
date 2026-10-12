@@ -49,8 +49,8 @@ export default function MyTripsPage() {
                     <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
                     <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                 </div>
-                <div className="page-content flex flex-row">
-                    <div className="flex flex-col justify-between">
+                <div className="page-content flex flex-row justify-between">
+                    <div className="flex flex-col justify-between h-100 w-[10%]">
                         <div>
                             <button
                                 className={`w-full text-right ${activeTab === "All" ? "tab-button-active" : "tab-button"}`}
@@ -99,7 +99,7 @@ export default function MyTripsPage() {
                                 <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 p-10 h-100 w-full overflow-y-auto">
+                            <div className="grid grid-cols-4 px-10 h-100 w-[90%] overflow-y-auto">
                                 {all.map(trip =>
                                     <div key={trip.id}>
                                         <TripPreview tripDetails={trip}/>
