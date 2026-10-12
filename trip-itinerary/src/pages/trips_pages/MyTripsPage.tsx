@@ -1,10 +1,9 @@
 import NavBar from '../../components/global/NavBar.tsx';
-import TripCarousel from "../../components/my_trips/TripCarousel.tsx";
 import TripPreview from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { currentTrips, futureTrips, pastTrips } from "../../utils/TripDateUtils.ts";
 import { getTrips } from "../../utils/TripStorage.ts";
-import { act, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
 
@@ -18,11 +17,11 @@ const SIDEBAR_GROUPS: TabName[][] = [
 
 const EMPTY_MSGS: Record<TabName, string> = {
     All: "You have no trips yet! Create one?",
-    Ongoing: "",
-    Upcoming: "",
-    History: "",
-    Archive: "",
-    Requests: "",
+    Ongoing: "You have no ongoing trips! Did you miss one?",
+    Upcoming: "You have no upcoming trips! Remedy this?",
+    History: "You have no old trips! Start making a new memory?",
+    Archive: "You have no archived trips!",
+    Requests: "You have no incoming trip requests! Send one instead?",
 }
 
 const NO_NEW_TRIP_BUTTON: TabName[] = ["Archive", "Requests"]
@@ -102,9 +101,7 @@ export default function MyTripsPage() {
                     ) : (
                         <div className="grid grid-cols-4 px-10 h-100 w-[90%] overflow-y-auto">
                             {visibleTrips.map(trip =>
-                                <div key={trip.id}>
-                                    <TripPreview tripDetails={trip}/>
-                                </div>
+                                <TripPreview key={trip.id} tripDetails={trip}/>
                             )}
                         </div>
                     )}
