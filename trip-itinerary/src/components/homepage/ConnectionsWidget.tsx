@@ -13,13 +13,13 @@ export default function ConnectionsWidget() {
                 No recent activity to show!
             </div>
 
-            <div className="connections-side">
-                <div className="connections-link">
-                    <NavLink className="connections-text" to="/connections">
+            <div className="w-[150px] mt-[-24px]">
+                <div className="bg-[var(--primary-colour-alt)] rounded-t-lg whitespace-nowrap hover:underline">
+                    <NavLink className="!text-[var(--background-colour-alt)] text-2xs lg:text-xs" to="/connections">
                         GO TO CONNECTIONS
                     </NavLink>
                 </div>
-                <img className="placeholder-img" alt="placeholder" src={placeholder}/>
+                <img className="rounded-bl-lg w-full h-[85%] obejct-cover" alt="placeholder" src={placeholder}/>
             </div>
         </div>
     );
