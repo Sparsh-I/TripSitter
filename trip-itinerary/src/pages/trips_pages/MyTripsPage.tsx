@@ -67,21 +67,22 @@ export default function MyTripsPage() {
     }
 
     return (
-        <div className="page-layout">
+        <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <div className="p-10">
-                <div className="my-trips-header">
-                    <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
+            <main className="flex-1 p-10">
+                <div className="flex justify-between flex-col mb-[30px] lg:flex-row">
+                    <h2 className="text-left px-[20
+                    px] m-0">My Trips</h2>
                     <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                 </div>
                 <div className="page-content flex flex-row justify-between">
-                    <div className="flex flex-col justify-between h-80 w-[10%]">
+                    <div className="flex flex-col justify-between h-80 w-[10%] text-right">
                         {SIDEBAR_GROUPS.map((group, i) => (
                             <div key={i}>
                                 {group.map(tab => (
                                     <button
                                         key={tab}
-                                        className={`w-full text-right ${activeTab === tab ? "tab-button-active" : "tab-button"}`}
+                                        className={`w-full ${activeTab === tab ? "tab-button-active" : "tab-button"}`}
                                         onClick={() => openTab(tab)}
                                     >
                                         {tab}
@@ -99,14 +100,14 @@ export default function MyTripsPage() {
                             )}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-4 px-10 h-100 w-[90%] overflow-y-auto">
+                        <div className="grid grid-cols-4 px-10 h-100 w-[100%] overflow-y-auto">
                             {visibleTrips.map(trip =>
                                 <TripPreview key={trip.id} tripDetails={trip}/>
                             )}
                         </div>
                     )}
                 </div>
-            </div>
+            </main>
 
             {/* <div className="page-content">
                 <div className="trips-carousels">
