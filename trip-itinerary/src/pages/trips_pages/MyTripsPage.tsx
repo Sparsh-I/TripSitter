@@ -25,9 +25,9 @@ export default function MyTripsPage() {
     const navigate = useNavigate();
 
     return (
-        <div className="page-layout">
+        <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <div className="page-content">
+            <main className="flex-1 p-10">
                 <div className="trips-carousels">
                     <div className="my-trips-header">
                         <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
@@ -70,7 +70,7 @@ export default function MyTripsPage() {
                         )}
                     </div>
                 </div>
-            </div>
+            </main>
             <Footer/>
         </div>
     );

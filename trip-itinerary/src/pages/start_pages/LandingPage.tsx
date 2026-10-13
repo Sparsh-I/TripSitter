@@ -12,8 +12,8 @@ export default function LandingPage() {
     const isMobile = useIsMobile();
 
     return (
-        <div className="page-layout">
-            <div className="page-content">
+        <div className="min-h-screen flex flex-col">
+            <main className="flex-1 p-10">
                 <div className="navbar" id="main-page-nav">
                     <NavLink to="/">
                         <div className="logo">
@@ -34,7 +34,7 @@ export default function LandingPage() {
                         <img className="main-image" src={image2} alt="Path in a field" />
                     </div>
                 )}
-            </div>
+            </main>
             <Footer/>
         </div>
     );

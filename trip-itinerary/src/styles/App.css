@@ -227,7 +227,7 @@ h3 {
   }
 }
 
-.page-layout {
+.min-h-screen flex flex-col {
   min-height: 100vh;
   display: flex;
   flex-direction: column;

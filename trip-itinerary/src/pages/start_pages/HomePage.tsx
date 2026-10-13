@@ -33,9 +33,9 @@ export default function HomePage() {
     });
 
     return (
-        <div className="page-layout">
+        <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <div className="page-content">
+            <main className="flex-1 p-10">
                 <div id="banner">
                     <div className="label white">
                         <h2>Welcome back{!loading && `, ${name}`}! Planning a trip?</h2>
@@ -46,7 +46,7 @@ export default function HomePage() {
                     <ConnectionsWidget/>
                     <UpcomingTripWidget/>
                 </div>
-            </div>
+            </main>
             <Footer/>
         </div>
     );

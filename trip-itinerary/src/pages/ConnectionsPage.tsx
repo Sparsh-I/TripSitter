@@ -101,9 +101,9 @@ export default function ConnectionsPage() {
     }, [message]);
 
     return (
-        <div className="page-layout">
+        <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <div className="page-content">
+            <main className="flex-1 p-10">
                 <div className="connections-tabs">
                     <button 
                         className={activeTab === "Connections" ? "tab-button-active" : "tab-button"}
@@ -288,7 +288,7 @@ export default function ConnectionsPage() {
                         
                     </div>
                 )}
-            </div>
+            </main>
             <Footer/>
         </div>
     );

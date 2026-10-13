@@ -81,9 +81,9 @@ export default function MyMapPage() {
     }
 
     return (
-        <div className="page-layout">
+        <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <div className="page-content">
+            <main className="flex-1 p-10">
                 <div className="map">
                     <div className="map-filter">
                         {places && (
