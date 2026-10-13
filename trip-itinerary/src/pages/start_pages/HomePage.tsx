@@ -36,13 +36,13 @@ export default function HomePage() {
         <div className="min-h-screen flex flex-col">
             <NavBar/>
             <main className="flex-1">
-                <div className="w-full h-[33em] lg:h-[29em] bg-[url('../assets/images/lake.jpg')] bg-cover bg-top p-[2em] box-border">
+                <div className="w-full h-[29em] max-md:h-[33em] bg-[url('../assets/images/lake.jpg')] bg-cover bg-top p-[2em] box-border">
                     <div className="label white">
                         <h2>Welcome back{!loading && `, ${name}`}! Planning a trip?</h2>
                     </div>
                     <QuickTrip/>
                 </div>
-                <div className="flex flex-col gap-[40px] lg:gap-0 lg:flex-row justify-around px-[2.5em] py-[0.5em] mt-[20px] lg:mt-[40px]">
+                <div className="flex max-md:flex-col max-md:gap-[40px] justify-around px-[2.5em] py-[0.5em] mt-[40px] max-md:mt-[20px]">
                     <ConnectionsWidget/>
                     <UpcomingTripWidget/>
                 </div>
