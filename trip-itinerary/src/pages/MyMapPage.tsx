@@ -141,7 +141,7 @@ export default function MyMapPage() {
                             )};
                     </MapContainer>
                 </div>
-            </div>
+            </main>
             <Footer/>
         </div>
     );
