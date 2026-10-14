@@ -64,13 +64,15 @@ export default function UpcomingTripWidget() {
     }
 
     return (
-        <div className="relative w-full lg:w-[500px] h-[148px] bg-[var(--primary-colour-alt)] rounded-lg overflow py-[0.25em]">
-            <table className="h-full">
+        <div className="relative flex justify-center w-full lg:w-[520px] h-[148px] bg-[var(--primary-colour-alt)] rounded-2xl overflow py-[0.25em] max-md:w-[90%]
+                    before:absolute before:top-1/2 before:-left-5 before:-translate-y-1/2 before:size-9 before:rounded-full before:bg-white before:z-[2]
+                    after:absolute after:top-1/2 after:-right-5 after:-translate-y-1/2 after:size-9 after:rounded-full after:bg-white after:z-[2]">
+            <table className="h-full max-md:[&_td]:items-center max-md:[&_td]:w-[30%]">
                 <tbody>
                 <tr className="[&_h3]:!text-white [&_h1]:!text-white">
                     <td><h3>{upcomingTrip?.title ?? "No Upcoming Trips!"}</h3></td>
                     <td><h3>{startLocCode}➜{endLocCode}</h3></td>
-                    <td rowSpan={2} className="text-center items-center px-[8px] border-l-2 border-dashed border-white w-[20%]">
+                    <td rowSpan={2} className="text-center items-center px-[8px] border-l-2 border-dashed border-white w-[20%] max-md:py-[8px]">
                         <h3>{month.toUpperCase()}</h3>
                         <h1 className="mx-[-5px]">{day}</h1>
                         <h3>{year}</h3>
@@ -78,7 +80,7 @@ export default function UpcomingTripWidget() {
                 </tr>
                 <tr>
                     <td colSpan={2}>
-                        <p id="upcoming-trip-desc">{upcomingTrip 
+                        <p className="text-left !text-[var(--background-colour)] mx-[10px] max-w-[400px] min-w-[230px] line-clamp-3">{upcomingTrip 
                             ? "This would be where the description of the trip would go, but not sure where this would be pulled from?"
                             : "Time to start planning! Where are you thinking of going next?"}
                         </p>
@@ -89,95 +91,3 @@ export default function UpcomingTripWidget() {
         </div>
     );
 }
-
-// .upcoming-trip-date {
-//     vertical-align: middle;
-//     padding: 8px 2px;
-//     border-left: 1px dashed white;
-//     width: 20%;
-
-//     @media (max-width: 768px) {
-//         padding: 0 8px;
-//     }
-// }
-
-// .upcoming-trips-widget {
-//     position: relative;
-//     width: 500px;
-//     height: 148px;
-//     background: var(--primary-colour-alt);
-//     border-radius: 15px;
-//     overflow: visible;
-//     padding: 0 1em;
-
-//     table {
-//         height: 100%;
-//     }
-
-//     h3 {
-//         font-size: 20px;
-//         line-height: 1.6;
-//     }
-
-//     @media (max-width: 768px) {
-//         width: 90%;
-
-//         td {
-//             vertical-align: middle;
-//             width: 30%;
-//         }
-
-//         h1 {
-//             font-size: 32px;
-//         }
-//     }
-// }
-
-// .upcoming-trips-widget::before,
-// .upcoming-trips-widget::after {
-//     content: "";
-//     position: absolute;
-//     top: 50%;
-//     width: 36px;
-//     height: 36px;
-//     background-color: #fff;
-//     border-radius: 50%;
-//     transform: translateY(-50%);
-//     z-index: 2;
-// }
-
-// .upcoming-trips-widget::before {
-//     left: -20px;
-//     border-left: none;
-// }
-
-// .upcoming-trips-widget::after {
-//     right: -20px;
-// }
-
-// #upcoming-trip-title, #upcoming-trip-desc {
-//     text-align: left;
-//     color: var(--background-colour);
-//     padding: 0 20px;
-//     margin: 10px 0;
-//     max-width: 400px;
-//     min-width: 230px;
-//     white-space: break-spaces;
-//     overflow: hidden;
-//     text-overflow: ellipsis;
-
-//     @media (max-width: 768px) {
-//         margin: 0;
-//     }
-// }
-
-// .upcoming-trip-date {
-//     vertical-align: middle;
-//     padding: 8px 2px;
-//     border-left: 1px dashed white;
-//     width: 20%;
-
-//     @media (max-width: 768px) {
-//         padding: 0 8px;
-//     }
-// }
