@@ -37,7 +37,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
     }
 
     return createPortal(
-        <div className="popup-overlay" onClick={onClose}>
+        <div className="" onClick={onClose}>
             <div className="sidebar" onClick={(e) => e.stopPropagation()}>
                 <ul style={{paddingRight: "20px", paddingInlineStart: "0"}}>
                     <li><NavLink to="/home" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>Home</h3></NavLink></li>
@@ -52,7 +52,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
                         </NavLink>
                     </div>
                     <h4>{username}</h4>
-                    <button onClick={handleLogout} className="log-out-icon">
+                    <button onClick={handleLogout} className="hidden max-md:block">
                         <img src={logOutIcon} alt="Log Out" />
                     </button>
                 </div>

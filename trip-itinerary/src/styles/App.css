@@ -151,57 +151,13 @@ h3 {
   font-size: 24px;
 }
 
-.primary-text {
-  color: var(--primary-colour);
-}
-
-.primary-alt-text {
-  color: var(--primary-colour-alt);
-}
-
-.black-text {
-  color: var(--secondary-colour);
-}
-
-.white-text {
-  color: var(--background-colour);
-}
-
-.title-input {
-  width: 250px;
-}
-
-.login-background {
-  width: 90%;
-  height: 100%;
-  margin: -24px auto;
-}
-
-.footer {
-  margin-top: 30px;
-  padding: 30px;
-  background-color: var(--secondary-colour);
-
-  p {
-    color: var(--background-colour);
+@layer base {
+  .no-content-display {
+      background-color: var(--background-colour);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 20px 0;
   }
-}
-
-.min-h-screen flex flex-col {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.page-content {
-  flex: 1;
-}
-
-.no-content-display {
-    background-color: var(--background-colour);
-    border-radius: 15px;
-    padding: 30px;
-    margin: 20px 0;
 }
 
 .swiper {
