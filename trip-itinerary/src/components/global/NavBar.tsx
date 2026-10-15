@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import '../../styles/NavBar.css';
 import menuIcon from '../../assets/menu-icon.svg';
 import {useState} from "react";
 import Sidebar from "./Sidebar.tsx";
