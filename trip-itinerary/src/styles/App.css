@@ -74,13 +74,6 @@ button {
   height: fit-content;
   background-color: var(--primary-colour-alt);
   color: var(--background-colour);
-
-  &.alt {
-    background-color: transparent;
-    color: var(--primary-colour-alt);
-    border-color: var(--primary-colour-alt);
-    border-width: 2px;
-  }
 }
 
 input, textarea, select {
@@ -89,7 +82,7 @@ input, textarea, select {
   background-color: var(--background-colour);
   border: var(--background-colour);
   border-radius: 50px;
-  height: 30px;
+  height: 45px;
   padding: 0.5em 1.3em;
   color: var(--secondary-colour)
 }
@@ -158,39 +151,6 @@ h3 {
   font-size: 24px;
 }
 
-.label {
-  h1, h2, h3, h4, h5, h6 {
-    color: var(--secondary-colour-alt);
-  }
-
-  width: fit-content;
-  border-radius: 10px;
-  padding: 0 18px;
-  margin-bottom: 20px;
-
-  &.primary {
-    background: var(--primary-colour);
-    margin: 10px 0;
-  }
-
-  &.white {
-    background: var(--background-colour);
-  }
-
-  &.grey {
-    background: var(--background-colour-alt);
-  }
-
-  &.black {
-    h1, h2, h3, h4, h5, h6 {
-      color: var(--background-colour);
-    }
-
-    background: var(--secondary-colour);
-    margin-bottom: 10px;
-  }
-}
-
 .primary-text {
   color: var(--primary-colour);
 }
@@ -242,4 +202,29 @@ h3 {
     border-radius: 15px;
     padding: 30px;
     margin: 20px 0;
+}
+
+.swiper {
+    padding: 0 100px;
+    margin: auto auto;
+
+    @media (max-width: 768px) {
+        padding: 0 0 0 15%;
+
+        h3 {
+            margin: 0;
+            width: 80%;
+        }
+    }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: var(--primary-colour-alt);
+    width: 30px;
+    height: 30px;
+}
+
+.date-picker-input {
+    justify-content: normal;
 }

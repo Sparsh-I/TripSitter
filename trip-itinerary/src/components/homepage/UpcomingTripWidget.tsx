@@ -64,7 +64,7 @@ export default function UpcomingTripWidget() {
     }
 
     return (
-        <div className="relative flex justify-center w-full lg:w-[520px] h-[148px] bg-[var(--primary-colour-alt)] rounded-2xl overflow py-[0.25em] max-md:w-[90%]
+        <div className="relative flex justify-center w-full lg:w-[520px] h-[148px] bg-(--primary-colour-alt) rounded-2xl overflow py-[0.25em] max-md:w-[90%]
                     before:absolute before:top-1/2 before:-left-5 before:-translate-y-1/2 before:size-9 before:rounded-full before:bg-white before:z-[2]
                     after:absolute after:top-1/2 after:-right-5 after:-translate-y-1/2 after:size-9 after:rounded-full after:bg-white after:z-[2]">
             <table className="h-full max-md:[&_td]:items-center max-md:[&_td]:w-[30%]">
@@ -80,7 +80,7 @@ export default function UpcomingTripWidget() {
                 </tr>
                 <tr>
                     <td colSpan={2}>
-                        <p className="text-left !text-[var(--background-colour)] mx-[10px] max-w-[400px] min-w-[230px] line-clamp-3">{upcomingTrip 
+                        <p className="text-left !text-(--background-colour) mx-[10px] max-w-[400px] min-w-[230px] line-clamp-3">{upcomingTrip 
                             ? "This would be where the description of the trip would go, but not sure where this would be pulled from?"
                             : "Time to start planning! Where are you thinking of going next?"}
                         </p>
