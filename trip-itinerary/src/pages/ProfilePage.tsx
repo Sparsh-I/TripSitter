@@ -86,7 +86,7 @@ export default function ProfilePage () {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-center bg-cover
-                        bg-[url('../assets/images/castle.jpg')]">
+                        bg-[url('/assets/images/castle.jpg')]">
             <NavLink
                 to="/home"
                 className="fixed top-7.5 left-7.5 z-10 flex w-15 h-10 items-center justify-center

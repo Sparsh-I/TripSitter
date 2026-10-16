@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import placeholder from '../../assets/trip_preview/placeholder.jpg'
+import placeholder from '/assets/trip_preview/placeholder.jpg'
 
 export default function ConnectionsWidget() {
 

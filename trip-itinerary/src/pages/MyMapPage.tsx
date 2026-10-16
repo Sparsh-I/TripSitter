@@ -8,9 +8,9 @@ import React, {useEffect, useRef, useState} from "react";
 import Footer from "../components/global/Footer.tsx";
 import {currentTrips, futureTrips, pastTrips} from "../utils/TripDateUtils.ts";
 import type {Trip} from "../types/Trip.ts";
-import currentPin from "../assets/my_map/current-pin.svg";
-import upcomingPin from "../assets/my_map/upcoming-pin.svg";
-import pastPin from "../assets/my_map/past-pin.svg";
+import currentPin from "/assets/my_map/current-pin.svg";
+import upcomingPin from "/assets/my_map/upcoming-pin.svg";
+import pastPin from "/assets/my_map/past-pin.svg";
 
 const iconOptions = {
     iconSize: [80, 80] as [number, number],

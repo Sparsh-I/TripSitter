@@ -4,7 +4,7 @@ import { type TripLocation } from "../global/LocationSearch.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { formatDate } from "../../utils/TripDateUtils.ts";
 import { createPortal } from "react-dom";
-import image from '../../assets/trip_preview/placeholder.jpg';
+import image from '/assets/trip_preview/placeholder.jpg';
 import EmbedWidget from "./EmbedWidget.tsx";
 import {useIsMobile} from "../../hooks/useIsMobile.ts";
 

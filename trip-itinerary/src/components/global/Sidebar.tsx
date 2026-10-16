@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
-import logOutIcon from "../../assets/log-out.svg";
+import logOutIcon from "/assets/log-out.svg";
 import { supabase } from "../../utils/SupabaseClient.ts";
 import { useEffect, useState } from "react";
 import { getProfile } from "../../utils/ProfileUtils.ts";

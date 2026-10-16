@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
-import menuIcon from '../../assets/menu-icon.svg';
+import menuIcon from '/assets/menu-icon.svg';
 import {useState} from "react";
 import Sidebar from "./Sidebar.tsx";
-import logoTent from '../../assets/logo/logo-tent.svg'
-import logoText from '../../assets/logo/logo-text.svg'
+import logoTent from '/assets/logo/logo-tent.svg'
+import logoText from '/assets/logo/logo-text.svg'
 import {supabase} from "../../utils/SupabaseClient.ts";
-import logOutIcon from "../../assets/log-out.svg";
+import logOutIcon from "/assets/log-out.svg";
 
 const NAV_LINKS = [
     { to: "/home", label: "Home" },

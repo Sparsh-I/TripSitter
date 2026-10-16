@@ -1,9 +1,9 @@
-import image from '../../assets/images/double-rainbow.jpg';
-import image2 from '../../assets/images/path.png';
+import image from '/assets/images/double-rainbow.jpg';
+import image2 from '/assets/images/path.png';
 import {NavLink} from "react-router-dom";
 import Login from "../../components/Login.tsx";
-import logoTent from "../../assets/logo/logo-tent.svg";
-import logoText from "../../assets/logo/logo-text.svg";
+import logoTent from "/assets/logo/logo-tent.svg";
+import logoText from "/assets/logo/logo-text.svg";
 import Footer from "../../components/global/Footer.tsx";
 import {useIsMobile} from "../../hooks/useIsMobile.ts";
 

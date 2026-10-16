@@ -72,8 +72,8 @@ export default function SignUpPage() {
   return (
       <div>
         <div className="flex justify-center items-center min-h-screen 
-                        bg-[url('../assets/images/mountains_and_field.jpg')]
-                        max-md:bg-[url('../assets/images/road_to_mountains.jpg')]">
+                        bg-[url('/assets/images/mountains_and_field.jpg')]
+                        max-md:bg-[url('/assets/images/road_to_mountains.jpg')]">
           <div className="profile-form">
             <h1>Set up your profile</h1>
 

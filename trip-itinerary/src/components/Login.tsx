@@ -31,7 +31,7 @@ export default function Login() {
     return (
         <div className="flex flex-col">
             <div className="flex flex-col gap-5 m-auto px-10 max-md:py-50 max-md:px-15
-                            max-md:bg-[url('../assets/images/starry-night.jpg')]
+                            max-md:bg-[url('/assets/images/starry-night.jpg')]
                             max-md:bg-center max-md:bg-cover"
             >
                 <h2 className="max-md:!text-(--background-colour)">Your Plan, Your Adventure</h2>
