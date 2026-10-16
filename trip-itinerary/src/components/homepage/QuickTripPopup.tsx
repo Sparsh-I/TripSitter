@@ -1,7 +1,6 @@
 import DatePicker from "../global/DatePicker.tsx";
 import {useRef, useState} from "react";
 import type { DateRange } from "react-day-picker";
-import '../../styles/PopupWindow.css';
 import LocationSearch, {type TripLocation} from "../global/LocationSearch.tsx";
 import {addTrip} from "../../utils/TripStorage.ts";
 import type {Trip} from "../../types/Trip.ts";

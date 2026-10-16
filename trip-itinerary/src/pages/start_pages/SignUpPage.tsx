@@ -1,4 +1,3 @@
-import '../../styles/Profile.css';
 import React, {useEffect, useRef, useState} from "react";
 import {getProfile, updateProfile} from "../../utils/ProfileUtils.ts";
 import type {Profile} from "../../types/Profile.ts";
@@ -72,7 +71,9 @@ export default function SignUpPage() {
 
   return (
       <div>
-        <div className="profile-page sign-up">
+        <div className="flex justify-center items-center min-h-screen 
+                        bg-[url('../assets/images/mountains_and_field.jpg')]
+                        max-md:bg-[url('../assets/images/road_to_mountains.jpg')]">
           <div className="profile-form">
             <h1>Set up your profile</h1>
 

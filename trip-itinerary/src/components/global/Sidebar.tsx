@@ -1,11 +1,16 @@
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
-import '../../styles/NavBar.css';
-import '../../styles/PopupWindow.css';
 import logOutIcon from "../../assets/log-out.svg";
-import {supabase} from "../../utils/SupabaseClient.ts";
-import {useEffect, useState} from "react";
-import {getProfile} from "../../utils/ProfileUtils.ts";
+import { supabase } from "../../utils/SupabaseClient.ts";
+import { useEffect, useState } from "react";
+import { getProfile } from "../../utils/ProfileUtils.ts";
+
+const NAV_LINKS = [
+    { to: "/home", label: "Home" },
+    { to: "/my-trips", label: "My Trips" },
+    { to: "/connections", label: "Connections" },
+    { to: "/my-map", label: "My Map" },
+];
 
 interface SidebarProps {
     onClose: () => void;
@@ -18,10 +23,10 @@ export default function Sidebar({ onClose }: SidebarProps) {
         let cancelled = false;
 
         async function getProfileDetails() {
-            const {data: {user}} = await supabase.auth.getUser();
+            const { data: { user } } = await supabase.auth.getUser();
             if (!user || cancelled) return;
             const profile = await getProfile(user.id);
-            if (!profile) return;
+            if (!profile || cancelled) return;
             setUsername(profile.username);
         }
 
@@ -30,32 +35,46 @@ export default function Sidebar({ onClose }: SidebarProps) {
         return () => {
             cancelled = true;
         };
-    });
+    }, []);
 
     async function handleLogout() {
         await supabase.auth.signOut();
     }
 
     return createPortal(
-        <div className="popup-overlay" onClick={onClose}>
-            <div className="sidebar" onClick={(e) => e.stopPropagation()}>
-                <ul style={{paddingRight: "20px", paddingInlineStart: "0"}}>
-                    <li><NavLink to="/home" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>Home</h3></NavLink></li>
-                    <li><NavLink to="/my-trips" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>My Trips</h3></NavLink></li>
-                    <li><NavLink to="/connections" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>Connections</h3></NavLink></li>
-                    <li><NavLink to="/my-map" className={({ isActive }) => isActive ? "active-link" : ""} onClick={onClose}><h3>My Map</h3></NavLink></li>
-                </ul>
-                <div className="profile-options">
-                    <div id="profile-small-screen">
-                        <NavLink to="/profile">
-                            <span className="navbar-profile"></span>
+        <div
+            className="fixed right-0 z-[1005] flex h-[60vh] w-50 flex-col justify-between
+                        rounded-l-[75px] bg-(--background-colour) py-7.5 text-right"
+            onClick={(e) => e.stopPropagation()}
+        >
+            <ul className="list-none pr-5 pl-0">
+                {NAV_LINKS.map(({ to, label }) => (
+                    <li key={to}>
+                        <NavLink
+                            to={to}
+                            onClick={onClose}
+                            className={({ isActive }) => isActive ? "active-link" : ""}
+                        >
+                            <h3 className="leading-[3] [.active-link_&]:underline [.active-link_&]:decoration-(--primary-colour-alt)">
+                                {label}
+                            </h3>
                         </NavLink>
-                    </div>
-                    <h4>{username}</h4>
-                    <button onClick={handleLogout} className="log-out-icon">
-                        <img src={logOutIcon} alt="Log Out" />
-                    </button>
-                </div>
+                    </li>
+                ))}
+            </ul>
+
+            <div className="flex w-[85%] flex-row justify-evenly self-center">
+                <NavLink to="/profile">
+                    <span className="relative top-1.25 z-[1005] block size-12.5 rounded-full
+                                        bg-(--primary-colour) bg-cover bg-center"></span>
+                </NavLink>
+                <h4 className="ml-2 mt-2.5 truncate">{username}</h4>
+                <button
+                    onClick={handleLogout}
+                    className="mt-1.5 hidden rounded-[110px] bg-white p-2 max-md:block"
+                >
+                    <img src={logOutIcon} alt="Log Out" />
+                </button>
             </div>
         </div>,
         document.body

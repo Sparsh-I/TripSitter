@@ -63,47 +63,27 @@ export default function UpcomingTripWidget() {
         year = startDate.toLocaleDateString("en-GB", { year: "numeric" });
     }
 
-    if (!upcomingTrip) {
-        return (
-            <div className="upcoming-trips-widget">
-                <table>
-                    <tbody>
-                    <tr>
-                        <td><h3 className="white-text">No Upcoming Trips!</h3></td>
-                        <td><h3 className="white-text">{startLocCode}➜{endLocCode}</h3></td>
-                        <td rowSpan={2} className="upcoming-trip-date">
-                            <h3 className="white-text">{month.toUpperCase()}</h3>
-                            <h1 className="white-text" style={{ margin: "-5px 0" }}>{day}</h1>
-                            <h3 className="white-text">{year}</h3>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colSpan={2}>
-                            <p id="upcoming-trip-desc">Time to start planning! Where are you thinking of going next?</p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
-    }
-
     return (
-        <div className="upcoming-trips-widget">
-            <table>
+        <div className="relative flex justify-center w-full lg:w-[520px] h-[148px] bg-(--primary-colour-alt) rounded-2xl overflow py-[0.25em] max-md:w-[90%]
+                    before:absolute before:top-1/2 before:-left-5 before:-translate-y-1/2 before:size-9 before:rounded-full before:bg-white before:z-[2]
+                    after:absolute after:top-1/2 after:-right-5 after:-translate-y-1/2 after:size-9 after:rounded-full after:bg-white after:z-[2]">
+            <table className="h-full max-md:[&_td]:items-center max-md:[&_td]:w-[30%]">
                 <tbody>
-                <tr>
-                    <td><h3 className="white-text">{upcomingTrip?.title}</h3></td>
-                    <td><h3 className="white-text">{startLocCode}➜{endLocCode}</h3></td>
-                    <td rowSpan={2} style={{ verticalAlign: "middle", padding: "8px 20px", borderLeft: "1px dashed white" }}>
-                        <h3 className="white-text">{month.toUpperCase()}</h3>
-                        <h1 className="white-text" style={{ margin: "-5px 0" }}>{day}</h1>
-                        <h3 className="white-text">{year}</h3>
+                <tr className="[&_h3]:!text-white [&_h1]:!text-white">
+                    <td><h3>{upcomingTrip?.title ?? "No Upcoming Trips!"}</h3></td>
+                    <td><h3>{startLocCode}➜{endLocCode}</h3></td>
+                    <td rowSpan={2} className="text-center items-center px-[8px] border-l-2 border-dashed border-white w-[20%] max-md:py-[8px]">
+                        <h3>{month.toUpperCase()}</h3>
+                        <h1 className="mx-[-5px]">{day}</h1>
+                        <h3>{year}</h3>
                     </td>
                 </tr>
                 <tr>
                     <td colSpan={2}>
-                        <p id="upcoming-trip-desc">This would be where the description of the trip would go, but not sure where this would be pulled from?</p>
+                        <p className="text-left !text-(--background-colour) mx-[10px] max-w-[400px] min-w-[230px] line-clamp-3">{upcomingTrip 
+                            ? "This would be where the description of the trip would go, but not sure where this would be pulled from?"
+                            : "Time to start planning! Where are you thinking of going next?"}
+                        </p>
                     </td>
                 </tr>
                 </tbody>

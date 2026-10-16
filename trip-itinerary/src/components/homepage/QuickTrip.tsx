@@ -26,29 +26,29 @@ export default function QuickTrip() {
     const isMobile = useIsMobile();
 
     return (
-        <div className="new-trip" style={{ position: "relative" }}>
-            <div style={{ display: "flex", flexDirection: "column"}}>
-                <div className="label black">
-                    <h3>Title</h3>
+        <div className="flex flex-col">
+            <div className="flex flex-row gap-[1.3em] pt-[4em] max-md:flex-col max-md:p-0" style={{ position: "relative" }}>
+                <div className="flex flex-col gap-2">
+                    <h3 className="!text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl !mx-0">
+                        Title
+                    </h3>
+                    <input
+                        className="w-[250px]"
+                        type="text"
+                        placeholder="What are we calling this?"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                    />
                 </div>
-                <input
-                    className="title-input"
-                    id="title-input-home"
-                    type="text"
-                    placeholder="What are we calling this?"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-            </div>
-            <div style={{ display: "flex", flexDirection: "column"}}>
-                <div className="label black">
-                    <h3>Dates</h3>
+                <div className="flex flex-col gap-2">
+                    <h3 className="!text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl !mx-0">
+                        Dates
+                    </h3>
+                    <DatePicker selected={range} onSelect={setRange} fieldSize={21} numMonths={isMobile ? 1 : 2}/>
                 </div>
-                <DatePicker selected={range} onSelect={setRange} fieldSize={21} numMonths={isMobile ? 1 : 2}/>
             </div>
-            <div style={{ textAlign: "start" }}>
-                <button className="submit-button" onClick={submitTrip}>Submit</button>
-            </div>
+
+            <button className="mt-[1.5em]" onClick={submitTrip}>Submit</button>
 
             {showPopup && (
                 <QuickTripPopup
