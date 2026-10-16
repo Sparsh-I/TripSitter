@@ -8,7 +8,7 @@ import NewTripPage from "./pages/trips_pages/NewTripPage.tsx";
 import SignUpPage from "./pages/start_pages/SignUpPage.tsx";
 import SplashScreen from "./components/global/SplashScreen.tsx";
 
-import "./styles/App.css";
+import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/start_pages/LandingPage.tsx";
 import ProtectedRoute from "./components/global/ProtectedRoute.tsx";

@@ -1,16 +1,38 @@
-import '../../styles/MyTrips.css';
-import placeholder from '../../assets/trip_preview/placeholder.jpg';
-import edit from '../../assets/trip_preview/edit.svg';
-import editHover from '../../assets/trip_preview/edit-hover.svg';
-import share from '../../assets/trip_preview/share.svg';
-import shareHover from '../../assets/trip_preview/share-hover.svg';
-import trash from '../../assets/trip_preview/trash.svg';
-import trashHover from '../../assets/trip_preview/trash-hover.svg';
+import placeholder from '/assets/trip_preview/placeholder.jpg';
+import eye from '/assets/trip_preview/eye.svg';
+// import eyeHover from '/assets/trip_preview/eye-hover.svg';
+import edit from '/assets/trip_preview/edit.svg';
+// import editHover from '/assets/trip_preview/edit-hover.svg';
+// import share from '/assets/trip_preview/share.svg';
+// import shareHover from '/assets/trip_preview/share-hover.svg';
+import trash from '/assets/trip_preview/trash.svg';
+// import trashHover from '/assets/trip_preview/trash-hover.svg';
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types/Trip.ts";
 import PreviewTripPopup from "./PreviewTripPopup.tsx";
 import {useState} from "react";
 import {deleteTrip} from "../../utils/TripStorage.ts";
+
+interface IconButtonProps {
+    main: string;
+    label: string;
+    onClick: () => void;
+    danger?: boolean;
+}
+
+function IconButton({ main, label, onClick, danger = false }: IconButtonProps) {
+    const colour = danger
+        ? "border-(--custom-red) hover:bg-(--custom-red)"
+        : "border-(--primary-colour) hover:bg-(--primary-colour)";
+
+    return (
+        <button className={`!bg-(--background-colour) ${colour}`} onClick={onClick} aria-label={label}>
+            <span className="block size-5">
+                <img src={main} alt="" className="object-cover"/>
+            </span>
+        </button>
+    );
+}
 
 interface TripPreviewProps {
     tripDetails: Trip
@@ -41,36 +63,15 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
     }
 
     return (
-        <div style={{width: "280px", margin: "0 0 25px 0"}}>
+        <div className="w-[280px] mb-[25px]">
             <div>
-                <div className="flex flex-col w-[200px]">
-                    <div onClick={openPreview} className="relative group overflow-hidden shadow-lg cursor-pointer bg-white flex justify-center text-center rounded-2xl">
-                        <img src={placeholder} alt="placeholder" className="rounded-xl"/>
-                        <div className="rounded-xl absolute inset-0 bg-gray-900/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                            <p className="text-[var(--background-colour)] text-lg font-bold translate-y-5 group-hover:translate-y-0 transition-transform duration-300">
-                                {tripDetails.title}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="flex flex-row justify-around [&>img]:flex [&>img]:rounded-none">
-                        <button className="alt" onClick={() => navigate(`/my-trips/edit-trip/${tripDetails.id}`)}>
-                            <div className="image-container">
-                                <img className="img-main" src={edit} alt="Edit"/>
-                                <img className="img-hover" src={editHover} alt="Edit Hovered"/>
-                            </div>
-                        </button>
-                        <button className="alt delete" onClick={handleDelete}>
-                            <div className="image-container">
-                                <img className="img-main" src={trash} alt="Delete"/>
-                                <img className="img-hover" src={trashHover} alt="Delete Hovered"/>
-                            </div>
-                        </button>
-                        <button className="alt">
-                            <div className="image-container">
-                                <img className="img-main" src={share} alt="Share"/>
-                                <img className="img-hover" src={shareHover} alt="Share Hovered"/>
-                            </div>
-                        </button>
+                <div className="flex my-[15px] border border-(--secondary-colour) rounded-2xl w-[275px] bg-(--background-colour) justify-evenly
+                                max-md:w-[225px] max-md:flex-col">
+                    <img src={placeholder} alt="placeholder" className="size-[175px] rounded-2xl object-contain max-md:w-225[px] max-md:h-[150px]"/>
+                    <div className="flex flex-col justify-around max-md:my-[5px] max-md:flex-row">
+                        <IconButton main={eye} label="Preview" onClick={openPreview} />
+                        <IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/edit-trip/${tripDetails.id}`)} />
+                        <IconButton main={trash} label="Delete" onClick={handleDelete} danger />
                     </div>
                 </div>
             </div>

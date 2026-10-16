@@ -61,7 +61,7 @@ TripSitter is currently in **early development**. Features are actively being bu
 
 ## Screenshots
 
-> Screenshots coming soon.
+![Homepage](https://github.com/user-attachments/assets/1d89c643-1f4a-4a92-b302-9861551d3a84)
 
 <!-- 
   Add screenshots here once the UI is more stable.

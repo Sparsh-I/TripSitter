@@ -5,13 +5,12 @@ import {getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
 import L from "leaflet";
 import React, {useEffect, useRef, useState} from "react";
-import '../styles/MyMap.css';
 import Footer from "../components/global/Footer.tsx";
 import {currentTrips, futureTrips, pastTrips} from "../utils/TripDateUtils.ts";
 import type {Trip} from "../types/Trip.ts";
-import currentPin from "../assets/my_map/current-pin.svg";
-import upcomingPin from "../assets/my_map/upcoming-pin.svg";
-import pastPin from "../assets/my_map/past-pin.svg";
+import currentPin from "/assets/my_map/current-pin.svg";
+import upcomingPin from "/assets/my_map/upcoming-pin.svg";
+import pastPin from "/assets/my_map/past-pin.svg";
 
 const iconOptions = {
     iconSize: [80, 80] as [number, number],
@@ -80,37 +79,53 @@ export default function MyMapPage() {
         all: currentIcon,
     }
 
+    const FILTER_COLOURS: Record<FilterType, string> = {
+        all: "before:border-(--primary-colour) checked:before:bg-(--primary-colour)",
+        current: "before:border-(--green-pin) checked:before:bg-(--green-pin)",
+        upcoming: "before:border-(--red-pin) checked:before:bg-(--red-pin)",
+        past: "before:border-(--blue-pin) checked:before:bg-(--blue-pin)",
+    };
+
+    interface FilterButtonProps {
+        text: string;
+        selected: FilterType;
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    }
+
+    function FilterButton({ text, selected, onChange }: FilterButtonProps) {
+        const type = text.toLowerCase() as FilterType;
+        const id = `map-filter-${type}`;
+
+        return (
+            <div className="flex justify-around items-center gap-2">
+                <input
+                    type="radio" 
+                    name="map-filter" 
+                    id={id}
+                    value={type} 
+                    onChange={onChange} 
+                    checked={selected == type} 
+                    className={`appearance-none size-5 rounded-full border-2 cursor-pointer ${FILTER_COLOURS[type]}`}
+                />
+                <label htmlFor={`map-filter-${type}`} className="cursor-pointer">{text}</label>
+            </div>
+        );
+    }
+
     return (
-        <div className="page-layout">
+        <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <div className="page-content">
-                <div className="map">
-                    <div className="map-filter">
+            <main className="flex-1 p-10">
+                <div className="flex flex-col align-center max-md:flex-col-reverse gap-4">
+                    <div className="inline-flex justify-center gap-10 w-[1/2] max-md:flex-col-reverse w-full">
                         {places && (
                             <p>Number of trips: {places.length}</p>
                         )}
-                        <div className="map-radio-groups">
-                            <div className="radio-group">
-                                <input
-                                    type="radio" name="map-filter" id="map-filter-all"
-                                    value="all" onChange={handleFilterChange} defaultChecked/>
-                                <label htmlFor="map-filter-all">All</label>
-                            </div>
-                            <div className="radio-group">
-                                <input type="radio" name="map-filter" id="map-filter-current"
-                                    value="current" onChange={handleFilterChange} />
-                                <label htmlFor="map-filter-current">Current</label>
-                            </div>
-                            <div className="radio-group">
-                                <input type="radio" name="map-filter" id="map-filter-upcoming"
-                                    value="upcoming" onChange={handleFilterChange} />
-                                <label htmlFor="map-filter-upcoming">Upcoming</label>
-                            </div>
-                            <div className="radio-group">
-                                <input type="radio" name="map-filter" id="map-filter-past"
-                                    value="past" onChange={handleFilterChange} />
-                                <label htmlFor="map-filter-past">Past</label>
-                            </div>
+                        <div className="flex justify-around gap-3">
+                            <FilterButton text="All" selected={filter} onChange={handleFilterChange} />
+                            <FilterButton text="Current" selected={filter} onChange={handleFilterChange} />
+                            <FilterButton text="Upcoming" selected={filter} onChange={handleFilterChange} />
+                            <FilterButton text="Past" selected={filter} onChange={handleFilterChange} />
                         </div>
                     </div>
 
@@ -119,29 +134,28 @@ export default function MyMapPage() {
                         center={[20, 0] as [number, number]}
                         zoom={2}
                         minZoom={2}
-                        className="my-map-container"
+                        className="mx-auto h-[750px] w-full max-md:h-[800px]"
                         maxBounds={[[-90, -180], [90, 180]]}
                         maxBoundsViscosity={1.0}
                     >
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" noWrap={true}/>
                             {places.map((place) => {
-                                    const category = getTripCategory(place);
-                                    return (
-                                        <Marker
-                                            key={place.title}
-                                            title={place.title}
-                                            position={[place.lat, place.lng]}
-                                            icon={iconMap[category]}
-                                            eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
-                                        >
-                                            <Popup>{place.title}</Popup>
-                                        </Marker>
-                                    )
-                                }
-                            )};
+                                const category = getTripCategory(place);
+                                return (
+                                    <Marker
+                                        key={place.title}
+                                        title={place.title}
+                                        position={[place.lat, place.lng]}
+                                        icon={iconMap[category]}
+                                        eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
+                                    >
+                                        <Popup>{place.title}</Popup>
+                                    </Marker>
+                                )
+                            })};
                     </MapContainer>
                 </div>
-            </div>
+            </main>
             <Footer/>
         </div>
     );
