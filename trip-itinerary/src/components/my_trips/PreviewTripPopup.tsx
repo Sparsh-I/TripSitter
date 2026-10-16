@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
-import '../../styles/PopupWindow.css';
 import { type TripLocation } from "../global/LocationSearch.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { formatDate } from "../../utils/TripDateUtils.ts";
 import { createPortal } from "react-dom";
-import '../../styles/PopupWindow.css';
 import image from '../../assets/trip_preview/placeholder.jpg';
 import EmbedWidget from "./EmbedWidget.tsx";
 import {useIsMobile} from "../../hooks/useIsMobile.ts";
