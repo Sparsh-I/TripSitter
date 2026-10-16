@@ -69,6 +69,7 @@ body {
 
 button {
   font-family: var(--font), sans-serif;
+  border: none;
   border-radius: 20px;
   width: fit-content;
   height: fit-content;
@@ -125,6 +126,13 @@ select {
       }
     }
   }
+
+  .no-content-display {
+      background-color: var(--background-colour);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 20px 0;
+  }
 }
 
 p, li, h1, h2, h3, h4 {
@@ -151,15 +159,6 @@ h2 {
 
 h3 {
   font-size: 24px;
-}
-
-@layer base {
-  .no-content-display {
-      background-color: var(--background-colour);
-      border-radius: 15px;
-      padding: 30px;
-      margin: 20px 0;
-  }
 }
 
 .swiper {
@@ -195,4 +194,130 @@ h3 {
         width: 100%;
         height: 700px;
     }
+}
+
+/* Date Range Picker CSS */
+
+:root {
+    --datepicker_start-background: linear-gradient(
+        90deg,
+        transparent 50%,
+        var(--primary-colour-alt2) 50%);
+    --datepicker_end-background: linear-gradient(
+        90deg,
+        var(--primary-colour-alt2) 50%,
+        transparent 50%)
+}
+
+.date-picker-input-popup {
+    position: relative;
+}
+
+.date-picker-dropdown {
+    position: relative;
+    left: 25px;
+    right: auto;
+    z-index: 1001;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 4px;
+    padding: 10px;
+    width: 75%;
+
+    @media (max-width: 768px) {
+        top: 100%;
+        position: absolute;
+        width: 310px;
+    }
+}
+
+.date-picker-input {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.date-picker-field {
+    cursor: pointer;
+    padding: 0.6em 1.3em;
+}
+
+button:hover {
+    border-color: var(--primary-colour-alt);
+}
+
+.rdp-selected {
+    font-weight: normal;
+    font-size: medium;
+}
+
+.rdp-day_button[aria-selected="true"] {
+    background-color: var(--primary-colour);
+    color: var(--secondary-colour);
+}
+
+.rdp-range_middle {
+    background-color: var(--primary-colour-alt2);
+
+    .rdp-day_button {
+        color: var(--secondary-colour);
+        border: var(--primary-colour-alt);
+        border-radius: 50%;
+        background-color: transparent;
+    }
+}
+
+/* Days in between the range */
+.rdp-day_range_middle {
+    background-color: var(--primary-colour-alt2);
+
+    .rdp-day_button {
+        background-color: var(--primary-colour-alt2);
+        color: var(--secondary-colour);
+    }
+}
+
+.rdp-day_button:hover {
+    background-color: var(--primary-colour-alt) !important;
+    color: var(--background-colour) !important;
+}
+
+.rdp-day_button {
+    color: var(--secondary-colour);
+}
+
+.rdp-month_caption, .rdp-weekday {
+    color: var(--secondary-colour);
+}
+
+.rdp-button_previous, .rdp-button_next {
+    color: var(--secondary-colour);
+}
+
+.rdp-range_start {
+    background: var(--datepicker_start-background);
+    color: white;
+    .rdp-day_button {
+        background-color: var(--primary-colour-alt);
+        border-color: var(--primary-colour-alt);
+    }
+}
+
+.rdp-range_end {
+    background: var(--datepicker_end-background);
+    color: white;
+    .rdp-day_button {
+        background-color: var(--primary-colour-alt);
+        border-color: var(--primary-colour-alt);
+    }
+}
+
+.rdp-caption_label {
+    padding: 13px
+}
+
+.rdp-chevron {
+    fill: var(--primary-colour-alt)
 }

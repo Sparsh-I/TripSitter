@@ -1,6 +1,5 @@
 import NavBar from '../components/global/NavBar.tsx';
 import Footer from "../components/global/Footer.tsx";
-import '../styles/Connections.css';
 import { useState, useEffect, useCallback } from 'react';
 import * as ConnUtils from "../utils/ConnectionUtils.ts";
 import type { Connection } from '../types/Connection.ts';
@@ -115,10 +114,10 @@ export default function ConnectionsPage() {
     function TabButton({ active, alt = false, className = "", ...props }:
         { active: boolean; alt?: boolean } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
         const style = active
-            ? "rounded-[10px] border border-white bg-[#ffa154] text-black"
+            ? "!rounded-[10px] !bg-[#ffa154] !text-black"
             : alt
                 ? "rounded-[15px]"
-                : "rounded-[10px] border border-white bg-white text-black hover:bg-[#FFBE88]";
+                : "!rounded-[10px] !bg-white !text-black";
         return <button className={`${style} ${className}`} {...props} />;
     }
     
@@ -166,8 +165,8 @@ export default function ConnectionsPage() {
                     <div className={WRAPPER}>
                         <h2 className={HEADING}>Pending Requests</h2>
                         <div className="flex justify-around gap-5 mt-2.5">
-                            <TabButton active={activeSubTab === "Incoming"} className="w-1/2" onClick={() => openSubTab("Incoming")}>Incoming</TabButton>
-                            <TabButton active={activeSubTab === "Outgoing"} className="w-1/2" onClick={() => openSubTab("Outgoing")}>Outgoing</TabButton>
+                            <TabButton active={activeSubTab === "Incoming"} className="!w-1/2" onClick={() => openSubTab("Incoming")}>Incoming</TabButton>
+                            <TabButton active={activeSubTab === "Outgoing"} className="!w-1/2" onClick={() => openSubTab("Outgoing")}>Outgoing</TabButton>
                         </div>
                         <br />
 
