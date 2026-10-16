@@ -70,19 +70,19 @@ export default function MyTripsPage() {
         <div className="min-h-screen flex flex-col">
             <NavBar/>
             <main className="flex-1 p-10">
-                <div className="flex justify-between flex-col mb-[30px] lg:flex-row">
-                    <h2 className="text-left px-[20
-                    px] m-0">My Trips</h2>
+                <div className="flex flex-row mb-[30px] justify-between items-start max-md:flex-col">
+                    <h2 className="!m-0">My Trips</h2>
                     <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
                 </div>
                 <div className="page-content flex flex-row justify-between">
-                    <div className="flex flex-col justify-between h-80 w-[10%] text-right">
+                    <div className="flex flex-col justify-between h-100 w-[10%]">
                         {SIDEBAR_GROUPS.map((group, i) => (
-                            <div key={i}>
+                            <div key={i} className="flex flex-col gap-1 text-right">
                                 {group.map(tab => (
                                     <button
                                         key={tab}
-                                        className={`w-full ${activeTab === tab ? "tab-button-active" : "tab-button"}`}
+                                        className={`!w-full !rounded-lg text-right
+                                                    ${activeTab === tab ? "!bg-(--primary-colour-alt)" : "!bg-white !text-black hover:!bg-(--primary-colour)"}`}
                                         onClick={() => openTab(tab)}
                                     >
                                         {tab}
