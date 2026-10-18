@@ -81,8 +81,8 @@ export default function MyTripsPage() {
                                 {group.map(tab => (
                                     <button
                                         key={tab}
-                                        className={`!w-full !rounded-lg text-right
-                                                    ${activeTab === tab ? "!bg-(--primary-colour-alt)" : "!bg-white !text-black hover:!bg-(--primary-colour)"}`}
+                                        className={`w-full !rounded-lg text-right
+                                                    ${activeTab === tab ? "bg-(--primary-colour-alt)" : "bg-white text-black hover:bg-(--primary-colour)"}`}
                                         onClick={() => openTab(tab)}
                                     >
                                         {tab}
@@ -100,59 +100,16 @@ export default function MyTripsPage() {
                             )}
                         </div>
                     ) : (
-                        <div className="grid grid-cols-4 px-10 h-100 w-[100%] overflow-y-auto">
+                        <div className="grid grid-cols-4 px-10 h-full w-full overflow-y-auto">
                             {visibleTrips.map(trip =>
-                                <TripPreview key={trip.id} tripDetails={trip}/>
+                                <TripPreview key={trip.id} tripDetails={trip} />
                             )}
                         </div>
                     )}
                 </div>
             </main>
 
-            {/* <div className="page-content">
-                <div className="trips-carousels">
-                    <div className="my-trips-header">
-                        <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
-                        <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
-                    </div>
-                    <div>
-                        <h3 className="px-[18px] w-fit bg-(--primary-colour) rounded-xl !mx-0">
-                            Current
-                        </h3>
-                        {current.length === 0 ? (
-                            <div className="no-content-display">
-                                <h4>No trips to show</h4>
-                            </div>
-                        ) : (
-                            <TripCarousel trips={current} />
-                        )}
-                    </div>
-                    <div>
-                        <h3 className="!text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl !mx-0">
-                            Upcoming
-                        </h3>
-                        {upcoming.length === 0 ? (
-                            <div className="no-content-display">
-                                <h4>No trips to show</h4>
-                            </div>
-                        ) : (
-                            <TripCarousel trips={upcoming} />
-                        )}
-                    </div>
-                    <div>
-                        <h3 className="px-[18px] w-fit bg-(--background-colour-alt) rounded-xl !mx-0">
-                            Past
-                        </h3>
-                        {past.length === 0 ? (
-                            <div className="no-content-display">
-                                <h4>No trips to show</h4>
-                            </div>
-                        ) : (
-                            <TripCarousel trips={past} />
-                        )}
-                    </div>
-                </div>
-            </div> */}
+
             <Footer/>
         </div>
     );
