@@ -6,8 +6,8 @@ import trash from '/assets/trip_preview/trash.svg';
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types/Trip.ts";
 import PreviewTripPopup from "./PreviewTripPopup.tsx";
-import {useContext, useState} from "react";
-import {deleteTrip} from "../../utils/TripStorage.ts";
+import { useState } from "react";
+import { deleteTrip } from "../../utils/TripStorage.ts";
 import { useContextMenu } from '../../hooks/useContextMenu.ts';
 
 interface IconButtonProps {
