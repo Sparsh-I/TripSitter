@@ -29,33 +29,48 @@ export default function Login() {
     const isMobile = useIsMobile();
 
     return (
-        <div style={{ display: "inline-flex", flexDirection: "column" }}>
-            <div className="login-page">
-                <h2>Your Plan, Your Adventure</h2>
+        <div className="flex flex-col">
+            <div className="flex flex-col gap-5 m-auto px-10 max-md:py-50 max-md:px-15
+                            max-md:bg-[url('/assets/images/starry-night.jpg')]
+                            max-md:bg-center max-md:bg-cover"
+            >
+                <h2 className="max-md:!text-(--background-colour)">Your Plan, Your Adventure</h2>
                 {!isMobile && (
-                    <p>Plan, manage, and log trips and follow your friends' journeys too. Join TripSitter today completely for free.</p>
+                    <p className="text-(--background-colour)">
+                        Plan, manage, and log trips and follow your friends' journeys too.
+                        Join TripSitter today completely for free.
+                    </p>
                 )}
-                <h4>Log in or sign up to continue</h4>
+                <h4 className="my-2.5 max-md:!text-(--background-colour)">
+                    Log in or sign up to continue
+                </h4>
                 {!sent ? (
-                    <form onSubmit={handleMagicLink}>
+                    <form 
+                        className="flex flex-col gap-5 items-center"
+                        onSubmit={handleMagicLink}
+                    >
                         <input
                             type="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             placeholder="you@example.com"
                             required
+                            className="w-75"
                         />
                         <button type="submit" disabled={sending}>
                             {sending ? "Sending..." : "Send Login Link"}
                         </button>
-                        {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
+                        {errorMsg && <p className="text-red">{errorMsg}</p>}
                     </form>
                     ) : (
-                    <p>Check your email for a login link!</p>
+                    <p className="max-md:text-(--background-colour)">Check your email for a login link!</p>
                 )}
             </div>
             {isMobile && (
-                <p style={{fontSize: "larger", padding: "10px 30px"}}>Plan, manage, and log trips and follow your friends' journeys too. Join TripSitter today completely for free.</p>
+                <p className="text-(--background-colour) font-lg py-5 px-7.5">
+                    Plan, manage, and log trips and follow your friends' journeys too. 
+                    Join TripSitter today completely for free.
+                </p>
             )}
         </div>
     );

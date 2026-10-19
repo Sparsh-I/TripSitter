@@ -1,0 +1,423 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
+@import "tailwindcss";
+
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    min-width: 1200px;
+  }
+}
+
+:root {
+  --font: 'Space Grotesk', sans-serif;
+  /* colour palette */
+  --primary-colour: #ffbe88;
+  --primary-colour-alt: #f47a1e;
+  --primary-colour-alt2: #E2FFF7;
+  --secondary-colour: #3c3c3c;
+  --secondary-colour-alt: #252525;
+  --background-colour: #F5F5F5;
+  --background-colour-alt: #E1E1E1;
+
+  --custom-green: #0DB781;
+  --custom-red: #F96E6E;
+
+  --green-pin: #48C199;
+  --red-pin: #C14848;
+  --blue-pin: #494381;
+
+  background-color: white;
+}
+
+@font-face {
+  font-family: 'Cubao Free';
+  src: url('../../public/fonts/Cubao_Free_Wide.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background: #ffffff;
+  color: var(--secondary-colour);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+button {
+  font-family: var(--font), sans-serif;
+  border: none;
+  border-radius: 20px;
+  width: fit-content;
+  height: fit-content;
+  background-color: var(--primary-colour-alt);
+  color: var(--background-colour);
+}
+
+textarea {
+  border-radius: 10px;
+  padding: 0.5em 0.5em;
+}
+
+select {
+  height: 50px;
+}
+
+@layer base {
+  input, textarea, select {
+    font-family: var(--font), sans-serif;
+    font-size: medium;
+    background-color: var(--background-colour);
+    border: var(--background-colour);
+    border-radius: 50px;
+    height: 45px;
+    padding: 0.5em 1.3em;
+    color: var(--secondary-colour)
+  }
+
+  input[type="radio"] {
+    appearance: none;
+
+    width: 1.25em;
+    height: 1.25em;
+
+    border: none !important;
+
+    background-color: transparent;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+
+    &::before {
+      content: "";
+      width: 0.65em;
+      height: 0.65em;
+      border-radius: 50%;
+      border: 2px solid var(--primary-colour);
+      background-color: transparent;
+    }
+
+    &:checked {
+      &::before {
+        background-color: var(--primary-colour);
+      }
+    }
+  }
+
+  .no-content-display {
+      background-color: var(--background-colour);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 20px 0;
+  }
+}
+
+p, li, h1, h2, h3, h4 {
+  font-family: var(--font), sans-serif;
+  color: var(--secondary-colour);
+}
+
+h1, h2, h3, h4 {
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.8;
+  margin: auto;
+}
+
+h1 {
+  font-size: 36px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+h2 {
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+.swiper {
+    padding: 0 100px;
+    margin: auto auto;
+
+    @media (max-width: 768px) {
+        padding: 0 0 0 15%;
+
+        h3 {
+            margin: 0;
+            width: 80%;
+        }
+    }
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+    color: var(--primary-colour-alt);
+    width: 30px;
+    height: 30px;
+}
+
+.date-picker-input {
+    justify-content: normal;
+}
+
+
+.leaflet-container {
+    width: 800px;
+
+    @media (max-width: 768px) {
+        width: 100%;
+        height: 700px;
+    }
+}
+
+/* Date Range Picker CSS */
+
+:root {
+    --datepicker_start-background: linear-gradient(
+        90deg,
+        transparent 50%,
+        var(--primary-colour-alt2) 50%);
+    --datepicker_end-background: linear-gradient(
+        90deg,
+        var(--primary-colour-alt2) 50%,
+        transparent 50%)
+}
+
+.date-picker-input-popup {
+    position: relative;
+}
+
+.date-picker-dropdown {
+    position: relative;
+    left: 25px;
+    right: auto;
+    z-index: 1001;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-top: 4px;
+    padding: 10px;
+    width: 75%;
+
+    @media (max-width: 768px) {
+        top: 100%;
+        position: absolute;
+        width: 310px;
+    }
+}
+
+.date-picker-input {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.date-picker-field {
+    cursor: pointer;
+    padding: 0.6em 1.3em;
+}
+
+button:hover {
+    border-color: var(--primary-colour-alt);
+}
+
+.rdp-selected {
+    font-weight: normal;
+    font-size: medium;
+}
+
+.rdp-day_button[aria-selected="true"] {
+    background-color: var(--primary-colour);
+    color: var(--secondary-colour);
+}
+
+.rdp-range_middle {
+    background-color: var(--primary-colour-alt2);
+
+    .rdp-day_button {
+        color: var(--secondary-colour);
+        border: var(--primary-colour-alt);
+        border-radius: 50%;
+        background-color: transparent;
+    }
+}
+
+/* Days in between the range */
+.rdp-day_range_middle {
+    background-color: var(--primary-colour-alt2);
+
+    .rdp-day_button {
+        background-color: var(--primary-colour-alt2);
+        color: var(--secondary-colour);
+    }
+}
+
+.rdp-day_button:hover {
+    background-color: var(--primary-colour-alt) !important;
+    color: var(--background-colour) !important;
+}
+
+.rdp-day_button {
+    color: var(--secondary-colour);
+}
+
+.rdp-month_caption, .rdp-weekday {
+    color: var(--secondary-colour);
+}
+
+.rdp-button_previous, .rdp-button_next {
+    color: var(--secondary-colour);
+}
+
+.rdp-range_start {
+    background: var(--datepicker_start-background);
+    color: white;
+    .rdp-day_button {
+        background-color: var(--primary-colour-alt);
+        border-color: var(--primary-colour-alt);
+    }
+}
+
+.rdp-range_end {
+    background: var(--datepicker_end-background);
+    color: white;
+    .rdp-day_button {
+        background-color: var(--primary-colour-alt);
+        border-color: var(--primary-colour-alt);
+    }
+}
+
+.rdp-caption_label {
+    padding: 13px
+}
+
+.rdp-chevron {
+    fill: var(--primary-colour-alt)
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    position: relative; /* anchors the absolutely-positioned button below */
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    min-width: 550px;
+    height: 560px;
+
+    overflow-y: auto;
+
+    @media (max-width: 768px) {
+        min-width: 120px;
+        width: 80%
+    }
+}
+
+.popup-labels {
+    text-align: left;
+    color: var(--secondary-colour);
+}
+
+
+.popup-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    color: #333;
+    padding: 4px 8px;
+}
+
+.popup-close:hover {
+    color: #000;
+}
+
+.location-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 90%;
+    z-index: 1002;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 210px;
+    overflow-y: auto;
+
+    list-style: none;
+    margin: 4px 25px 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.location-search-dropdown li {
+    padding: 8px 12px;
+    cursor: pointer;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.location-search-dropdown li:hover {
+    background: #f0f0f0;
+}
+
+.trip-preview-photo {
+    width: 100%;
+    height: 20em;
+    background: var(--primary-colour-alt);
+    background-size: cover;
+    background-position: center;
+    margin: 5px 0 10px 0;
+}
+
+.embed-widget {
+    width: 450px;
+    height: 300px;
+    margin: auto;
+
+    @media (max-width: 768px) {
+        margin: -30px 0;
+        width: 100%;
+    }
+}
