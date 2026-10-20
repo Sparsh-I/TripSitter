@@ -40,7 +40,7 @@
 }
 
 body {
-  background: var(--background-colour);
+  background: #fff;
   color: var(--secondary-colour);
 }
 

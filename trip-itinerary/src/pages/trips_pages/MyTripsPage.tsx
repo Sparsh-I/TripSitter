@@ -67,7 +67,7 @@ export default function MyTripsPage() {
     }
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-(--background-colour)">
             <NavBar/>
             <main className="flex-1 pr-5 py-2">
                 {/* <div className="flex flex-row mb-[30px] justify-between items-start max-md:flex-col">
