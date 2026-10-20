@@ -70,10 +70,6 @@ export default function MyTripsPage() {
         <div className="min-h-screen flex flex-col bg-(--background-colour)">
             <NavBar/>
             <main className="flex-1 pr-5 py-2">
-                {/* <div className="flex flex-row mb-[30px] justify-between items-start max-md:flex-col">
-                    <h2 className="!m-0">My Trips</h2>
-                    <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
-                </div> */}
                 <div className="page-content flex flex-row justify-between">
                     <div className="flex flex-col gap-5 w-[10%] mx-5">
                         <div className="align-start">
