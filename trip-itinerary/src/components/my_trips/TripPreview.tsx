@@ -62,12 +62,14 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
     }
 
     return (
-        <div className="w-full px-3">
-            <div onContextMenu={(e) => open(e, tripDetails)} className="bg-gray-300 hover:bg-gray-200 cursor-pointer p-2 rounded-xl">
+        <div className="w-60 px-3">
+            <div onContextMenu={(e) => open(e, tripDetails)} 
+                 className="bg-gray-300 hover:bg-gray-200 cursor-pointer p-2 rounded-xl"
+                 onDoubleClick={openPreview}>
                 <div className="flex flex-row w-full justify-between items-center mb-1 gap-3">
                     <p className="text-left font-lg min-w-0 flex-1 truncate">{tripDetails.title}</p>
                     <button
-                        className="w-6 p-0 shrink-0 rounded-full bg-transparent leading-none text-black hover:bg-gray-100/80"
+                        className="p-0 shrink-0 rounded-full bg-transparent leading-none text-black hover:bg-gray-100/80"
                         onClick={(e) => {
                             e.stopPropagation();
                             open(e, tripDetails);

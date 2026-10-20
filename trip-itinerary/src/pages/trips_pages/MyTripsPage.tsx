@@ -69,43 +69,53 @@ export default function MyTripsPage() {
     return (
         <div className="min-h-screen flex flex-col">
             <NavBar/>
-            <main className="flex-1 p-10">
-                <div className="flex flex-row mb-[30px] justify-between items-start max-md:flex-col">
+            <main className="flex-1 pr-5 py-2">
+                {/* <div className="flex flex-row mb-[30px] justify-between items-start max-md:flex-col">
                     <h2 className="!m-0">My Trips</h2>
                     <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
-                </div>
+                </div> */}
                 <div className="page-content flex flex-row justify-between">
-                    <div className="flex flex-col justify-between h-100 w-[10%]">
-                        {SIDEBAR_GROUPS.map((group, i) => (
-                            <div key={i} className="flex flex-col gap-1 text-right">
-                                {group.map(tab => (
-                                    <button
-                                        key={tab}
-                                        className={`w-full !rounded-lg text-right
-                                                    ${activeTab === tab ? "bg-(--primary-colour-alt)" : "bg-white text-black hover:bg-(--primary-colour)"}`}
-                                        onClick={() => openTab(tab)}
-                                    >
-                                        {tab}
-                                    </button>
-                                ))}
-                            </div>
-                        ))}
+                    <div className="flex flex-col gap-5 w-[10%] mx-5">
+                        <div className="align-start">
+                            <button className="bg-(--primary-colour) hover:bg-(--primary-colour-alt2) text-black" onClick={() => navigate("/my-trips/new-trip")}>+ New</button>
+                        </div>
+                        <div className="flex flex-col justify-between h-100">
+                            {SIDEBAR_GROUPS.map((group, i) => (
+                                <div key={i} className="flex flex-col gap-1 text-right">
+                                    {group.map(tab => (
+                                        <button
+                                            key={tab}
+                                            className={`w-full !rounded-full text-left h-10 py-0
+                                                        ${activeTab === tab ? "bg-(--primary-colour-alt)" : "bg-transparent text-black hover:bg-(--primary-colour)"}`}
+                                            onClick={() => openTab(tab)}
+                                        >
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                        
-                    {visibleTrips.length == 0 ? (
-                        <div className="flex flex-col w-full justify-center items-center gap-5">
-                            <p>{EMPTY_MSGS[activeTab]}</p>
-                            {!NO_NEW_TRIP_BUTTON.includes(activeTab) && (
-                                <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
-                            )}
+                    
+                    <div className="flex flex-col gap-10 p-5 h-[70vh] w-[90%] bg-white rounded-xl">
+                        <div>
+                            <h2 className="m-0 text-left">My Trips</h2>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-4 px-10 h-full w-full overflow-y-auto">
-                            {visibleTrips.map(trip =>
-                                <TripPreview key={trip.id} tripDetails={trip} />
-                            )}
-                        </div>
-                    )}
+                        {visibleTrips.length == 0 ? (
+                            <div className="flex flex-col w-full justify-center items-center gap-5">
+                                <p>{EMPTY_MSGS[activeTab]}</p>
+                                {!NO_NEW_TRIP_BUTTON.includes(activeTab) && (
+                                    <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-5 h-full w-full overflow-y-auto">
+                                {visibleTrips.map(trip =>
+                                    <TripPreview key={trip.id} tripDetails={trip} />
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </main>
 

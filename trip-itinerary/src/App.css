@@ -16,7 +16,7 @@
   /* colour palette */
   --primary-colour: #ffbe88;
   --primary-colour-alt: #f47a1e;
-  --primary-colour-alt2: #E2FFF7;
+  --primary-colour-alt2: #ffcea6;
   --secondary-colour: #3c3c3c;
   --secondary-colour-alt: #252525;
   --background-colour: #F5F5F5;
@@ -40,7 +40,7 @@
 }
 
 body {
-  background: #ffffff;
+  background: var(--background-colour);
   color: var(--secondary-colour);
 }
 
@@ -345,7 +345,8 @@ button:hover {
 }
 
 .popup-content {
-    position: relative; /* anchors the absolutely-positioned button below */
+    position: relative;
+    top: -5%;
     background: white;
     padding: 30px;
     border-radius: 8px;
