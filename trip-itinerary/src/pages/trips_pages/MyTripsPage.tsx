@@ -1,13 +1,40 @@
 import NavBar from '../../components/global/NavBar.tsx';
-import TripCarousel from "../../components/my_trips/TripCarousel.tsx";
+import TripPreview from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { currentTrips, futureTrips, pastTrips } from "../../utils/TripDateUtils.ts";
 import { getTrips } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
 
+const TABS = ["All", "Ongoing", "Upcoming", "History", "Archive", "Requests"] as const;
+type TabName = typeof TABS[number];
+
+const SIDEBAR_GROUPS: TabName[][] = [
+    ["All", "Ongoing", "Upcoming", "History"],
+    ["Archive", "Requests"],
+]
+
+const EMPTY_MSGS: Record<TabName, string> = {
+    All: "You have no trips yet! Create one?",
+    Ongoing: "You have no ongoing trips! Did you miss one?",
+    Upcoming: "You have no upcoming trips! Remedy this?",
+    History: "You have no old trips! Start making a new memory?",
+    Archive: "You have no archived trips!",
+    Requests: "You have no incoming trip requests! Send one instead?",
+}
+
+const NO_NEW_TRIP_BUTTON: TabName[] = ["Archive", "Requests"]
+
+function parseParams<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
+    return value !== null && (allowed as readonly string[]).includes(value)
+        ? (value as T)
+        : fallback;
+}
+
 export default function MyTripsPage() {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "All");
     const [trips, setTrips] = useState<Trip[]>([]);
 
     useEffect(() => {
@@ -22,55 +49,73 @@ export default function MyTripsPage() {
     const upcoming = futureTrips(trips);
     const past = pastTrips(trips);
 
+    const tripsByTab: Record<TabName, Trip[]> = {
+        All: [...past, ...current, ...upcoming],
+        Ongoing: current,
+        Upcoming: upcoming,
+        History: past,
+        Archive: [],
+        Requests: [],
+    }
+
+    const visibleTrips = tripsByTab[activeTab];
+
     const navigate = useNavigate();
+    
+    function openTab(tabName: TabName) {
+        setSearchParams({tab: tabName})
+    }
 
     return (
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col bg-(--background-colour)">
             <NavBar/>
-            <main className="flex-1 p-10">
-                <div className="mx-[100px] my-[10px] max-md:mx-[50px]">
-                    <div className="flex justify-between align-center max-md:flex-col max-md:mb-[30px]">
-                        <h2 style={{textAlign: "left", padding: "20px 0", margin: "0"}}>My Trips</h2>
-                        <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
+            <main className="flex-1 pr-5 py-2">
+                <div className="page-content flex flex-row justify-between">
+                    <div className="flex flex-col gap-5 w-[10%] mx-5">
+                        <div className="align-start">
+                            <button className="bg-(--primary-colour) hover:bg-(--primary-colour-alt2) text-black" onClick={() => navigate("/my-trips/new-trip")}>+ New</button>
+                        </div>
+                        <div className="flex flex-col justify-between h-100">
+                            {SIDEBAR_GROUPS.map((group, i) => (
+                                <div key={i} className="flex flex-col gap-1 text-right">
+                                    {group.map(tab => (
+                                        <button
+                                            key={tab}
+                                            className={`w-full !rounded-full text-left h-10 py-0
+                                                        ${activeTab === tab ? "bg-(--primary-colour-alt)" : "bg-transparent text-black hover:bg-(--primary-colour)"}`}
+                                            onClick={() => openTab(tab)}
+                                        >
+                                            {tab}
+                                        </button>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="px-[18px] w-fit bg-(--primary-colour) rounded-xl !mx-0">
-                            Current
-                        </h3>
-                        {current.length === 0 ? (
-                            <div className="no-content-display">
-                                <h4>No trips to show</h4>
+                    
+                    <div className="flex flex-col gap-10 p-5 h-[70vh] w-[90%] bg-white rounded-xl">
+                        <div>
+                            <h2 className="m-0 text-left">My Trips</h2>
+                        </div>
+                        {visibleTrips.length == 0 ? (
+                            <div className="flex flex-col w-full justify-center items-center gap-5">
+                                <p>{EMPTY_MSGS[activeTab]}</p>
+                                {!NO_NEW_TRIP_BUTTON.includes(activeTab) && (
+                                    <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
+                                )}
                             </div>
                         ) : (
-                            <TripCarousel trips={current} />
-                        )}
-                    </div>
-                    <div>
-                        <h3 className="!text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl !mx-0">
-                            Upcoming
-                        </h3>
-                        {upcoming.length === 0 ? (
-                            <div className="no-content-display">
-                                <h4>No trips to show</h4>
+                            <div className="grid grid-cols-5 h-full w-full overflow-y-auto">
+                                {visibleTrips.map(trip =>
+                                    <TripPreview key={trip.id} tripDetails={trip} />
+                                )}
                             </div>
-                        ) : (
-                            <TripCarousel trips={upcoming} />
-                        )}
-                    </div>
-                    <div>
-                        <h3 className="px-[18px] w-fit bg-(--background-colour-alt) rounded-xl !mx-0">
-                            Past
-                        </h3>
-                        {past.length === 0 ? (
-                            <div className="no-content-display">
-                                <h4>No trips to show</h4>
-                            </div>
-                        ) : (
-                            <TripCarousel trips={past} />
                         )}
                     </div>
                 </div>
             </main>
+
+
             <Footer/>
         </div>
     );
