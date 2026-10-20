@@ -37,7 +37,7 @@ export default function NavBar() {
                             {NAV_LINKS.map(({ to, label }) => (
                                 <td
                                     key={to}
-                                    className="px-3 transition-colors duration-200
+                                    className="px-3 pb-2 transition-colors duration-200
                                                has-[.active-link]:border-b-[3px]
                                                has-[.active-link]:border-(--primary-colour)"
                                 >
