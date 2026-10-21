@@ -61,12 +61,14 @@ TripSitter is currently in **early development**. Features are actively being bu
 
 ## Screenshots
 
-![Homepage](https://github.com/user-attachments/assets/1d89c643-1f4a-4a92-b302-9861551d3a84)
+![Homepage](https://github.com/user-attachments/assets/9df11441-967b-4253-af70-2a38827d318d)
+![My Trips](https://github.com/user-attachments/assets/0594beff-ad14-4afd-8683-b3ec6b9fca8f)
 
 <!-- 
   Add screenshots here once the UI is more stable.
   Example:
-  ![Dashboard](./screenshots/dashboard.png)
+  ![Dashboard](./screenshots/dashboard.png)![Uploading TripSitterHome.png…]()
+
   ![Trip View](./screenshots/trip-view.png)
 -->
 
