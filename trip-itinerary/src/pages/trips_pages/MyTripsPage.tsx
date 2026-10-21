@@ -6,6 +6,7 @@ import { getTrips } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
+import { useLoading } from '../../context/LoadingContext.tsx';
 
 const TABS = ["All", "Ongoing", "Upcoming", "History", "Archive", "Requests"] as const;
 type TabName = typeof TABS[number];
@@ -36,9 +37,10 @@ export default function MyTripsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "All");
     const [trips, setTrips] = useState<Trip[]>([]);
+    const { track } = useLoading();
 
     useEffect(() => {
-        getTrips()
+        track(getTrips())
             .then(trips => setTrips(trips))
             .catch(e => {
                 console.error("Failed to load trips: ", e);
@@ -93,7 +95,7 @@ export default function MyTripsPage() {
                         </div>
                     </div>
                     
-                    <div className="flex flex-col gap-10 p-5 h-[70vh] w-[90%] bg-white rounded-xl">
+                    <div className="flex flex-col gap-10 p-5 h-[80vh] w-[90%] bg-white rounded-xl">
                         <div>
                             <h2 className="m-0 text-left">My Trips</h2>
                         </div>

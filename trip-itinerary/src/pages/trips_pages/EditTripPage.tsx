@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import {getTripById, updateTrip} from "../../utils/TripStorage.ts";
 import { type Trip } from "../../types/Trip.ts";
 import {useIsMobile} from "../../hooks/useIsMobile.ts";
+import { useLoading } from "../../context/LoadingContext.tsx";
 
 // interface LocationEntry {
 //     range: DateRange | undefined;
@@ -28,11 +29,12 @@ export default function EditTripPage() {
 
     const navigate = useNavigate();
     const isMobile = useIsMobile();
+    const { track } = useLoading();
 
     useEffect(() => {
         if (!id) return;
 
-        getTripById(id)
+        track(getTripById(id))
             .then(trip => setTripDetails(trip))
             .catch(e => {
                 console.error("Failed to load trip: ", e);
@@ -148,7 +150,7 @@ export default function EditTripPage() {
 
                 <h3 className="text-(--secondary-colour-alt) text-left mt-5">Relevant Links</h3>
                 {links.map((link, index) => (
-                    <div key={index} style={{ display: "flex", gap: "8px", margin: "8px 0" }}>
+                    <div key={index} className="flex gap-2 my-4">
                         <input
                             type="text"
                             placeholder="Any bookings you'd like to store?"

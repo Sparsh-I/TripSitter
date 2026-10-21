@@ -4,32 +4,26 @@ import ConnectionsWidget from "../../components/homepage/ConnectionsWidget.tsx";
 import UpcomingTripWidget from "../../components/homepage/UpcomingTripWidget.tsx";
 import Footer from "../../components/global/Footer.tsx";
 import {useEffect, useState} from "react";
-import {supabase} from "../../utils/SupabaseClient.ts";
+// import {supabase} from "../../utils/SupabaseClient.ts";
 import {getProfile} from "../../utils/ProfileUtils.ts";
+import { useAuthContext } from '../../context/AuthContext.tsx';
 
 export default function HomePage() {
     const [name, setName] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
+    const { session } = useAuthContext();
+    const userId = session?.user.id;
 
     useEffect(() => {
+        if (!userId) return;
         let cancelled = false;
 
-        async function getProfileDetails() {
-            const {data: {user}} = await supabase.auth.getUser();
-            if (!user || cancelled) return;
-            const profile = await getProfile(user.id);
-            if (!profile) return;
-            setName(profile.firstName);
+        getProfile(userId)
+            .then(p => { if (!cancelled && p) setName(p.firstName); })
+            .finally(() => { if (!cancelled) setLoading(false); });
 
-            if (!cancelled) setLoading(false);
-        }
-
-        void getProfileDetails();
-
-        return () => {
-            cancelled = true;
-        };
-    });
+        return () => { cancelled = true; };
+    }, [userId]);
 
     return (
         <div className="min-h-screen flex flex-col">
