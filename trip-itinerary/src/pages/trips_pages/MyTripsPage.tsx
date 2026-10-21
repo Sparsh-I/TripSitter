@@ -80,16 +80,29 @@ export default function MyTripsPage() {
                         <div className="flex flex-col justify-between h-100">
                             {SIDEBAR_GROUPS.map((group, i) => (
                                 <div key={i} className="flex flex-col gap-1 text-right">
-                                    {group.map(tab => (
-                                        <button
-                                            key={tab}
-                                            className={`w-full !rounded-full text-left h-10 py-0
-                                                        ${activeTab === tab ? "bg-(--primary-colour-alt)" : "bg-transparent text-black hover:bg-(--primary-colour)"}`}
-                                            onClick={() => openTab(tab)}
-                                        >
-                                            {tab}
-                                        </button>
-                                    ))}
+                                    {group.map(tab => {
+                                        const count = tripsByTab[tab].length;
+                                        const showBadge = tab === "Requests" && count > 0;
+
+                                        return (
+                                            <button
+                                                key={tab}
+                                                className={`w-full rounded-full text-left h-10 py-0 flex justify-between items-center
+                                                            ${activeTab === tab ? "bg-(--primary-colour-alt)" : "bg-transparent text-black hover:bg-(--primary-colour-alt2)"}`}
+                                                onClick={() => openTab(tab)}
+                                            >
+                                                <span>{tab}</span>
+                                                <span
+                                                    className={`flex size-5 shrink-0 items-center justify-center rounded-full text-xs
+                                                                ${showBadge
+                                                                    ? "bg-(--custom-red) text-white"
+                                                                    : activeTab === tab ? "text-gray-100" : "text-gray-400"}`}
+                                                >
+                                                    {count}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             ))}
                         </div>

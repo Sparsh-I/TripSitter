@@ -1,7 +1,7 @@
 import placeholder from '/assets/trip_preview/placeholder.jpg';
 import eye from '/assets/trip_preview/eye.svg';
 import edit from '/assets/trip_preview/edit.svg';
-// import share from '/assets/trip_preview/share.svg';
+import share from '/assets/trip_preview/share.svg';
 import trash from '/assets/trip_preview/trash.svg';
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types/Trip.ts";
@@ -93,6 +93,9 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                     style={{ top: menu.y, left: menu.x }} onClick={(e) => e.stopPropagation()}>
                     <li><IconButton main={eye} label="Preview" onClick={openPreview} /></li>
                     <li><IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/edit-trip/${tripDetails.id}`)} /></li>
+                    <li role="separator" className="my-1 border-t border-gray-400" />
+                    <li><IconButton main={share} label="Share" onClick={() => undefined} /></li>
+                    <li role="separator" className="my-1 border-t border-gray-400" />
                     <li><IconButton main={trash} label="Delete" onClick={handleDelete} danger /></li>
                 </ul>
             )}
