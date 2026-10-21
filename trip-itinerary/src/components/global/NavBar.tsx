@@ -61,8 +61,7 @@ export default function NavBar() {
 
                 <button
                     onClick={handleLogout}
-                    className="absolute right-25 block rounded-[110px] !bg-white
-                               !hover:border-white !focus:border-white focus:outline-none max-md:hidden"
+                    className="absolute right-25 block rounded-[110px] bg-transparent focus:outline-none max-md:hidden"
                 >
                     <img src={logOutIcon} alt="Log Out" />
                 </button>
