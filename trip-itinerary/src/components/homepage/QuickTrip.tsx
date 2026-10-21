@@ -33,7 +33,7 @@ export default function QuickTrip() {
                         Title
                     </h3>
                     <input
-                        className="w-[250px]"
+                        className="w-65"
                         type="text"
                         placeholder="What are we calling this?"
                         value={title}

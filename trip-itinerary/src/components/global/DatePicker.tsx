@@ -49,7 +49,8 @@ export default function DatePicker({ selected, onSelect, variant = 'default', fi
             />
 
             {open && (
-                <div className="date-picker-dropdown">
+                <div className="absolute left-65 z-1001 mt-1 w-max rounded-lg bg-white p-2.5
+                                shadow-[0_4px_12px_rgba(0,0,0,0.15)] max-md:left-0 max-md:w-77">
                     <DayPicker
                         mode="range"
                         selected={selected}
