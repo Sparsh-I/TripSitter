@@ -59,7 +59,7 @@ export default function DatePicker({ selected, onSelect, variant = 'default', fi
                         disabled={{ before: new Date() }}
                     />
                     <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                        <button onClick={clearDates}>Clear</button>
+                        <button className="bg-gray-500" onClick={clearDates}>Clear</button>
                         <button onClick={() => setOpen(false)}>Save</button>
                     </div>
                 </div>
