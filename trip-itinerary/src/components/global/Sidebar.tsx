@@ -43,8 +43,8 @@ export default function Sidebar({ onClose }: SidebarProps) {
 
     return createPortal(
         <div
-            className="fixed right-0 z-[1005] flex h-[60vh] w-50 flex-col justify-between
-                        rounded-l-[75px] bg-(--background-colour) py-7.5 text-right"
+            className="fixed right-0 z-1005 flex h-full w-50 flex-col justify-between
+                        rounded-none bg-(--background-colour) py-7.5 text-right"
             onClick={(e) => e.stopPropagation()}
         >
             <ul className="list-none pr-5 pl-0">
@@ -65,13 +65,13 @@ export default function Sidebar({ onClose }: SidebarProps) {
 
             <div className="flex w-[85%] flex-row justify-evenly self-center">
                 <NavLink to="/profile">
-                    <span className="relative top-1.25 z-[1005] block size-12.5 rounded-full
+                    <span className="relative top-1.25 z-1005 block size-12.5 rounded-full
                                         bg-(--primary-colour) bg-cover bg-center"></span>
                 </NavLink>
                 <h4 className="ml-2 mt-2.5 truncate">{username}</h4>
                 <button
                     onClick={handleLogout}
-                    className="mt-1.5 hidden rounded-[110px] bg-white p-2 max-md:block"
+                    className="mt-1.5 hidden bg-transparent p-2 max-md:block"
                 >
                     <img src={logOutIcon} alt="Log Out" />
                 </button>

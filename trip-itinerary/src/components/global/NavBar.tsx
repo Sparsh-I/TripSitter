@@ -23,7 +23,7 @@ export default function NavBar() {
 
     return (
         <div>
-            <div className="w-full h-7.5 mt-5 px-14 box-border flex items-center navbar">
+            <div className="w-full h-7.5 mt-5 px-14 box-border flex items-center">
                 <NavLink to="/home">
                     <div className="flex flex-row justify-center">
                         <img src={logoTent} alt="Logo icon" className="w-17.5"  />
@@ -46,7 +46,7 @@ export default function NavBar() {
                                         className={({ isActive }) =>
                                             `text-[#1a1a1a] ${isActive ? "active-link" : ""}`}
                                     >
-                                        <p className="cursor-pointer hover:text-(--primary-colour)">{label}</p>
+                                        <p className="cursor-pointer hover:text-(--primary-colour-alt)">{label}</p>
                                     </NavLink>
                                 </td>
                             ))}
@@ -68,15 +68,23 @@ export default function NavBar() {
 
                 <button
                     onClick={() => setShowSidebar(true)}
-                    className="absolute right-5 hidden rounded-[110px] bg-white
-                               hover:border-white focus:border-white focus:outline-none max-md:block max-md:!bg-white"
+                    className="absolute right-5 hidden hover:border-white focus:border-white focus:outline-none
+                               max-md:block max-md:bg-transparent"
                 >
                     <img src={menuIcon} className="w-10" alt="Menu" />
                 </button>
             </div>
             <br/>
 
-            {showSidebar && <Sidebar onClose={() => setShowSidebar(false)} />}
+            {showSidebar && 
+                <>
+                    <div 
+                        onClick={() => setShowSidebar(false)}
+                        className="fixed inset-0 z-40 bg-black/40"
+                    />
+                    <Sidebar onClose={() => setShowSidebar(false)} />
+                </>
+            }
         </div>
     );
 }

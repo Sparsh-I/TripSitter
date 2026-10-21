@@ -105,7 +105,7 @@ export default function MyTripsPage() {
                                 )}
                             </div>
                         ) : (
-                            <div className="grid grid-cols-5 h-full w-full overflow-y-auto">
+                            <div className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] h-full w-full overflow-y-auto">
                                 {visibleTrips.map(trip =>
                                     <TripPreview key={trip.id} tripDetails={trip} />
                                 )}
