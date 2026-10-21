@@ -13,7 +13,10 @@ export default function QuickTrip() {
     const isFilled = title.trim() !== "" && range?.from && range?.to;
 
     function submitTrip() {
-        if (!isFilled) return;
+        if (!isFilled){
+            alert("Fill out both fields before trying to submit!");
+            return;
+        }
         setShowPopup(true);
     }
 
@@ -27,13 +30,13 @@ export default function QuickTrip() {
 
     return (
         <div className="flex flex-col">
-            <div className="flex flex-row gap-[1.3em] pt-[4em] max-md:flex-col max-md:p-0" style={{ position: "relative" }}>
+            <div className="flex flex-row gap-[1.3em] pt-[4em] max-md:flex-col max-md:p-0 relative">
                 <div className="flex flex-col gap-2">
-                    <h3 className="!text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl !mx-0">
+                    <h3 className="text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl mx-0">
                         Title
                     </h3>
                     <input
-                        className="w-[250px]"
+                        className="w-65"
                         type="text"
                         placeholder="What are we calling this?"
                         value={title}
@@ -41,7 +44,7 @@ export default function QuickTrip() {
                     />
                 </div>
                 <div className="flex flex-col gap-2">
-                    <h3 className="!text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl !mx-0">
+                    <h3 className="text-(--background-colour) px-[18px] w-fit bg-(--secondary-colour) rounded-xl mx-0">
                         Dates
                     </h3>
                     <DatePicker selected={range} onSelect={setRange} fieldSize={21} numMonths={isMobile ? 1 : 2}/>

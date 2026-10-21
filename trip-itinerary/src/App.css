@@ -14,9 +14,9 @@
 :root {
   --font: 'Space Grotesk', sans-serif;
   /* colour palette */
-  --primary-colour: #ffbe88;
-  --primary-colour-alt: #f47a1e;
-  --primary-colour-alt2: #ffcea6;
+  --primary-colour: #88bfff;
+  --primary-colour-alt: #7385fa;
+  --primary-colour-alt2: #aed4ff;
   --secondary-colour: #3c3c3c;
   --secondary-colour-alt: #252525;
   --background-colour: #F5F5F5;
@@ -225,25 +225,6 @@ select {
     position: relative;
 }
 
-.date-picker-dropdown {
-    position: relative;
-    left: 25px;
-    right: auto;
-    z-index: 1001;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-top: 4px;
-    padding: 10px;
-    width: 75%;
-
-    @media (max-width: 768px) {
-        top: 100%;
-        position: absolute;
-        width: 310px;
-    }
-}
-
 .date-picker-input {
     position: relative;
     display: inline-flex;
@@ -297,6 +278,10 @@ button:hover {
 }
 
 .rdp-day_button {
+    padding: 0;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
     color: var(--secondary-colour);
 }
 
@@ -308,8 +293,7 @@ button:hover {
     color: var(--secondary-colour);
 }
 
-.rdp-range_start {
-    background: var(--datepicker_start-background);
+.rdp-range_start, .rdp-range_end {
     color: white;
     .rdp-day_button {
         background-color: var(--primary-colour-alt);
@@ -317,13 +301,12 @@ button:hover {
     }
 }
 
+.rdp-range_start {
+    background: var(--datepicker_start-background);
+}
+
 .rdp-range_end {
     background: var(--datepicker_end-background);
-    color: white;
-    .rdp-day_button {
-        background-color: var(--primary-colour-alt);
-        border-color: var(--primary-colour-alt);
-    }
 }
 
 .rdp-caption_label {

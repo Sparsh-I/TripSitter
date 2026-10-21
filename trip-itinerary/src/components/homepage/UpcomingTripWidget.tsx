@@ -64,23 +64,23 @@ export default function UpcomingTripWidget() {
     }
 
     return (
-        <div className="relative flex justify-center w-full lg:w-[520px] h-[148px] bg-(--primary-colour-alt) rounded-2xl overflow py-[0.25em] max-md:w-[90%]
-                    before:absolute before:top-1/2 before:-left-5 before:-translate-y-1/2 before:size-9 before:rounded-full before:bg-white before:z-[2]
-                    after:absolute after:top-1/2 after:-right-5 after:-translate-y-1/2 after:size-9 after:rounded-full after:bg-white after:z-[2]">
+        <div className="relative flex justify-center w-135 max-md:w-full h-37 bg-(--primary-colour-alt) rounded-2xl overflow py-1 max-md:w-[90%]
+                    before:absolute before:top-1/2 before:-left-5 before:-translate-y-1/2 before:size-9 before:rounded-full before:bg-white before:z-2
+                    after:absolute after:top-1/2 after:-right-5 after:-translate-y-1/2 after:size-9 after:rounded-full after:bg-white after:z-2">
             <table className="h-full max-md:[&_td]:items-center max-md:[&_td]:w-[30%]">
                 <tbody>
-                <tr className="[&_h3]:!text-white [&_h1]:!text-white">
+                <tr className="[&_h3]:text-white [&_h1]:text-white">
                     <td><h3>{upcomingTrip?.title ?? "No Upcoming Trips!"}</h3></td>
                     <td><h3>{startLocCode}➜{endLocCode}</h3></td>
-                    <td rowSpan={2} className="text-center items-center px-[8px] border-l-2 border-dashed border-white w-[20%] max-md:py-[8px]">
+                    <td rowSpan={2} className="text-center items-center px-2 border-l-2 border-dashed border-white w-[20%] max-md:py-2">
                         <h3>{month.toUpperCase()}</h3>
-                        <h1 className="mx-[-5px]">{day}</h1>
+                        <h1>{day}</h1>
                         <h3>{year}</h3>
                     </td>
                 </tr>
                 <tr>
                     <td colSpan={2}>
-                        <p className="text-left !text-(--background-colour) mx-[10px] max-w-[400px] min-w-[230px] line-clamp-3">{upcomingTrip 
+                        <p className="text-left text-(--background-colour) mx-2.5 max-w-100 min-w-67.5 line-clamp-3">{upcomingTrip 
                             ? "This would be where the description of the trip would go, but not sure where this would be pulled from?"
                             : "Time to start planning! Where are you thinking of going next?"}
                         </p>
