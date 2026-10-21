@@ -34,9 +34,9 @@ export default function Login() {
                             max-md:bg-[url('/assets/images/starry-night.jpg')]
                             max-md:bg-center max-md:bg-cover"
             >
-                <h2 className="max-md:!text-(--background-colour)">Your Plan, Your Adventure</h2>
+                <h2 className="max-md:text-(--background-colour)">Your Plan, Your Adventure</h2>
                 {!isMobile && (
-                    <p className="text-(--background-colour)">
+                    <p className="text-black">
                         Plan, manage, and log trips and follow your friends' journeys too.
                         Join TripSitter today completely for free.
                     </p>
@@ -67,7 +67,7 @@ export default function Login() {
                 )}
             </div>
             {isMobile && (
-                <p className="text-(--background-colour) font-lg py-5 px-7.5">
+                <p className="text-(--secondary-colour) font-lg py-5 px-7.5">
                     Plan, manage, and log trips and follow your friends' journeys too. 
                     Join TripSitter today completely for free.
                 </p>
