@@ -3,8 +3,6 @@ import ProfilePage from "./pages/ProfilePage.tsx";
 import MyTripsPage from "./pages/trips_pages/MyTripsPage.tsx";
 import ConnectionsPage from "./pages/ConnectionsPage.tsx";
 import MyMapPage from "./pages/MyMapPage.tsx";
-import EditTripPage from "./pages/trips_pages/EditTripPage.tsx";
-import NewTripPage from "./pages/trips_pages/NewTripPage.tsx";
 import SignUpPage from "./pages/start_pages/SignUpPage.tsx";
 import SplashScreen from "./components/global/SplashScreen.tsx";
 
@@ -15,6 +13,7 @@ import ProtectedRoute from "./components/global/ProtectedRoute.tsx";
 import { supabase } from "./utils/SupabaseClient.ts";
 import { useEffect, useState } from "react";
 import { getProfile } from "./utils/ProfileUtils.ts";
+import TripFormPage from "./pages/trips_pages/TripForm.tsx";
 
 async function checkHasProfile(userId: string): Promise<boolean> {
     const profile = await getProfile(userId);
@@ -78,8 +77,8 @@ export default function App() {
             <Route path="/connections" element={<ProtectedRoute><ConnectionsPage/></ProtectedRoute>}/>
             <Route path="/my-map" element={<ProtectedRoute><MyMapPage/></ProtectedRoute>}/>
 
-            <Route path="/my-trips/edit-trip/:id" element={<ProtectedRoute><EditTripPage/></ProtectedRoute>}/>
-            <Route path="/my-trips/new-trip" element={<ProtectedRoute><NewTripPage/></ProtectedRoute>}/>
+            <Route path="/my-trips/new" element={<ProtectedRoute><TripFormPage/></ProtectedRoute>}/>
+            <Route path="/my-trips/:id/edit" element={<ProtectedRoute><TripFormPage/></ProtectedRoute>}/>
 
             <Route path="/profile" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}/>
         </Routes>

@@ -75,7 +75,7 @@ export default function MyTripsPage() {
                 <div className="page-content flex flex-row justify-between">
                     <div className="flex flex-col gap-5 w-[10%] mx-5">
                         <div className="align-start">
-                            <button className="bg-(--primary-colour) hover:bg-(--primary-colour-alt2) text-black" onClick={() => navigate("/my-trips/new-trip")}>+ New</button>
+                            <button className="bg-(--primary-colour) hover:bg-(--primary-colour-alt2) text-black" onClick={() => navigate("/my-trips/new")}>+ New</button>
                         </div>
                         <div className="flex flex-col justify-between h-100">
                             {SIDEBAR_GROUPS.map((group, i) => (
@@ -116,7 +116,7 @@ export default function MyTripsPage() {
                             <div className="flex flex-col w-full justify-center items-center gap-5">
                                 <p>{EMPTY_MSGS[activeTab]}</p>
                                 {!NO_NEW_TRIP_BUTTON.includes(activeTab) && (
-                                    <button onClick={() => navigate("/my-trips/new-trip")}>+ New trip</button>
+                                    <button onClick={() => navigate("/my-trips/new")}>+ New trip</button>
                                 )}
                             </div>
                         ) : (

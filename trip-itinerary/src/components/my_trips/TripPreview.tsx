@@ -92,7 +92,7 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                 <ul className="fixed z-50 bg-gray-200 py-2" 
                     style={{ top: menu.y, left: menu.x }} onClick={(e) => e.stopPropagation()}>
                     <li><IconButton main={eye} label="Preview" onClick={openPreview} /></li>
-                    <li><IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/edit-trip/${tripDetails.id}`)} /></li>
+                    <li><IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/${tripDetails.id}/edit`)} /></li>
                     <li role="separator" className="my-1 border-t border-gray-400" />
                     <li><IconButton main={share} label="Share" onClick={() => undefined} /></li>
                     <li role="separator" className="my-1 border-t border-gray-400" />
