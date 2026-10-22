@@ -73,7 +73,7 @@ export default function MyTripsPage() {
             <NavBar/>
             <main className="flex-1 pr-5 py-2">
                 <div className="page-content flex flex-row justify-between">
-                    <div className="flex flex-col gap-5 w-[10%] mx-5">
+                    <div className="flex flex-col gap-5 w-[12%] mx-5">
                         <div className="align-start">
                             <button className="bg-(--primary-colour) hover:bg-(--primary-colour-alt2) text-black" onClick={() => navigate("/my-trips/new")}>+ New</button>
                         </div>

@@ -171,6 +171,56 @@ select {
     h3 {
         font-size: 24px;
     }
+
+    .popup-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+    }
+
+    .popup-content {
+        position: relative;
+        top: -5%;
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        min-width: 550px;
+        height: 560px;
+        max-width: 60%;
+        overflow-y: auto;
+
+        @media (max-width: 768px) {
+            min-width: 120px;
+            width: 80%
+        }
+    }
+
+    .popup-labels {
+        text-align: left;
+        color: var(--secondary-colour);
+    }
+
+
+    .popup-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        color: #333;
+        padding: 4px 8px;
+    }
+
+    .popup-close:hover {
+        color: #000;
+    }
 }
 
 .swiper {
@@ -317,56 +367,6 @@ button:hover {
     fill: var(--primary-colour-alt)
 }
 
-.popup-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.popup-content {
-    position: relative;
-    top: -5%;
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    min-width: 550px;
-    height: 560px;
-
-    overflow-y: auto;
-
-    @media (max-width: 768px) {
-        min-width: 120px;
-        width: 80%
-    }
-}
-
-.popup-labels {
-    text-align: left;
-    color: var(--secondary-colour);
-}
-
-
-.popup-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    line-height: 1;
-    cursor: pointer;
-    color: #333;
-    padding: 4px 8px;
-}
-
-.popup-close:hover {
-    color: #000;
-}
-
 .location-search-dropdown {
     position: absolute;
     top: 100%;
@@ -396,24 +396,4 @@ button:hover {
 
 .location-search-dropdown li:hover {
     background: #f0f0f0;
-}
-
-.trip-preview-photo {
-    width: 100%;
-    height: 20em;
-    background: var(--primary-colour-alt);
-    background-size: cover;
-    background-position: center;
-    margin: 5px 0 10px 0;
-}
-
-.embed-widget {
-    width: 450px;
-    height: 300px;
-    margin: auto;
-
-    @media (max-width: 768px) {
-        margin: -30px 0;
-        width: 100%;
-    }
 }

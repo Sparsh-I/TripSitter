@@ -41,27 +41,27 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                 <button onClick={onClose} className="popup-close">x</button>
                 <h2>{trip.title}</h2>
 
-                <div className="trip-preview-photo"
-                     style={{backgroundImage: `url(${image})`}}
+                <div className="w-full h-80 bg-(--primary-colour-alt) bg-cover bg-center mt-1.25 mb-2.5
+                                bg-[url(/assets/trip_preview/placeholder.jpg)]"
                 />
-                <table style={{marginLeft: "auto", marginRight: "auto"}}>
+                <table className="mx-auto [&_td]:p-4">
                     <tbody>
-                        <tr>
-                            <td width="120"><p className="popup-labels"><strong>Dates</strong></p></td>
+                        <tr className="odd:bg-gray-200 even:bg-white">
+                            <td className="min-w-40"><p className="popup-labels"><strong>Dates</strong></p></td>
                             <td><p>{formatDate(trip.startDate)} ➜ {formatDate(trip.endDate)}</p></td>
                         </tr>
-                        <tr>
+                        <tr className="odd:bg-gray-200 even:bg-white">
                             <td><p className="popup-labels"><strong>Location</strong></p></td>
                             <td><p>{trip.locationLabel}</p></td>
                         </tr>
-                        <tr>
+                        <tr className="odd:bg-gray-200 even:bg-white">
                             <td><p className="popup-labels"><strong>Notes</strong></p></td>
                             <td><p>{trip.notes}</p></td>
                         </tr>
-                        <tr>
+                        <tr className="odd:bg-gray-200 even:bg-white">
                             <td><p className="popup-labels"><strong>Relevant Links</strong></p></td>
                             {!isMobile && links.map((link, index) => (
-                                <td key={index}><EmbedWidget link={link}/></td>
+                                <td key={index} className="!p-0 !-m-2"><EmbedWidget link={link}/></td>
                             ))}
                         </tr>
                     </tbody>

@@ -20,7 +20,7 @@ export default function EmbedWidget({ link }: EmbedWidgetProps) {
         const match = link.match(/\/([^/?]+)\?/);
         return match ? match[1] : null;
     }
-    if (!link) return <p>Missing embed link</p>;
+    if (!link) return <p className="flex justify-center">Missing embed link</p>;
 
     const airbnbId = extractAirbnbId(link);
 
@@ -28,7 +28,7 @@ export default function EmbedWidget({ link }: EmbedWidgetProps) {
 
     return (
         <div
-            className="airbnb-embed-frame embed-widget"
+            className="airbnb-embed-frame w-100 h-75 max-md:-my-7.5 max-md:w-full"
             data-id={airbnbId}
             data-view="home"
             data-hide-price="true"
