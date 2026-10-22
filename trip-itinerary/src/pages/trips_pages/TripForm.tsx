@@ -9,10 +9,18 @@ import { addTrip, getTripById, updateTrip } from "../../utils/TripStorage.ts";
 import SplashScreen from "../../components/global/SplashScreen.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import LocationSearch from "../../components/global/LocationSearch.tsx";
+import placeholder from '/assets/trip_preview/placeholder.jpg'
+import { TabButton } from "../../components/global/TabButton.tsx";
+import { useTabParam } from "../../hooks/useTabParam.ts";
+
+const TABS = ["General", "Trip Legs", "Members"] as const;
+// const SUB_TABS = ["Incoming", "Outgoing"] as const;
 
 export default function TripFormPage() {
     const { id } = useParams<{ id: string }>();
     const isEditing = !!id;
+
+    const [activeTab, openTab] = useTabParam("tab", TABS, "General");
 
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const [loading, setLoading] = useState(isEditing);
@@ -21,6 +29,7 @@ export default function TripFormPage() {
     const [range, setRange] = useState<DateRange | undefined>();
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [notes, setNotes] = useState("");
+    const [photo, setPhoto] = useState(placeholder);
 
     const navigate = useNavigate();
     const isMobile = useIsMobile();
@@ -92,6 +101,23 @@ export default function TripFormPage() {
     //         prev.map((entry, i) => (i === index ? { ...entry, range } : entry))
     //     );
     // }
+
+    return (
+        <div>
+            <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border"
+                 style={{ backgroundImage: `url(${photo})` }}
+            >
+                <h2 className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]">
+                    {tripDetails?.title}
+                </h2>
+            </div>
+            <div className="flex justify-center gap-5 mt-3">
+                <TabButton active={activeTab === "General"} onClick={() => openTab("General")}>General</TabButton>
+                <TabButton active={activeTab === "Trip Legs"} onClick={() => openTab("Trip Legs")}>Trip Legs</TabButton>
+                <TabButton active={activeTab === "Members"} onClick={() => openTab("Members")}>Members</TabButton>
+            </div>
+        </div>
+    );
 
     return (
             <div>
@@ -169,7 +195,7 @@ export default function TripFormPage() {
     
                     <h3 className="text-(--secondary-colour-alt) text-left mt-5">Additional Notes</h3>
                     <textarea className="w-full my-2.5" value={notes} placeholder="Anything extra...">
-                        {tripDetails?.notes ? tripDetails.notes : ""}
+                        {tripDetails?.notes ? tripDetails?.notes : ""}
                     </textarea>
     
                     <div className="mt-5">
