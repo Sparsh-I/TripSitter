@@ -1,5 +1,5 @@
 import DatePicker from "../../components/global/DatePicker.tsx";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import type { TripLocation } from "../../components/global/LocationSearch.tsx";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,7 @@ import LocationSearch from "../../components/global/LocationSearch.tsx";
 import placeholder from '/assets/trip_preview/placeholder.jpg'
 import { TabButton } from "../../components/global/TabButton.tsx";
 import { useTabParam } from "../../hooks/useTabParam.ts";
+import { displayName, getProfileSummaries, type ProfileSummary } from "../../utils/ConnectionUtils.ts";
 
 const TABS = ["General", "Trip Legs", "Members"] as const;
 // const SUB_TABS = ["Incoming", "Outgoing"] as const;
@@ -29,16 +30,18 @@ export default function TripFormPage() {
     const [range, setRange] = useState<DateRange | undefined>();
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [notes, setNotes] = useState("");
-    const [photo, setPhoto] = useState(placeholder);
+    const [photo, /*setPhoto*/] = useState(placeholder);
 
     const navigate = useNavigate();
     const isMobile = useIsMobile();
     const { track } = useLoading();
 
+    const [profiles, setProfiles] = useState<Record<string, ProfileSummary>>({});
+
     useEffect(() => {
         if (!id) return;
         track(getTripById(id))
-            .then(trip => {
+            .then(async trip => {
                 if (!trip) return;
                 setTripDetails(trip);
                 setTitle(trip.title);
@@ -46,10 +49,15 @@ export default function TripFormPage() {
                 setLocation({ lat: trip.lat, lng: trip.lng, label: trip.locationLabel });
                 setNotes(trip.notes ?? "");
                 if (trip.links?.length) setLinks(trip.links);
+
+                const memberIds = [trip.ownerId /*, ...trip.members */];
+                setProfiles(await getProfileSummaries(memberIds));
             })
             .catch(e => console.error("Failed to load trip:", e))
             .finally(() => setLoading(false));
     }, [id]);
+
+    const ownerId = tripDetails?.ownerId;
 
     if (loading) return <SplashScreen />;
     if (isEditing && !tripDetails) {
@@ -111,10 +119,54 @@ export default function TripFormPage() {
                     {tripDetails?.title}
                 </h2>
             </div>
-            <div className="flex justify-center gap-5 mt-3">
-                <TabButton active={activeTab === "General"} onClick={() => openTab("General")}>General</TabButton>
-                <TabButton active={activeTab === "Trip Legs"} onClick={() => openTab("Trip Legs")}>Trip Legs</TabButton>
-                <TabButton active={activeTab === "Members"} onClick={() => openTab("Members")}>Members</TabButton>
+            <div className="flex justify-center gap-0 mt-3">
+                <TabButton active={activeTab === "General"} tab onClick={() => openTab("General")}>General</TabButton>
+                <TabButton active={activeTab === "Trip Legs"} tab onClick={() => openTab("Trip Legs")}>Trip Legs</TabButton>
+                <TabButton active={activeTab === "Members"} tab onClick={() => openTab("Members")}>Members</TabButton>
+            </div>
+            <div className="border-t-5 border-(--primary-colour-alt)">
+                {activeTab === "General" && (
+                    <div>
+                       Does
+                    </div>
+                )}
+
+                {activeTab === "Trip Legs" && (
+                    <div>
+                       This
+                    </div>
+                )}
+
+                {activeTab === "Members" && (
+                    <div className="flex flex-col items-center w-full">
+                        <div className="flex w-[90%] items-center justify-between py-6">
+                            <h3 className="m-0">Members</h3>
+                            <button>+ Add Member</button>
+                        </div>
+
+                        <ul className="w-[90%] [&_li]:odd:bg-(--background-colour) [&_li]:even:bg-white">
+                            <li className="p-3">
+                                <div className="flex items-center gap-2">
+                                    <span>{displayName(ownerId ? profiles[ownerId] : undefined)}</span>
+                                    <span className="shrink-0 rounded-full bg-(--primary-colour-alt2) px-2 py-0.5 text-xs">
+                                        Admin
+                                    </span>
+                                </div>
+                            </li>
+                            {/* {tripDetails.members.map(m => 
+                                <li key={m.id} className="flex items-center justify-between p-3">
+                                    <div className="flex items-center gap-2">
+                                        <span>{displayName(m.id ? profiles[m.id] : undefined)}</span>
+                                        <span className="shrink-0 rounded-full bg-(--background-colour-alt) px-2 py-0.5 text-xs">
+                                            Member
+                                        </span>
+                                    </div>
+                                    <button className="text-xs rounded-full">Add connection</button>
+                                </li>
+                            )} */}
+                        </ul>
+                    </div>
+                )}
             </div>
         </div>
     );

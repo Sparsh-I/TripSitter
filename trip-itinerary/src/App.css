@@ -137,13 +137,10 @@ select {
         padding: 0.6em 1.2em;
         cursor: pointer;
         transition: border-color 0.25s;
+        outline: none;
     }
     button:hover {
         border-color: #646cff;
-    }
-    button:focus,
-    button:focus-visible {
-        outline: 4px auto -webkit-focus-ring-color;
     }
 
     p, li, h1, h2, h3, h4 {
@@ -155,7 +152,6 @@ select {
         font-style: normal;
         font-weight: 700;
         line-height: 1.8;
-        margin: auto;
     }
 
     h1 {

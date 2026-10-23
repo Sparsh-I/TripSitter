@@ -92,10 +92,6 @@ export default function ConnectionsPage() {
     const ACTION_PLAIN = `${ACTION_BASE} text-(--primary-colour-alt)`;
     const ACTION_GREEN = `${ACTION_BASE} border-2 border-(--custom-green) text-(--custom-green) hover:bg-(--custom-green) hover:text-(--background-colour)`;
     const ACTION_RED = `${ACTION_BASE} border-2 border-(--custom-red) text-(--custom-red) hover:bg-(--custom-red) hover:text-(--background-colour)`;
-    
-    function displayName(p?: ConnUtils.ProfileSummary) {
-        return p ? `${p.first_name ?? ""} ${p.last_name ?? ""}` : "Unknown User";
-    }
 
     const sendDisabled = otherUsername.trim() === "" || sending;
             
@@ -121,7 +117,7 @@ export default function ConnectionsPage() {
                                     const otherId = ConnUtils.otherUserId(connection, userId!);
                                     return (
                                         <tr key={`${connection.userId}-${connection.connectionId}`} className={ROW}>
-                                            <td className={`${CELL} text-left`}>{displayName(profiles[otherId])}</td>
+                                            <td className={`${CELL} text-left`}>{ConnUtils.displayName(profiles[otherId])}</td>
                                             <td className={`${CELL} text-right`}>
                                                 <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(otherId)}>View Profile</button>
                                             </td>
@@ -149,7 +145,7 @@ export default function ConnectionsPage() {
                                         <tr><td colSpan={3} className="no-content-display"><h4>No incoming requests</h4></td></tr>
                                     ) : incoming.map(c => (
                                         <tr key={`${c.userId}-${c.connectionId}`} className={ROW}>
-                                            <td className={`${CELL} text-left`}>{displayName(profiles[c.userId])}</td>
+                                            <td className={`${CELL} text-left`}>{ConnUtils.displayName(profiles[c.userId])}</td>
                                             <td className={CELL}>
                                                 <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.userId)}>View Profile</button>
                                             </td>
@@ -173,7 +169,7 @@ export default function ConnectionsPage() {
                                         return (
                                             <tr key={`${c.userId}-${c.connectionId}`} className={ROW}>
                                                 <td className={`${CELL} text-left`}>
-                                                    <div>{displayName(other)}</div>
+                                                    <div>{ConnUtils.displayName(other)}</div>
                                                     {other?.username && <div className="text-[#909090] text-[0.8rem]">@{other.username}</div>}
                                                 </td>
                                                 <td className={CELL}>

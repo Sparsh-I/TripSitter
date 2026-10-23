@@ -20,6 +20,10 @@ async function requireUser() {
     return user;
 }   
 
+export function displayName(p?: ProfileSummary) {
+    return p ? `${p.first_name ?? ""} ${p.last_name ?? ""}` : "Unknown User";
+}
+
 export async function getUserIdByUsername(username: string): Promise<string> {
     const { data, error } = await supabase
         .from('profiles')
