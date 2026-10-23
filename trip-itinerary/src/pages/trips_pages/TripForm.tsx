@@ -153,17 +153,17 @@ export default function TripFormPage() {
                                     </span>
                                 </div>
                             </li>
-                            {/* {tripDetails.members.map(m => 
-                                <li key={m.id} className="flex items-center justify-between p-3">
+                            {tripDetails?.members?.map(m => 
+                                <li key={m} className="flex items-center justify-between p-3">
                                     <div className="flex items-center gap-2">
-                                        <span>{displayName(m.id ? profiles[m.id] : undefined)}</span>
+                                        <span>{displayName(m ? profiles[m] : undefined)}</span>
                                         <span className="shrink-0 rounded-full bg-(--background-colour-alt) px-2 py-0.5 text-xs">
                                             Member
                                         </span>
                                     </div>
                                     <button className="text-xs rounded-full">Add connection</button>
                                 </li>
-                            )} */}
+                            )}
                         </ul>
                     </div>
                 )}
