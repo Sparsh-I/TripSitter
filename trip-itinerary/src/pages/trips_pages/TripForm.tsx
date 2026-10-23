@@ -15,7 +15,6 @@ import { useTabParam } from "../../hooks/useTabParam.ts";
 import { displayName, getProfileSummaries, type ProfileSummary } from "../../utils/ConnectionUtils.ts";
 
 const TABS = ["General", "Trip Legs", "Members"] as const;
-// const SUB_TABS = ["Incoming", "Outgoing"] as const;
 
 export default function TripFormPage() {
     const { id } = useParams<{ id: string }>();
@@ -50,7 +49,7 @@ export default function TripFormPage() {
                 setNotes(trip.notes ?? "");
                 if (trip.links?.length) setLinks(trip.links);
 
-                const memberIds = [trip.ownerId /*, ...trip.members */];
+                const memberIds = [trip.ownerId, ...trip.members ?? []];
                 setProfiles(await getProfileSummaries(memberIds));
             })
             .catch(e => console.error("Failed to load trip:", e))

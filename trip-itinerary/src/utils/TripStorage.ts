@@ -15,6 +15,7 @@ function fromRow(row: any): Trip {
         endDate: row.end_date,
         notes: row.notes ?? undefined,
         links : row.links ?? undefined,
+        members: row.members ?? [],
     }
 }
 
@@ -107,6 +108,7 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId'>): Promise<void>
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
             links: trip.links ?? undefined,
+            members: trip.members ?? [],
         });
     if (error) throw error;
 }
@@ -123,6 +125,7 @@ export async function updateTrip(trip: Trip): Promise<void> {
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
             links: trip.links ?? undefined,
+            members: trip.members ?? [],
         })
         .eq('id', trip.id);
     if (error) throw error;
