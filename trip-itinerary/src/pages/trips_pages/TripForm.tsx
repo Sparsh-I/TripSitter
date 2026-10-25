@@ -13,6 +13,8 @@ import placeholder from '/assets/trip_preview/placeholder.jpg'
 import { TabButton } from "../../components/global/TabButton.tsx";
 import { useTabParam } from "../../hooks/useTabParam.ts";
 import { displayName, getProfileSummaries, type ProfileSummary } from "../../utils/ConnectionUtils.ts";
+import TripMembersPopup from "../../components/my_trips/TripMembersPopup.tsx";
+import { supabase } from "../../utils/SupabaseClient.ts";
 
 const TABS = ["General", "Trip Legs", "Members"] as const;
 
@@ -21,6 +23,7 @@ export default function TripFormPage() {
     const isEditing = !!id;
 
     const [activeTab, openTab] = useTabParam("tab", TABS, "General");
+    const [showPopup, setShowPopup] = useState(false);
 
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const [loading, setLoading] = useState(isEditing);
@@ -109,6 +112,29 @@ export default function TripFormPage() {
     //     );
     // }
 
+    function openMemberPopup() {
+        setShowPopup(true);
+    }
+
+    function closePopup() {
+        setShowPopup(false);
+    }
+
+    async function addTripMember(userId: string): Promise<void> {
+        if (!tripDetails) return;
+        const { data, error } = await supabase.from("trips").select("members").eq("id", tripDetails.id).single();
+        if (error) throw error;
+
+        const members: string[] = data.members ?? [];
+        if (members.includes(userId)) return;
+
+        const { error: updateError } = await supabase
+            .from("trips")
+            .update({ members: [...members, userId] })
+            .eq("id", tripDetails.id);
+        if (updateError) throw updateError;
+    }
+
     return (
         <div>
             <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border"
@@ -140,7 +166,7 @@ export default function TripFormPage() {
                     <div className="flex flex-col items-center w-full">
                         <div className="flex w-[90%] items-center justify-between py-6">
                             <h3 className="m-0">Members</h3>
-                            <button>+ Add Member</button>
+                            <button onClick={openMemberPopup}>+ Add Member</button>
                         </div>
 
                         <ul className="w-[90%] [&_li]:odd:bg-(--background-colour) [&_li]:even:bg-white">
@@ -164,6 +190,14 @@ export default function TripFormPage() {
                                 </li>
                             )}
                         </ul>
+
+                        {showPopup && (
+                            <TripMembersPopup
+                                trip={tripDetails!}
+                                onClose={closePopup}
+                                onAddMember={addTripMember}
+                            />
+                        )}
                     </div>
                 )}
             </div>

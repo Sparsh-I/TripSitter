@@ -4,6 +4,7 @@ import type { DateRange } from "react-day-picker";
 import LocationSearch, {type TripLocation} from "../global/LocationSearch.tsx";
 import {addTrip} from "../../utils/TripStorage.ts";
 import type {Trip} from "../../types/Trip.ts";
+import { createPortal } from "react-dom";
 
 interface NewTripPopupProps {
     title: string;
@@ -42,7 +43,7 @@ export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPop
         }
     }
 
-    return (
+    return createPortal(
         <div className="popup-overlay" onClick={onClose}>
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <button onClick={onClose} className="popup-close">x</button>
@@ -93,6 +94,7 @@ export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPop
                     <button onClick={saveTrip}>Save</button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
