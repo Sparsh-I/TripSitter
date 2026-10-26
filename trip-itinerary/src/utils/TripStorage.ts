@@ -1,4 +1,5 @@
 import type { Trip } from '../types/Trip';
+import type { TripMember } from '../types/TripMember';
 import {supabase} from "./SupabaseClient";
 
 // const STORAGE_KEY = 'trips';
@@ -15,7 +16,6 @@ function fromRow(row: any): Trip {
         endDate: row.end_date,
         notes: row.notes ?? undefined,
         links : row.links ?? undefined,
-        members: row.members ?? [],
     }
 }
 
@@ -23,60 +23,6 @@ export async function getTrips(): Promise<Trip[]> {
     const {data, error} = await supabase.from('trips').select('*');
     if (error) throw error;
     return data.map(fromRow);
-
-    // const raw = localStorage.getItem(STORAGE_KEY);
-    // return raw ? JSON.parse(raw) : [];
-    // return [
-    //     {
-    //         id: "2026-07-22T10:00:00.000Z",
-    //         title: "Tokyo Adventure",
-    //         lat: 35.6762,
-    //         lng: 139.6503,
-    //         locationLabel: "Tokyo, Japan",
-    //         startDate: new Date("2026-09-10"),
-    //         endDate: new Date("2026-09-20"),
-    //         notes: "Cherry blossom season, remember to book teamLab tickets in advance",
-    //     },
-    //     {
-    //         id: "2026-07-22T10:05:00.000Z",
-    //         title: "Family Reunion",
-    //         lat: 43.6532,
-    //         lng: -79.3832,
-    //         locationLabel: "Toronto, Ontario, Canada",
-    //         startDate: new Date("2026-08-01"),
-    //         endDate: new Date("2026-08-05"),
-    //         notes: "Staying at Aunt Rosa's place",
-    //     },
-    //     {
-    //         id: "2026-07-22T10:10:00.000Z",
-    //         title: "Solo Backpacking",
-    //         lat: -8.3405,
-    //         lng: 115.0920,
-    //         locationLabel: "Ubud, Bali, Indonesia",
-    //         startDate: new Date("2025-11-15"),
-    //         endDate: new Date("2025-11-30"),
-    //         notes: "Yoga retreat first week, then explore rice terraces"
-    //     },
-    //     {
-    //         id: "2026-07-22T10:15:00.000Z",
-    //         title: "Ski Trip",
-    //         lat: 51.1784,
-    //         lng: -115.5708,
-    //         locationLabel: "Banff, Alberta, Canada",
-    //         startDate: new Date("2027-01-05"),
-    //         endDate: new Date("2027-01-12")
-    //     },
-    //     {
-    //         id: "2026-07-22T10:20:00.000Z",
-    //         title: "European Summer",
-    //         lat: 48.8566,
-    //         lng: 2.3522,
-    //         locationLabel: "Paris, France",
-    //         startDate: new Date("2026-06-01"),
-    //         endDate: new Date("2026-06-15"),
-    //         notes: "Museum passes, Eiffel Tower at sunset"
-    //     }
-    // ];
 }
 
 export async function getTripById(id: string): Promise<Trip | null> {
@@ -108,7 +54,6 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId'>): Promise<void>
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
             links: trip.links ?? undefined,
-            members: trip.members ?? [],
         });
     if (error) throw error;
 }
@@ -125,7 +70,6 @@ export async function updateTrip(trip: Trip): Promise<void> {
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
             links: trip.links ?? undefined,
-            members: trip.members ?? [],
         })
         .eq('id', trip.id);
     if (error) throw error;
@@ -136,6 +80,43 @@ export async function deleteTrip(trip: Trip): Promise<void> {
     if (error) throw error;
 }
 
-// export function saveTrips(trips: Trip[]): void {
-//     localStorage.setItem(STORAGE_KEY, JSON.stringify(trips));
-// }
+export async function getTripMembers(tripId: string): Promise<TripMember[]> {
+    const { data, error } = await supabase
+        .from("trip_members")
+        .select("*")
+        .eq("trip_id", tripId);
+    
+    if (error) throw error;
+
+    return data.map(r => ({ tripId: r.trip_id, userId: r.user_id, status: r.status }));
+
+}
+
+export async function inviteTripMember(tripId: string, userId: string): Promise<void> {
+    const { error } = await supabase
+        .from("trip_members")
+        .insert({ trip_id: tripId, user_id: userId, status: "pending" });
+
+    if (error) throw new Error(error.code === "23505" ? "Already invited" : error.message);
+}
+
+export async function acceptTripInvite(tripId: string): Promise<void> {
+    const user = (await supabase.auth.getUser()).data.user;
+    if (!user) throw new Error("Not logged in");
+
+    const { error } = await supabase
+        .from("trip_members").update({ status: "accepted" })
+        .eq("trip_id", tripId).eq("user_id", user.id);
+
+    if (error) throw error;
+}
+
+export async function removeTripMember(tripId: string, userId: string): Promise<void> {
+    const { error } = await supabase
+        .from("trip_members")
+        .delete()
+        .eq("trip_id", tripId)
+        .eq("user_id", userId);
+
+    if (error) throw error;
+}

@@ -1,9 +1,7 @@
-export type ConnectionStatus = "pending" | "accepted" | "rejected";
-
 export interface Connection {
     userId: string;
     connectionId: string;
-    status: ConnectionStatus;
+    status: "pending" | "accepted";
     updatedAt: string;
     createdAt: string;
 }

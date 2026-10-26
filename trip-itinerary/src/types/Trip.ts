@@ -9,5 +9,4 @@ export interface Trip {
     endDate: Date;
     notes?: string;
     links?: string[];
-    members?: string[];
 }

@@ -49,6 +49,11 @@ export async function getProfileSummaries(ids: string[]): Promise<Record<string,
 
 export async function getConnections(): Promise<Connection[]> {
     const user = await requireUser();
+    console.log("me:", user.id);
+    const all = await supabase.from('connections').select('*');
+    console.log("unfiltered:", all.data, all.error);
+
+    // const user = await requireUser();
     const {data, error} = await supabase
         .from('connections')
         .select('*')
