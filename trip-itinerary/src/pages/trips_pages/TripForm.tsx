@@ -1,11 +1,11 @@
 import DatePicker from "../../components/global/DatePicker.tsx";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import type { TripLocation } from "../../components/global/LocationSearch.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useIsMobile } from "../../hooks/useIsMobile.ts";
 import { useLoading } from "../../context/LoadingContext.tsx";
-import { addTrip, getTripById, updateTrip } from "../../utils/TripStorage.ts";
+import { addTrip, getTripById, getTripMembers, updateTrip } from "../../utils/TripStorage.ts";
 import SplashScreen from "../../components/global/SplashScreen.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import LocationSearch from "../../components/global/LocationSearch.tsx";
@@ -15,6 +15,7 @@ import { useTabParam } from "../../hooks/useTabParam.ts";
 import { displayName, getProfileSummaries, type ProfileSummary } from "../../utils/ConnectionUtils.ts";
 import TripMembersPopup from "../../components/my_trips/TripMembersPopup.tsx";
 import { supabase } from "../../utils/SupabaseClient.ts";
+import type { TripMember } from "../../types/TripMember.ts";
 
 const TABS = ["General", "Trip Legs", "Members"] as const;
 
@@ -23,8 +24,7 @@ export default function TripFormPage() {
     const isEditing = !!id;
 
     const [activeTab, openTab] = useTabParam("tab", TABS, "General");
-    const [showPopup, setShowPopup] = useState(false);
-
+    
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const [loading, setLoading] = useState(isEditing);
     const [title, setTitle] = useState("");
@@ -33,6 +33,9 @@ export default function TripFormPage() {
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [notes, setNotes] = useState("");
     const [photo, /*setPhoto*/] = useState(placeholder);
+    
+    const [showPopup, setShowPopup] = useState(false);
+    const [tripMembers, setTripMembers] = useState<TripMember[]>([]);
 
     const navigate = useNavigate();
     const isMobile = useIsMobile();
@@ -42,23 +45,27 @@ export default function TripFormPage() {
 
     useEffect(() => {
         if (!id) return;
+        
         track(getTripById(id))
-            .then(async trip => {
-                if (!trip) return;
-                setTripDetails(trip);
-                setTitle(trip.title);
-                setRange({ from: new Date(trip.startDate), to: new Date(trip.endDate) });
-                setLocation({ lat: trip.lat, lng: trip.lng, label: trip.locationLabel });
-                setNotes(trip.notes ?? "");
-                if (trip.links?.length) setLinks(trip.links);
-
-                const memberIds = [trip.ownerId, ...trip.members ?? []];
-                setProfiles(await getProfileSummaries(memberIds));
-            })
-            .catch(e => console.error("Failed to load trip:", e))
-            .finally(() => setLoading(false));
+        .then(async trip => {
+            if (!trip) return;
+            setTripDetails(trip);
+            setTitle(trip.title);
+            setRange({ from: new Date(trip.startDate), to: new Date(trip.endDate) });
+            setLocation({ lat: trip.lat, lng: trip.lng, label: trip.locationLabel });
+            setNotes(trip.notes ?? "");
+            if (trip.links?.length) setLinks(trip.links);
+            
+            const tripMembers = await getTripMembers(trip.id);
+            setTripMembers(tripMembers);
+            const tripMemberIds = tripMembers.map(m => m.userId);
+            const memberIds = [trip.ownerId, ...tripMemberIds];
+            setProfiles(await getProfileSummaries(memberIds));
+        })
+        .catch(e => console.error("Failed to load trip:", e))
+        .finally(() => setLoading(false));
     }, [id]);
-
+    
     const ownerId = tripDetails?.ownerId;
 
     if (loading) return <SplashScreen />;
@@ -178,10 +185,10 @@ export default function TripFormPage() {
                                     </span>
                                 </div>
                             </li>
-                            {tripDetails?.members?.map(m => 
-                                <li key={m} className="flex items-center justify-between p-3">
+                            {tripMembers.map(m => 
+                                <li key={m.userId} className="flex items-center justify-between p-3">
                                     <div className="flex items-center gap-2">
-                                        <span>{displayName(m ? profiles[m] : undefined)}</span>
+                                        <span>{displayName(m ? profiles[m.userId] : undefined)}</span>
                                         <span className="shrink-0 rounded-full bg-(--background-colour-alt) px-2 py-0.5 text-xs">
                                             Member
                                         </span>
@@ -194,6 +201,7 @@ export default function TripFormPage() {
                         {showPopup && (
                             <TripMembersPopup
                                 trip={tripDetails!}
+                                members={tripMembers}
                                 onClose={closePopup}
                                 onAddMember={addTripMember}
                             />
@@ -203,90 +211,4 @@ export default function TripFormPage() {
             </div>
         </div>
     );
-
-    return (
-            <div>
-                <button className="flex mt-5 ml-5 w-52.5 justify-around" onClick={() => navigate("/my-trips")}>← Return to My Trips</button>
-                <div className="mx-[25%] justify-around max-md:mx-[5%]">
-                    <h1 className="text-(--secondary-colour-alt) text-left mt-5">{isEditing ? "Edit Trip" : "New Trip"}</h1>
-    
-                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Title</h3>
-                    <input
-                        type="text"
-                        placeholder="What are we calling this?"
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        className="w-[95%] my-2.5 max-md:w-[80%]"
-                    />
-    
-                    <br/>
-                    <hr/>
-    
-                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
-                    <div>
-                        <DatePicker
-                            selected={range}
-                            onSelect={setRange}
-                            fieldSize={21}
-                            numMonths={isMobile ? 1 : 2}
-                        />
-                    </div>
-    
-                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Location</h3>
-                    <LocationSearch onLocationSelect={setLocation} defaultVal={tripDetails?.locationLabel} />
-    
-                    <br/>
-                    <hr/>
-    
-                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Relevant Links</h3>
-                    {links.map((link, index) => (
-                        <div key={index} className="flex gap-2 my-4">
-                            <input
-                                type="text"
-                                placeholder="Any bookings you'd like to store?"
-                                value={link}
-                                onChange={e => updateLinkAt(index, e.target.value)}
-                                className="w-[95%] my-2.5 max-md:w-[80%]"
-                            />
-                            {links.length > 1 && (
-                                <button onClick={() => removeLinkAt(index)}>Remove</button>
-                            )}
-                        </div>
-                    ))}
-                    <button onClick={addLink}>+ Add Another Link</button>
-    
-                    <br/>
-                    <br/>
-                    <hr/>
-    
-                    {/*{entries.map((entry, index) => (*/}
-                    {/*    <div key={index}>*/}
-                    {/*        <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates{entries.length > 1 ? ` #${index + 1}` : ""}</h3>*/}
-                    {/*        <div>*/}
-                    {/*            <DatePicker selected={entry.range} onSelect={(range) => {setRangeAt(index, range);}} fieldSize={20}/>*/}
-                    {/*        </div>*/}
-    
-                    {/*        <h3 className="text-(--secondary-colour-alt) text-left mt-5">Location{entries.length > 1 ? ` #${index + 1}` : ""}</h3>*/}
-                    {/*        <LocationSearch onLocationSelect={setLocation} />*/}
-                    {/*        {index > 0 && (*/}
-                    {/*            <button className="my-[3%]" onClick={() => removeEntry(index)}>- Remove</button>*/}
-                    {/*        )}*/}
-                    {/*        <br/>*/}
-                    {/*        <hr/>*/}
-                    {/*    </div>*/}
-                    {/*))}*/}
-    
-                    {/*<button className="editmy-[3%]" onClick={addEntry}>+ Add Another Location</button>*/}
-    
-                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Additional Notes</h3>
-                    <textarea className="w-full my-2.5" value={notes} placeholder="Anything extra...">
-                        {tripDetails?.notes ? tripDetails?.notes : ""}
-                    </textarea>
-    
-                    <div className="mt-5">
-                        <button className="my-[3%]" onClick={save}>Save</button>
-                    </div>
-                </div>
-            </div>
-        );
 }

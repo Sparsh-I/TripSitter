@@ -3,25 +3,27 @@ import type { Trip } from "../../types/Trip";
 import { createPortal } from "react-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import * as ConnUtils from "../../utils/ConnectionUtils";
+import type { TripMember } from "../../types/TripMember";
 
 interface TripMembersPopupProps {
     trip: Trip;
+    members: TripMember[];
     onClose: () => void;
     onAddMember: (userId: string) => Promise<void>
 }
 
-export default function TripMembersPopup({ trip, onClose, onAddMember }: TripMembersPopupProps) {
+export default function TripMembersPopup({ trip, members, onClose, onAddMember }: TripMembersPopupProps) {
     const { session } = useAuthContext();
     const userId = session?.user.id;
     
     const [otherUsername, setOtherUsername] = useState("");
-    const [sending, setSending] = useState(false);
+    const [sending, ] = useState(false);
     const [busyId, setBusyId] = useState<string | null>(null);
     const [message, setMessage] = useState<{ type: "success" | "error"; text: string} | null>(null);
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [profiles, setProfiles] = useState<Record<string, ConnUtils.ProfileSummary>>({});
 
-    const memberIds = new Set([trip.ownerId, ...(trip.members ?? [])]);
+    const memberIds = new Set([trip.ownerId, ...members.map(m => m.userId) ?? []]);
     const sendDisabled = otherUsername.trim() === "" || sending;
 
     useEffect(() => {
@@ -45,7 +47,7 @@ export default function TripMembersPopup({ trip, onClose, onAddMember }: TripMem
         })();
 
         return () => { cancelled = true; };
-    }, [userId, trip.members]);
+    }, [userId, members, trip.ownerId]);
 
     useEffect(() => {
         if (!message) return;
@@ -62,7 +64,7 @@ export default function TripMembersPopup({ trip, onClose, onAddMember }: TripMem
             if (memberIds.has(id)) throw new Error("Already on this trip");
             await onAddMember(id);
             setOtherUsername("");
-            setMessage({ type: "success", text: `Added ${username} to the trip!` });
+            setMessage({ type: "success", text: `Request sent to ${username} to join the trip!` });
         } catch (err: any) {
             setMessage({ type: "error", text: err.message ?? "Couldn't add that user. Please try again." });
         } finally {

@@ -179,3 +179,15 @@ export function otherUserId(connection: Connection, currentUserId: string): stri
         : connection.userId;
 }
 
+export async function hasExistingConnection(currentUserId: string, otherUserId: string): Promise<boolean> {
+    const { data, error } = await supabase
+        .from('connections')
+        .select('*')
+        .or(
+            `and(user_id.eq.${currentUserId},connection_id.eq.${otherUserId})` + 
+            `and(user_id.eq.${otherUserId},connection_id.eq.${currentUserId})`
+        );
+    
+    if (error) throw new Error(`Failed to check existing connection: ${error.message}`);
+    return data.length > 0;
+}
