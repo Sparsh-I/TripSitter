@@ -54,33 +54,38 @@ export default function ConnectionsPage() {
                 return () => { 
                     void supabase.removeChannel(channel);
                 };
-            }, [userId, load]);
+    }, [userId, load]);
             
-            const current = ConnUtils.currentConnections(connections);
-            const incoming = ConnUtils.incomingRequests(connections, userId!);
-            const outgoing = ConnUtils.outgoingRequests(connections, userId!);
-            
-            async function handleSendRequest() {
-                if (!userId || !otherUsername) return;
-                setSending(true);
-                
-                try {
-                    await ConnUtils.sendConnectionRequest(otherUsername);
-                    setOtherUsername("");
-                    setMessage({type: "success", text: `Connection request sent to ${otherUsername}!`})
-                } catch (err) {
-                    setMessage({type: "error", text: "Connection request failed to send. Please try again."})       
-                    console.error("Failed to send connection request", err);
-                } finally {
-                    setSending(false);
-                }
-            }
-            
-            useEffect(() => {
-                if (!message) return;
-                const t = setTimeout(() => setMessage(null), 3000);
-                return () => clearTimeout(t);
-            }, [message]);
+    const current = ConnUtils.currentConnections(connections);
+    const incoming = ConnUtils.incomingRequests(connections, userId!);
+    const outgoing = ConnUtils.outgoingRequests(connections, userId!);
+    
+    async function handleSendRequest() {
+        if (!userId || !otherUsername) return;
+        setSending(true);
+        
+        try {
+            await ConnUtils.sendConnectionRequest(otherUsername);
+            setOtherUsername("");
+            setMessage({type: "success", text: `Connection request sent to ${otherUsername}!`})
+        } catch (err) {
+            setMessage({type: "error", text: "Connection request failed to send. Please try again."})       
+            console.error("Failed to send connection request", err);
+        } finally {
+            setSending(false);
+        }
+    }
+    
+    useEffect(() => {
+        void load();
+    }, [load]);
+
+
+    useEffect(() => {
+        if (!message) return;
+        const t = setTimeout(() => setMessage(null), 3000);
+        return () => clearTimeout(t);
+    }, [message]);
 
     const WRAPPER = "w-full box-border px-[10%]";
     const HEADING = "text-left pt-[50px]";
@@ -117,7 +122,10 @@ export default function ConnectionsPage() {
                                     const otherId = ConnUtils.otherUserId(connection, userId!);
                                     return (
                                         <tr key={`${connection.userId}-${connection.connectionId}`} className={ROW}>
-                                            <td className={`${CELL} text-left`}>{ConnUtils.displayName(profiles[otherId])}</td>
+                                            <td className={`${CELL} text-left`}>
+                                                <div>{ConnUtils.displayName(profiles[otherId])}</div>
+                                                {profiles[otherId]?.username && <div className="text-[#909090] text-[0.8rem]">@{profiles[otherId].username}</div>}
+                                            </td>
                                             <td className={`${CELL} text-right`}>
                                                 <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(otherId)}>View Profile</button>
                                             </td>
@@ -145,7 +153,10 @@ export default function ConnectionsPage() {
                                         <tr><td colSpan={3} className="no-content-display"><h4>No incoming requests</h4></td></tr>
                                     ) : incoming.map(c => (
                                         <tr key={`${c.userId}-${c.connectionId}`} className={ROW}>
-                                            <td className={`${CELL} text-left`}>{ConnUtils.displayName(profiles[c.userId])}</td>
+                                            <td className={`${CELL} text-left`}>
+                                                <div>{ConnUtils.displayName(profiles[c.userId])}</div>
+                                                {profiles[c.userId]?.username && <div className="text-[#909090] text-[0.8rem]">@{profiles[c.userId].username}</div>}
+                                            </td>
                                             <td className={CELL}>
                                                 <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.userId)}>View Profile</button>
                                             </td>
