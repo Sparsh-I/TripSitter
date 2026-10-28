@@ -127,7 +127,9 @@ export default function ConnectionsPage() {
                                                 {profiles[otherId]?.username && <div className="text-[#909090] text-[0.8rem]">@{profiles[otherId].username}</div>}
                                             </td>
                                             <td className={`${CELL} text-right`}>
-                                                <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(otherId)}>View Profile</button>
+                                                <div className="flex items-center justify-end">
+                                                    <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(otherId)}>View Profile</button>
+                                                </div>
                                             </td>
                                         </tr>
                                     );
@@ -158,7 +160,9 @@ export default function ConnectionsPage() {
                                                 {profiles[c.userId]?.username && <div className="text-[#909090] text-[0.8rem]">@{profiles[c.userId].username}</div>}
                                             </td>
                                             <td className={CELL}>
-                                                <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.userId)}>View Profile</button>
+                                                <div className="flex items-center justify-end">
+                                                    <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.userId)}>View Profile</button>
+                                                </div>
                                             </td>
                                             <td className={`${CELL} text-right`}>
                                                 <button className={ACTION_GREEN} onClick={async () => { await ConnUtils.acceptRequest(c.userId); await load(); }}>✓</button>
@@ -184,7 +188,9 @@ export default function ConnectionsPage() {
                                                     {other?.username && <div className="text-[#909090] text-[0.8rem]">@{other.username}</div>}
                                                 </td>
                                                 <td className={CELL}>
-                                                    <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.connectionId)}>View Profile</button>
+                                                    <div className="flex items-center justify-end">
+                                                        <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.connectionId)}>View Profile</button>
+                                                    </div>
                                                 </td>
                                                 <td className={`${CELL} text-right`}>
                                                     <button className={ACTION_RED} onClick={async () => { await ConnUtils.cancelRequest(c.connectionId); await load(); }}>⏎</button>
