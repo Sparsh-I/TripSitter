@@ -17,6 +17,7 @@
     import { supabase } from "../../utils/SupabaseClient.ts";
     import type { TripMember } from "../../types/TripMember.ts";
 import { useAuthContext } from "../../context/AuthContext.tsx";
+import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
 
     const TABS = ["General", "Trip Legs", "Members"] as const;
 
@@ -41,6 +42,7 @@ import { useAuthContext } from "../../context/AuthContext.tsx";
         const [showPopup, setShowPopup] = useState(false);
         const [tripMembers, setTripMembers] = useState<TripMember[]>([]);
         const [connectedIds, setConnectedIds] = useState<Set<string>>(new Set());
+        const [flag, setFlag] = useState("");
 
         const navigate = useNavigate();
         const isMobile = useIsMobile();
@@ -80,6 +82,13 @@ import { useAuthContext } from "../../context/AuthContext.tsx";
                 .then(conns => setConnectedIds(new Set(conns.map(c => ConnUtils.otherUserId(c, userId)))))
                 .catch(e => console.error("Failed to load connections:", e));
         }, [userId]);
+
+        useEffect(() => {
+            if (!location) return;
+            getCountryCode(location.lat, location.lng)
+                .then(code => setFlag(countryFlag(code)))
+                .catch(() => setFlag(""));
+        }, [location?.lat, location?.lng]);
 
         if (loading) return <SplashScreen />;
         if (isEditing && !tripDetails) {
@@ -157,12 +166,13 @@ import { useAuthContext } from "../../context/AuthContext.tsx";
 
         return (
             <div>
-                <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border"
+                <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border flex justify-between items-start"
                     style={{ backgroundImage: `url(${photo})` }}
                 >
                     <h2 className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]">
                         {tripDetails?.title}
                     </h2>
+                    <button className="rounded-full" onClick={() => navigate("/my-trips")}>X</button>
                 </div>
                 <div className="flex justify-center gap-0 mt-3">
                     <TabButton active={activeTab === "General"} tab onClick={() => openTab("General")}>General</TabButton>
@@ -178,7 +188,11 @@ import { useAuthContext } from "../../context/AuthContext.tsx";
 
                     {activeTab === "Trip Legs" && (
                         <div>
-                        This
+                            <div className="flex flex-col m-10 items-end">
+                                <h1 className="font-xl">
+                                    {flag}
+                                </h1>
+                            </div>
                         </div>
                     )}
 

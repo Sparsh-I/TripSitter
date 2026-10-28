@@ -22,6 +22,13 @@ export function getAlpha3(alpha2: string): string | undefined {
     return countries.alpha2ToAlpha3(alpha2);
 }
 
+export function countryFlag(code: string | null | undefined): string {
+    if (!code || code.length !== 2) return "🏳️";
+    return String.fromCodePoint(
+        ...code.toUpperCase().split("").map(c => 0x1f1e6 + c.charCodeAt(0) - 65)
+    );
+}
+
 export const countryList = [
     "Afghanistan",
     "Åland Islands",
