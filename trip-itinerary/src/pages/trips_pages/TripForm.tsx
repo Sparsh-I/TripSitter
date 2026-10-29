@@ -29,6 +29,7 @@ import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
         const isEditing = !!id;
 
         const [activeTab, openTab] = useTabParam("tab", TABS, "General");
+        const [saveDisabled, setSaveDisabled] = useState(true);
         
         const [tripDetails, setTripDetails] = useState<Trip | null>(null);
         const [loading, setLoading] = useState(isEditing);
@@ -180,7 +181,6 @@ import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
             if (updateError) throw updateError;
         }
 
-
         //className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]
         return (
             <div>
@@ -280,6 +280,22 @@ import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
                         </div>
                     )}
                 </div>
+                {activeTab != "Members" && (
+                    <div className="flex justify-center gap-15 mt-20">
+                        {!saveDisabled && (
+                            <button className="bg-gray-300 text-black">Discard</button>
+                        )}
+                        
+                        <button 
+                            disabled={saveDisabled}
+                            className={`${saveDisabled
+                                        ? "bg-[#9a9a9a] border-[#9a9a9a] cursor-not-allowed"
+                                        : "bg-(--primary-colour-alt) border-(--primary-colour-alt) cursor-pointer"}`}
+                        >
+                            Save
+                        </button>
+                    </div>
+                )}
             </div>
         );
     }

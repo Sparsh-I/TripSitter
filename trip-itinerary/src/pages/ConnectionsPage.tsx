@@ -219,7 +219,7 @@ export default function ConnectionsPage() {
                             <button
                                 disabled={sendDisabled}
                                 onClick={handleSendRequest}
-                                className={`ml-10 whitespace-nowrap ${sendDisabled}
+                                className={`ml-10 whitespace-nowrap ${sendDisabled
                                     ? "bg-[#9a9a9a] border-[#9a9a9a] cursor-not-allowed"
                                     : "bg-(--primary-colour-alt) border-(--primary-colour-alt) cursor-pointer"}`}
                             >
