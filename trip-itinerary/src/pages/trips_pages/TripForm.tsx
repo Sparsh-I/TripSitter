@@ -149,6 +149,22 @@ import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
             setShowPopup(false);
         }
 
+        function saveTitle() {
+            const trimmed = title.trim();
+
+            if (!tripDetails || trimmed == tripDetails.title) return;
+            if (trimmed === "") return;
+
+            try {
+                const updatedDetails = {...tripDetails, title: trimmed};
+                updateTrip(updatedDetails);
+                setTripDetails(updatedDetails);
+                setTitle(trimmed);
+            } catch (e) {
+                console.error("Failed to update trip title: ", e);
+            }
+        }
+
         async function addTripMember(userId: string): Promise<void> {
             if (!tripDetails) return;
             const { data, error } = await supabase.from("trips").select("members").eq("id", tripDetails.id).single();
@@ -164,14 +180,28 @@ import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
             if (updateError) throw updateError;
         }
 
+
+        //className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]
         return (
             <div>
                 <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border flex justify-between items-start"
                     style={{ backgroundImage: `url(${photo})` }}
                 >
-                    <h2 className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]">
-                        {tripDetails?.title}
-                    </h2>
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={e => setTitle(e.target.value)}
+                        onBlur={saveTitle}
+                        size={Math.max(title.length, 10)}
+                        defaultValue="Untitled Trip"
+                        placeholder="Give this trip a name!"
+                        className="bg-transparent text-2xl font-bold rounded-lg px-2 max-w-full
+                                   border-2 border-transparent outline-none cursor-text
+                                   hover:bg-white/70 hover:border-gray-300
+                                   focus:bg-white focus:border-(--primary-colour-alt)"
+
+                    >
+                    </input>
                     <button className="rounded-full" onClick={() => navigate("/my-trips")}>X</button>
                 </div>
                 <div className="flex justify-center gap-0 mt-3">
@@ -182,7 +212,7 @@ import { countryFlag, getCountryCode } from "../../utils/LocationUtils.ts";
                 <div className="border-t-5 border-(--primary-colour-alt)">
                     {activeTab === "General" && (
                         <div>
-                        Does
+                            
                         </div>
                     )}
 
