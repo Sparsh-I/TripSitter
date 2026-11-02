@@ -1,7 +1,7 @@
 import NavBar from '../../components/global/NavBar.tsx';
 import TripPreview from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
-import { currentTrips, futureTrips, pastTrips } from "../../utils/TripDateUtils.ts";
+import { currentItems, futureTrips, pastItems } from "../../utils/TripDateUtils.ts";
 import { getTrips } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -47,9 +47,9 @@ export default function MyTripsPage() {
         });
     }, [])
 
-    const current = currentTrips(trips);
+    const current = currentItems(trips);
     const upcoming = futureTrips(trips);
-    const past = pastTrips(trips);
+    const past = pastItems(trips);
 
     const tripsByTab: Record<TabName, Trip[]> = {
         All: [...past, ...current, ...upcoming],
