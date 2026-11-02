@@ -1,4 +1,4 @@
-export interface Trip {
+export interface TripLeg {
     tripId: string;
     legId: string;
     lat: number;

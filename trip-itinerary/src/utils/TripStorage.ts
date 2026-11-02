@@ -1,10 +1,11 @@
 import type { Trip } from '../types/Trip';
+import type { TripLeg } from '../types/TripLeg';
 import type { TripMember } from '../types/TripMember';
 import {supabase} from "./SupabaseClient";
 
 // const STORAGE_KEY = 'trips';
 
-function fromRow(row: any): Trip {
+function fromTripRow(row: any): Trip {
     return {
         id: row.id,
         ownerId: row.owner_id,
@@ -22,7 +23,7 @@ function fromRow(row: any): Trip {
 export async function getTrips(): Promise<Trip[]> {
     const {data, error} = await supabase.from('trips').select('*');
     if (error) throw error;
-    return data.map(fromRow);
+    return data.map(fromTripRow);
 }
 
 export async function getTripById(id: string): Promise<Trip | null> {
@@ -35,7 +36,7 @@ export async function getTripById(id: string): Promise<Trip | null> {
     if (error) throw error;
     if (!data) return null;
 
-    return fromRow(data);
+    return fromTripRow(data);
 }
 
 export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId'>): Promise<void> {
@@ -118,5 +119,78 @@ export async function removeTripMember(tripId: string, userId: string): Promise<
         .eq("trip_id", tripId)
         .eq("user_id", userId);
 
+    if (error) throw error;
+}
+
+function fromLegRow(row: any): TripLeg {
+    return {
+        tripId: row.trip_id,
+        legId: row.leg_id,
+        lat: row.lat,
+        lng: row.lng,
+        locationLabel: row.location_label,
+        startDate: row.start_date,
+        endDate: row.end_date,
+        links : row.links ?? undefined,
+        documents : row.links ?? undefined,
+        photos : row.links ?? undefined,
+        notes: row.notes ?? undefined,
+    }
+}
+
+function toLegRow(leg: Omit<TripLeg, 'id'>) {
+    return {
+        trip_id: leg.tripId,
+        location_label: leg.locationLabel,
+        lat: leg.lat,
+        lng: leg.lng,
+        start_date: leg.startDate,
+        end_date: leg.endDate,
+        notes: leg.notes ?? null,
+    };
+}
+
+export async function getTripLegs(tripId: string): Promise<TripLeg[]> {
+    const { data, error } = await supabase
+        .from('trip_legs')
+        .select('*')
+        .eq('trip_id', tripId)
+        .order('start_date').order('end_date').order('created_at');
+    if (error) throw error;
+    return data.map(fromLegRow);
+}
+
+
+export async function getLegsForTrips(tripIds: string[]): Promise<TripLeg[]> {
+    if (tripIds.length === 0) return [];
+    const { data, error } = await supabase
+        .from('trip_legs')
+        .select('*')
+        .in('trip_id', tripIds)
+        .order('start_date');
+    if (error) throw error;
+    return data.map(fromLegRow);
+}
+
+export async function addTripLeg(leg: Omit<TripLeg, 'id'>): Promise<TripLeg> {
+    const { data, error } = await supabase
+        .from('trip_legs')
+        .insert(toLegRow(leg))
+        .select()
+        .single();
+    if (error) throw error;
+    return fromLegRow(data);
+}
+
+export async function updateTripLeg(leg: TripLeg): Promise<void> {
+    const { error } = await supabase
+        .from('trip_legs')
+        .update(toLegRow(leg))
+        .eq('id', leg.legId);
+    if (error) throw error;
+}
+
+export async function deleteTripLeg(legId: string): Promise<void> {
+    const { error } = await supabase.from('trip_legs').delete().eq('id', legId);
     if (error) throw error;
 }

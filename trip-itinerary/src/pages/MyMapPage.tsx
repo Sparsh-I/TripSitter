@@ -1,16 +1,17 @@
 import NavBar from '../components/global/NavBar.tsx';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import {getTrips} from "../utils/TripStorage.ts";
+import {getLegsForTrips, getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
 import L from "leaflet";
 import React, {useEffect, useRef, useState} from "react";
 import Footer from "../components/global/Footer.tsx";
-import {currentTrips, futureTrips, pastTrips} from "../utils/TripDateUtils.ts";
+import {currentItems, currentTrips, futureItems, futureTrips, pastItems, pastTrips} from "../utils/TripDateUtils.ts";
 import type {Trip} from "../types/Trip.ts";
 import currentPin from "/assets/my_map/current-pin.svg";
 import upcomingPin from "/assets/my_map/upcoming-pin.svg";
 import pastPin from "/assets/my_map/past-pin.svg";
+import type { TripLeg } from '../types/TripLeg.ts';
 
 const iconOptions = {
     iconSize: [80, 80] as [number, number],
@@ -27,6 +28,7 @@ type FilterType = "all" | "current" | "upcoming" | "past";
 export default function MyMapPage() {
     const mapRef = useRef<LeafletMap | null>(null);
     const [allTrips, setAllTrips] = useState<Trip[]>([]);
+    const [allTripLegs, setAllTripLegs] = useState<TripLeg[]>([]);
     const [filter, setFilter] = useState<FilterType>("all");
     const [, setLoading] = useState(true);
 
@@ -34,22 +36,28 @@ export default function MyMapPage() {
     useEffect(() => {
         let cancelled = false;
 
-        getTrips()
-          .then(setAllTrips)
-          .catch(err => {
-            console.error("Failed to load trips: ", err);
-          }).finally(() => {
-            if (!cancelled) setLoading(false);
-          });
-      return () => {
-        cancelled = true;
-      };
+        (async () => {
+            try {
+                const trips = await getTrips();
+                const legs = await getLegsForTrips(trips.map(t => t.id));
+                if (cancelled) return;
+                setAllTrips(trips);
+                setAllTripLegs(legs);
+            } catch (err) {
+                console.error("Failed to load trips or legs: ", err);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
+        
+        return () => { cancelled = true; };
     }, []);
 
+
     const places =
-        filter === "current" ? currentTrips(allTrips)
-        : filter === "upcoming" ? futureTrips(allTrips)
-        : filter === "past" ? pastTrips(allTrips)
+        filter === "current" ? currentItems(allTrips)
+        : filter === "upcoming" ? futureItems(allTrips)
+        : filter === "past" ? pastItems(allTrips)
         : allTrips;
 
     function handleMarkerClick(lat: number, lng: number) {
