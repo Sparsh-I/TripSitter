@@ -5,7 +5,7 @@ import type { TripLocation } from "../../components/global/LocationSearch.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useIsMobile } from "../../hooks/useIsMobile.ts";
 import { useLoading } from "../../context/LoadingContext.tsx";
-import { addTrip, getTripById, getTripLegs, getTripMembers, updateTrip } from "../../utils/TripStorage.ts";
+import { addTrip, getTripById, getTripLegs, getTripMembers, updateTrip, uploadPhoto } from "../../utils/TripStorage.ts";
 import SplashScreen from "../../components/global/SplashScreen.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import LocationSearch from "../../components/global/LocationSearch.tsx";
@@ -221,7 +221,23 @@ const TABS = ["General", "Trip Legs", "Members"] as const;
         )
 
         function updateBanner(url: string) {
-            setBanner(url);
+            if (!tripDetails) return;
+            if (url === tripDetails.photo) return;
+
+            try {
+                const updatedDetails = {...tripDetails, photo: url};
+                updateTrip(updatedDetails);
+                setTripDetails(updatedDetails);
+                setBanner(url);
+            } catch (e) {
+                console.error("Failed to update trip banner: ", e);
+            }
+        }
+
+        function addPhoto(file: File) {
+            if (!tripDetails) return;
+            const path = `trip_${tripDetails.id}/${crypto.randomUUID()}_${file.name}`;
+            uploadPhoto(file, path);
         }
 
         //className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]

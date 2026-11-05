@@ -194,3 +194,11 @@ export async function deleteTripLeg(legId: string): Promise<void> {
     const { error } = await supabase.from('trip_legs').delete().eq('id', legId);
     if (error) throw error;
 }
+
+export async function uploadPhoto(file: File, path: string): Promise<string> {
+    const { error } = await supabase.storage.from('gallery').upload(path, file);
+    if (error) throw error;
+
+    const { data: urlData } = supabase.storage.from('gallery').getPublicUrl(path);
+    return urlData.publicUrl;
+}
