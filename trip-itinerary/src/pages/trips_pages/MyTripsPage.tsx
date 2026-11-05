@@ -39,6 +39,8 @@ export default function MyTripsPage() {
     const [trips, setTrips] = useState<Trip[]>([]);
     const { track } = useLoading();
 
+    const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
+
     useEffect(() => {
         track(getTrips())
             .then(trips => setTrips(trips))
@@ -66,6 +68,10 @@ export default function MyTripsPage() {
     
     function openTab(tabName: TabName) {
         setSearchParams({tab: tabName})
+    }
+
+    function chooseSelectedTrip(trip: Trip | null) {
+        setSelectedTrip(trip);
     }
 
     return (
@@ -109,8 +115,18 @@ export default function MyTripsPage() {
                     </div>
                     
                     <div className="flex flex-col gap-10 p-5 h-[80vh] w-[90%] bg-white rounded-xl">
-                        <div>
+                        <div className="flex flex-row justify-between items-center">
                             <h2 className="m-0 text-left">My Trips</h2>
+                            {selectedTrip && (
+                                <div className="flex flex-row gap-5 items-center">
+                                    <div className="px-3">
+                                        <p><strong>{selectedTrip.title} </strong></p>
+                                    </div>
+                                    <button>Share</button>
+                                    <button>Archive</button>
+                                    <button>Delete</button>
+                                </div>
+                            )}
                         </div>
                         {visibleTrips.length == 0 ? (
                             <div className="flex flex-col w-full justify-center items-center gap-5">
@@ -122,7 +138,13 @@ export default function MyTripsPage() {
                         ) : (
                             <div className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] h-full w-full overflow-y-auto">
                                 {visibleTrips.map(trip =>
-                                    <TripPreview key={trip.id} tripDetails={trip} />
+                                    <span 
+                                        onClick={() => chooseSelectedTrip(trip)} 
+                                        onBlur={() => chooseSelectedTrip(null)} 
+                                        key={trip.id}
+                                    >
+                                        <TripPreview tripDetails={trip} />
+                                    </span>
                                 )}
                             </div>
                         )}

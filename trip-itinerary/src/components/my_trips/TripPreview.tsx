@@ -33,10 +33,11 @@ function IconButton({ main, label, onClick, danger = false }: IconButtonProps) {
 }
 
 interface TripPreviewProps {
-    tripDetails: Trip
+    tripDetails: Trip;
+    onSelect?: (trip: Trip | null) => void;
 }
 
-export default function TripPreview({ tripDetails }: TripPreviewProps ) {
+export default function TripPreview({ tripDetails, onSelect }: TripPreviewProps ) {
     const navigate = useNavigate();
     const { menu, open } = useContextMenu<Trip>();
     const [showPopup, setShowPopup] = useState(false);
