@@ -10,4 +10,5 @@ export interface Trip {
     notes?: string;
     links?: string[];
     photo?: string;
+    archived: boolean;
 }

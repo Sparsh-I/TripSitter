@@ -17,6 +17,8 @@ function fromTripRow(row: any): Trip {
         endDate: row.end_date,
         notes: row.notes ?? undefined,
         links : row.links ?? undefined,
+        photo: row.photo ?? undefined,
+        archived: row.archived,
     }
 }
 
@@ -55,6 +57,8 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId'>): Promise<void>
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
             links: trip.links ?? undefined,
+            photo: trip.photo ?? undefined,
+            archived: false,
         });
     if (error) throw error;
 }
@@ -71,6 +75,8 @@ export async function updateTrip(trip: Trip): Promise<void> {
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
             links: trip.links ?? undefined,
+            photo: trip.photo ?? undefined,
+            archived: trip.archived,
         })
         .eq('id', trip.id);
     if (error) throw error;
@@ -80,6 +86,23 @@ export async function deleteTrip(trip: Trip): Promise<void> {
     const { error } = await supabase.from('trips').delete().eq('id', trip.id);
     if (error) throw error;
 }
+
+export async function archiveTrip(trip: Trip): Promise<void> {
+    const { error } = await supabase
+        .from('trips')
+        .update({ archived: true })
+        .eq('id', trip.id);
+    if (error) throw error;
+}
+
+export async function unarchiveTrip(trip: Trip): Promise<void> {
+    const { error } = await supabase
+        .from('trips')
+        .update({ archived: false })
+        .eq('id', trip.id);
+    if (error) throw error;
+}
+
 
 export async function getTripMembers(tripId: string): Promise<TripMember[]> {
     const { data, error } = await supabase

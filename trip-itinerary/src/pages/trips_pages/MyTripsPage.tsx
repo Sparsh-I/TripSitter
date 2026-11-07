@@ -1,12 +1,17 @@
 import NavBar from '../../components/global/NavBar.tsx';
-import TripPreview from "../../components/my_trips/TripPreview.tsx";
+import TripPreview, { IconButton } from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
-import { currentItems, futureTrips, pastItems } from "../../utils/TripDateUtils.ts";
-import { getTrips } from "../../utils/TripStorage.ts";
+import { currentItems, futureItems, futureTrips, pastItems } from "../../utils/TripDateUtils.ts";
+import { archiveTrip, deleteTrip, getTrips } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
 import { useLoading } from '../../context/LoadingContext.tsx';
+
+import edit from '/assets/my_trips/edit.svg';
+import share from '/assets/my_trips/share.svg';
+import archive from '/assets/my_trips/archive.svg';
+import trash from '/assets/my_trips/trash.svg';
 
 const TABS = ["All", "Ongoing", "Upcoming", "History", "Archive", "Requests"] as const;
 type TabName = typeof TABS[number];
@@ -49,16 +54,31 @@ export default function MyTripsPage() {
         });
     }, [])
 
+    useEffect(() => {
+        if (!selectedTrip) return;
+
+        const onDown = (e: MouseEvent) => {
+            const el = e.target as HTMLElement;
+
+            if (el.closest("[data-trip-card], [data-trip-actions]")) return;
+            setSelectedTrip(null);
+        };
+
+        document.addEventListener("mousedown", onDown);
+        return () => document.removeEventListener("mousedown", onDown);
+    }, [selectedTrip]);
+
     const current = currentItems(trips);
-    const upcoming = futureTrips(trips);
+    const upcoming = futureItems(trips);
     const past = pastItems(trips);
+    const archived = trips.filter(t => t.archived);
 
     const tripsByTab: Record<TabName, Trip[]> = {
         All: [...past, ...current, ...upcoming],
         Ongoing: current,
         Upcoming: upcoming,
         History: past,
-        Archive: [],
+        Archive: archived,
         Requests: [],
     }
 
@@ -72,6 +92,28 @@ export default function MyTripsPage() {
 
     function chooseSelectedTrip(trip: Trip | null) {
         setSelectedTrip(trip);
+    }
+
+    async function handleDelete() {
+        if (confirm("Are you sure you want to delete this trip?")) {
+            try {
+                await deleteTrip(selectedTrip!);
+                window.location.reload();
+            } catch (error) {
+                console.error("Failed to delete trip:", error);
+                alert("Something went wrong deleting this trip.");
+            }
+        }
+    }
+    
+    async function handleArchive() {
+        try {
+            await archiveTrip(selectedTrip!);
+            window.location.reload();
+        } catch (error) {
+            console.error("Failed to archive trip:", error);
+            alert("Something went wrong archiving this trip.");
+        }
     }
 
     return (
@@ -114,17 +156,18 @@ export default function MyTripsPage() {
                         </div>
                     </div>
                     
-                    <div className="flex flex-col gap-10 p-5 h-[80vh] w-[90%] bg-white rounded-xl">
+                    <div className="flex flex-col gap-10 p-5 h-[85vh] w-[90%] bg-white rounded-xl">
                         <div className="flex flex-row justify-between items-center">
                             <h2 className="m-0 text-left">My Trips</h2>
                             {selectedTrip && (
-                                <div className="flex flex-row gap-5 items-center">
+                                <div data-trip-actions className="flex flex-row gap-5 items-center">
                                     <div className="px-3">
                                         <p><strong>{selectedTrip.title} </strong></p>
                                     </div>
-                                    <button>Share</button>
-                                    <button>Archive</button>
-                                    <button>Delete</button>
+                                    <IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/${selectedTrip.id}/edit`)} notext/>
+                                    <IconButton main={share} label="Share" onClick={() => undefined} notext />
+                                    <IconButton main={archive} label="Archive" onClick={() => undefined} notext />
+                                    <IconButton main={trash} label="Delete" onClick={handleDelete} danger notext />
                                 </div>
                             )}
                         </div>
@@ -136,12 +179,13 @@ export default function MyTripsPage() {
                                 )}
                             </div>
                         ) : (
-                            <div className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] h-full w-full overflow-y-auto">
+                            <div className="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] h-full w-[95%] overflow-y-auto justify-items-center gap-5">
                                 {visibleTrips.map(trip =>
                                     <span 
-                                        onClick={() => chooseSelectedTrip(trip)} 
-                                        onBlur={() => chooseSelectedTrip(null)} 
                                         key={trip.id}
+                                        data-trip-card
+                                        onClick={() => chooseSelectedTrip(trip)}
+                                        className="w-60" 
                                     >
                                         <TripPreview tripDetails={trip} />
                                     </span>
