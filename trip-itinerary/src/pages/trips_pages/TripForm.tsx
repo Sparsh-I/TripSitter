@@ -1,5 +1,4 @@
 import SplashScreen from "../../components/global/SplashScreen.tsx";
-import { supabase } from "../../utils/SupabaseClient.ts";
 
 import { useAuthContext } from "../../context/AuthContext.tsx";
 import { useEffect, useState } from "react";
@@ -18,9 +17,7 @@ import type { Trip, TripLeg } from "../../types/Trip.ts";
 import placeholder from '/assets/my_trips/placeholder.jpg'
 
 import { TabButton } from "../../components/global/TabButton.tsx";
-import * as ConnUtils from "../../utils/ConnectionUtils.ts";
 import PhotoPopup from "../../components/my_trips/PhotoPopup.tsx";
-import TripLegsDetails from "../../components/my_trips/trip_form/TripLegsDetails.tsx";
 import TripLegsTab from "../../components/my_trips/trip_form/TripLegsTab.tsx";
 import MembersList from "../../components/my_trips/trip_form/MembersList.tsx";
 
