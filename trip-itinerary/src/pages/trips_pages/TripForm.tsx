@@ -9,7 +9,7 @@ import { addTrip, getTripById, getTripLegs, getTripMembers, updateTrip, uploadPh
 import SplashScreen from "../../components/global/SplashScreen.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import LocationSearch from "../../components/global/LocationSearch.tsx";
-import placeholder from '/assets/trip_preview/placeholder.jpg'
+import placeholder from '/assets/my_trips/placeholder.jpg'
 import { TabButton } from "../../components/global/TabButton.tsx";
 import { useTabParam } from "../../hooks/useTabParam.ts";
 import * as ConnUtils from "../../utils/ConnectionUtils.ts";

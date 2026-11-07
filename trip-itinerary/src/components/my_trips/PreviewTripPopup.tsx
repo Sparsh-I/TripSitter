@@ -41,7 +41,7 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                 <h2>{trip.title}</h2>
 
                 <div className="w-full h-80 bg-(--primary-colour-alt) bg-cover bg-center mt-1.25 mb-2.5
-                                bg-[url(/assets/trip_preview/placeholder.jpg)]"
+                                bg-[url(/assets/my_trips/placeholder.jpg)]"
                 />
                 <table className="mx-auto [&_td]:p-4">
                     <tbody>

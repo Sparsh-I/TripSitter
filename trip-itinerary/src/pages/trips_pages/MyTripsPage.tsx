@@ -1,7 +1,7 @@
 import NavBar from '../../components/global/NavBar.tsx';
 import TripPreview, { IconButton } from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
-import { currentItems, futureItems, futureTrips, pastItems } from "../../utils/TripDateUtils.ts";
+import { currentItems, futureItems, pastItems } from "../../utils/TripDateUtils.ts";
 import { archiveTrip, deleteTrip, getTrips } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
