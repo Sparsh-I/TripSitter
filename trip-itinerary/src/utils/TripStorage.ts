@@ -41,7 +41,7 @@ export async function getTripById(id: string): Promise<Trip | null> {
     return fromTripRow(data);
 }
 
-export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId'>): Promise<void> {
+export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): Promise<void> {
     const {data : {user}} = await supabase.auth.getUser();
     if (!user) throw new Error("Not logged in!");
 
