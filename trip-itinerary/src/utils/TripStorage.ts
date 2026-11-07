@@ -3,7 +3,7 @@ import type { TripLeg } from '../types/TripLeg';
 import type { TripMember } from '../types/TripMember';
 import {supabase} from "./SupabaseClient";
 
-// const STORAGE_KEY = 'trips';
+// TRIP INFORMATION
 
 function fromTripRow(row: any): Trip {
     return {
@@ -104,6 +104,8 @@ export async function unarchiveTrip(trip: Trip): Promise<void> {
 }
 
 
+// TRIP MEMBERS
+
 export async function getTripMembers(tripId: string): Promise<TripMember[]> {
     const { data, error } = await supabase
         .from("trip_members")
@@ -145,6 +147,9 @@ export async function removeTripMember(tripId: string, userId: string): Promise<
     if (error) throw error;
 }
 
+
+// TRIP LEGS
+
 function fromLegRow(row: any): TripLeg {
     return {
         tripId: row.trip_id,
@@ -182,7 +187,6 @@ export async function getTripLegs(tripId: string): Promise<TripLeg[]> {
     if (error) throw error;
     return data.map(fromLegRow);
 }
-
 
 export async function getLegsForTrips(tripIds: string[]): Promise<TripLeg[]> {
     if (tripIds.length === 0) return [];

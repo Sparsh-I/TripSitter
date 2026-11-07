@@ -2,7 +2,7 @@ import NavBar from '../../components/global/NavBar.tsx';
 import TripPreview, { IconButton } from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { currentItems, futureItems, pastItems } from "../../utils/TripDateUtils.ts";
-import { archiveTrip, deleteTrip, getTrips } from "../../utils/TripStorage.ts";
+import { archiveTrip, deleteTrip, getTrips, unarchiveTrip } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
@@ -106,15 +106,25 @@ export default function MyTripsPage() {
         }
     }
     
-    async function handleArchive() {
-        try {
-            await archiveTrip(selectedTrip!);
-            window.location.reload();
-        } catch (error) {
-            console.error("Failed to archive trip:", error);
-            alert("Something went wrong archiving this trip.");
+    async function handleArchive(isArchived: boolean) {
+            if (isArchived) {
+                try {
+                    await unarchiveTrip(selectedTrip!);
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Failed to unarchive trip:", error);
+                    alert("Something went wrong unarchiving this trip.");
+                }
+            } else {
+                try {
+                    await archiveTrip(selectedTrip!);
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Failed to archive trip:", error);
+                    alert("Something went wrong archiving this trip.");
+                }
+            }
         }
-    }
 
     return (
         <div className="min-h-screen flex flex-col bg-(--background-colour)">
@@ -166,7 +176,7 @@ export default function MyTripsPage() {
                                     </div>
                                     <IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/${selectedTrip.id}/edit`)} notext/>
                                     <IconButton main={share} label="Share" onClick={() => undefined} notext />
-                                    <IconButton main={archive} label="Archive" onClick={() => undefined} notext />
+                                    <IconButton main={archive} label="Archive" onClick={() => handleArchive(selectedTrip.archived)} notext />
                                     <IconButton main={trash} label="Delete" onClick={handleDelete} danger notext />
                                 </div>
                             )}

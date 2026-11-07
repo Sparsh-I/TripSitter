@@ -3,7 +3,7 @@ import type { Trip } from "../../types/Trip";
 import { createPortal } from "react-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import * as ConnUtils from "../../utils/ConnectionUtils";
-import type { TripMember } from "../../types/TripMember";
+import type { TripMember } from "../../types/Trip";
 
 interface TripMembersPopupProps {
     trip: Trip;

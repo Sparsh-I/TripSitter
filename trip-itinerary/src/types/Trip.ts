@@ -12,3 +12,24 @@ export interface Trip {
     photo?: string;
     archived: boolean;
 }
+
+export interface TripLeg {
+    tripId: string;
+    legId: string;
+    legTitle: string;
+    lat: number;
+    lng: number;
+    locationLabel: string;
+    startDate: Date;
+    endDate: Date;
+    links?: string[];
+    documents?: string[];
+    photos?: string[];
+    notes?: string;
+}
+
+export interface TripMember {
+    tripId: string;
+    userId: string;
+    status: "pending" | "accepted"; 
+}
