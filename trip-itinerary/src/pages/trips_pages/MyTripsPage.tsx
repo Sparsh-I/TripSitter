@@ -2,7 +2,7 @@ import NavBar from '../../components/global/NavBar.tsx';
 import TripPreview, { IconButton } from "../../components/my_trips/TripPreview.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { currentItems, futureItems, pastItems } from "../../utils/TripDateUtils.ts";
-import { archiveTrip, deleteTrip, getTrips, unarchiveTrip } from "../../utils/TripStorage.ts";
+import { archiveTrip, deleteTrip, getTripRequests, getTrips, unarchiveTrip } from "../../utils/TripStorage.ts";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
@@ -12,6 +12,8 @@ import edit from '/assets/my_trips/edit.svg';
 import share from '/assets/my_trips/share.svg';
 import archive from '/assets/my_trips/archive.svg';
 import trash from '/assets/my_trips/trash.svg';
+import { supabase } from '../../utils/SupabaseClient.ts';
+import { useAuthContext } from '../../context/AuthContext.tsx';
 
 const TABS = ["All", "Ongoing", "Upcoming", "History", "Archive", "Requests"] as const;
 type TabName = typeof TABS[number];
@@ -42,9 +44,13 @@ export default function MyTripsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "All");
     const [trips, setTrips] = useState<Trip[]>([]);
+    const [tripRequests, setTripRequests] = useState<Trip[]>([]);
     const { track } = useLoading();
 
     const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
+
+    const { session } = useAuthContext();
+    const userId = session?.user.id;
 
     useEffect(() => {
         track(getTrips())
@@ -53,6 +59,17 @@ export default function MyTripsPage() {
                 console.error("Failed to load trips: ", e);
         });
     }, [])
+
+    useEffect(() => {
+        if (!userId) return;
+        let cancelled = false;
+
+        getTripRequests(userId)
+            .then(r => { if (!cancelled) setTripRequests(r); })
+            .catch(err => console.error("Failed to trip requests:", err));
+
+        return () => { cancelled = true; };
+    }, []);
 
     useEffect(() => {
         if (!selectedTrip) return;
@@ -72,6 +89,7 @@ export default function MyTripsPage() {
     const upcoming = futureItems(trips);
     const past = pastItems(trips);
     const archived = trips.filter(t => t.archived);
+    const requests = tripRequests;
 
     const tripsByTab: Record<TabName, Trip[]> = {
         All: [...past, ...current, ...upcoming],
@@ -79,7 +97,7 @@ export default function MyTripsPage() {
         Upcoming: upcoming,
         History: past,
         Archive: archived,
-        Requests: [],
+        Requests: requests,
     }
 
     const visibleTrips = tripsByTab[activeTab];
@@ -170,14 +188,16 @@ export default function MyTripsPage() {
                         <div className="flex flex-row justify-between items-center">
                             <h2 className="m-0 text-left">My Trips</h2>
                             {selectedTrip && (
-                                <div data-trip-actions className="flex flex-row gap-5 items-center">
+                                <div data-trip-actions className="flex flex-row gap-7 items-center bg-gray-200 rounded-xl px-3">
                                     <div className="px-3">
                                         <p><strong>{selectedTrip.title} </strong></p>
                                     </div>
-                                    <IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/${selectedTrip.id}/edit`)} notext/>
-                                    <IconButton main={share} label="Share" onClick={() => undefined} notext />
-                                    <IconButton main={archive} label="Archive" onClick={() => handleArchive(selectedTrip.archived)} notext />
-                                    <IconButton main={trash} label="Delete" onClick={handleDelete} danger notext />
+                                    <div className="flex flex-row">
+                                        <IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/${selectedTrip.id}/edit`)} notext/>
+                                        <IconButton main={share} label="Share" onClick={() => undefined} notext />
+                                        <IconButton main={archive} label="Archive" onClick={() => handleArchive(selectedTrip.archived)} notext />
+                                        <IconButton main={trash} label="Delete" onClick={handleDelete} danger notext />
+                                    </div>
                                 </div>
                             )}
                         </div>

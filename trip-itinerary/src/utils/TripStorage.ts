@@ -1,6 +1,4 @@
-import type { Trip } from '../types/Trip';
-import type { TripLeg } from '../types/TripLeg';
-import type { TripMember } from '../types/TripMember';
+import type { Trip, TripLeg, TripMember } from '../types/Trip.ts';
 import {supabase} from "./SupabaseClient";
 
 // TRIP INFORMATION
@@ -115,7 +113,6 @@ export async function getTripMembers(tripId: string): Promise<TripMember[]> {
     if (error) throw error;
 
     return data.map(r => ({ tripId: r.trip_id, userId: r.user_id, status: r.status }));
-
 }
 
 export async function inviteTripMember(tripId: string, userId: string): Promise<void> {
@@ -147,6 +144,17 @@ export async function removeTripMember(tripId: string, userId: string): Promise<
     if (error) throw error;
 }
 
+export async function getTripRequests(userId: string): Promise<Trip[]> {
+    const { data, error } = await supabase
+        .from("trip_members")
+        .select("*")
+        .eq("user_id", userId).eq("status", "pending");
+    
+    if (error) throw error;
+
+    return data.map(fromTripRow);
+}
+
 
 // TRIP LEGS
 
@@ -154,6 +162,7 @@ function fromLegRow(row: any): TripLeg {
     return {
         tripId: row.trip_id,
         legId: row.leg_id,
+        legTitle: row.leg_title,
         lat: row.lat,
         lng: row.lng,
         locationLabel: row.location_label,
@@ -169,6 +178,7 @@ function fromLegRow(row: any): TripLeg {
 function toLegRow(leg: Omit<TripLeg, 'id'>) {
     return {
         trip_id: leg.tripId,
+        legTitle: leg.legTitle,
         location_label: leg.locationLabel,
         lat: leg.lat,
         lng: leg.lng,
