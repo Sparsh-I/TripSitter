@@ -1,9 +1,9 @@
 import NavBar from '../../components/global/NavBar.tsx';
 import TripPreview, { IconButton } from "../../components/my_trips/TripPreview.tsx";
-import type { Trip } from "../../types/Trip.ts";
+import type { Trip, TripInvite } from "../../types/Trip.ts";
 import { currentItems, futureItems, pastItems } from "../../utils/TripDateUtils.ts";
-import { archiveTrip, deleteTrip, getTripRequests, getTrips, unarchiveTrip } from "../../utils/TripStorage.ts";
-import { useEffect, useState } from "react";
+import { acceptTripInvite, archiveTrip, deleteTrip, getTripInvites, getTrips, inviterLabel, removeTripMember, unarchiveTrip } from "../../utils/TripStorage.ts";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Footer from "../../components/global/Footer.tsx";
 import { useLoading } from '../../context/LoadingContext.tsx';
@@ -12,7 +12,6 @@ import edit from '/assets/my_trips/edit.svg';
 import share from '/assets/my_trips/share.svg';
 import archive from '/assets/my_trips/archive.svg';
 import trash from '/assets/my_trips/trash.svg';
-import { supabase } from '../../utils/SupabaseClient.ts';
 import { useAuthContext } from '../../context/AuthContext.tsx';
 
 const TABS = ["All", "Ongoing", "Upcoming", "History", "Archive", "Requests"] as const;
@@ -44,7 +43,7 @@ export default function MyTripsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "All");
     const [trips, setTrips] = useState<Trip[]>([]);
-    const [tripRequests, setTripRequests] = useState<Trip[]>([]);
+    const [invites, setInvites] = useState<TripInvite[]>([]);
     const { track } = useLoading();
 
     const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null);
@@ -52,24 +51,19 @@ export default function MyTripsPage() {
     const { session } = useAuthContext();
     const userId = session?.user.id;
 
-    useEffect(() => {
-        track(getTrips())
-            .then(trips => setTrips(trips))
-            .catch(e => {
-                console.error("Failed to load trips: ", e);
-        });
-    }, [])
-
-    useEffect(() => {
-        if (!userId) return;
-        let cancelled = false;
-
-        getTripRequests(userId)
-            .then(r => { if (!cancelled) setTripRequests(r); })
-            .catch(err => console.error("Failed to trip requests:", err));
-
-        return () => { cancelled = true; };
+    const loadTrips = useCallback(async () => {
+        try { setTrips(await track(getTrips())); }
+        catch (e) { console.error("Failed to load trips:", e); }
     }, []);
+
+    const loadInvites = useCallback(async () => {
+        try { setInvites(await getTripInvites()); }
+        catch (e) { console.error("Failed to load invites:", e); }
+    }, []);
+
+    useEffect(() => { void loadTrips(); }, [loadTrips]);
+    useEffect(() => { if (userId) void loadInvites(); }, [userId, loadInvites]);
+
 
     useEffect(() => {
         if (!selectedTrip) return;
@@ -85,22 +79,38 @@ export default function MyTripsPage() {
         return () => document.removeEventListener("mousedown", onDown);
     }, [selectedTrip]);
 
-    const current = currentItems(trips);
-    const upcoming = futureItems(trips);
-    const past = pastItems(trips);
-    const archived = trips.filter(t => t.archived);
-    const requests = tripRequests;
+    const active = trips.filter(t => !t.archived);
 
-    const tripsByTab: Record<TabName, Trip[]> = {
-        All: [...past, ...current, ...upcoming],
-        Ongoing: current,
-        Upcoming: upcoming,
-        History: past,
-        Archive: archived,
-        Requests: requests,
+    const tripsByTab: Record<Exclude<TabName, "Requests">, Trip[]> = {
+        All: [...pastItems(active), ...currentItems(active), ...futureItems(active)],
+        Ongoing: currentItems(active),
+        Upcoming: futureItems(active),
+        History: pastItems(active),
+        Archive: trips.filter(t => t.archived),
+    };
+
+    const counts: Record<TabName, number> = {
+        All: tripsByTab.All.length,
+        Ongoing: tripsByTab.Ongoing.length,
+        Upcoming: tripsByTab.Upcoming.length,
+        History: tripsByTab.History.length,
+        Archive: tripsByTab.Archive.length,
+        Requests: invites.length,
+    };
+
+    const visibleTrips = activeTab === "Requests" ? [] : tripsByTab[activeTab];
+
+    async function respondToInvite(tripId: string, accept: boolean) {
+        if (!userId) return;
+        try {
+            if (accept) await acceptTripInvite(tripId);
+            else await removeTripMember(tripId, userId);
+            await Promise.all([loadInvites(), loadTrips()]);
+        } catch (e) {
+            console.error(e);
+            alert("Something went wrong. Please try again.");
+        }
     }
-
-    const visibleTrips = tripsByTab[activeTab];
 
     const navigate = useNavigate();
     
@@ -116,7 +126,8 @@ export default function MyTripsPage() {
         if (confirm("Are you sure you want to delete this trip?")) {
             try {
                 await deleteTrip(selectedTrip!);
-                window.location.reload();
+                setSelectedTrip(null);
+                await loadTrips();
             } catch (error) {
                 console.error("Failed to delete trip:", error);
                 alert("Something went wrong deleting this trip.");
@@ -128,7 +139,8 @@ export default function MyTripsPage() {
             if (isArchived) {
                 try {
                     await unarchiveTrip(selectedTrip!);
-                    window.location.reload();
+                    setSelectedTrip(null);
+                    await loadTrips();
                 } catch (error) {
                     console.error("Failed to unarchive trip:", error);
                     alert("Something went wrong unarchiving this trip.");
@@ -136,13 +148,18 @@ export default function MyTripsPage() {
             } else {
                 try {
                     await archiveTrip(selectedTrip!);
-                    window.location.reload();
+                    setSelectedTrip(null);
+                    await loadTrips();
                 } catch (error) {
                     console.error("Failed to archive trip:", error);
                     alert("Something went wrong archiving this trip.");
                 }
             }
-        }
+    }
+
+    const ACTION_BASE = "mx-[5px] cursor-pointer bg-transparent px-3 py-[5px]";
+    const ACTION_GREEN = `${ACTION_BASE} border-2 border-(--custom-green) text-(--custom-green) hover:bg-(--custom-green) hover:text-(--background-colour)`;
+    const ACTION_RED = `${ACTION_BASE} border-2 border-(--custom-red) text-(--custom-red) hover:bg-(--custom-red) hover:text-(--background-colour)`;
 
     return (
         <div className="min-h-screen flex flex-col bg-(--background-colour)">
@@ -157,7 +174,7 @@ export default function MyTripsPage() {
                             {SIDEBAR_GROUPS.map((group, i) => (
                                 <div key={i} className="flex flex-col gap-1 text-right">
                                     {group.map(tab => {
-                                        const count = tripsByTab[tab].length;
+                                        const count = counts[tab];
                                         const showBadge = tab === "Requests" && count > 0;
 
                                         return (
@@ -201,7 +218,29 @@ export default function MyTripsPage() {
                                 </div>
                             )}
                         </div>
-                        {visibleTrips.length == 0 ? (
+
+                        {activeTab === "Requests" ? (
+                            invites.length === 0 ? (
+                                <p>{EMPTY_MSGS.Requests}</p>
+                            ) : (
+                                <ul className="w-[95%] overflow-y-auto">
+                                    {invites.map(inv => (
+                                        <li key={inv.tripId} className="flex items-center justify-between p-3 odd:bg-(--background-colour)">
+                                            <div className="text-left">
+                                                <strong>{inv.title}</strong>
+                                                <div className="text-[#909090] text-[0.8rem]">
+                                                    Invited by {inviterLabel(inv.inviter)}
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button className={ACTION_GREEN} onClick={() => respondToInvite(inv.tripId, true)}>✓</button>
+                                                <button className={ACTION_RED} onClick={() => respondToInvite(inv.tripId, false)}>✘</button>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )
+                        ) : visibleTrips.length == 0 ? (
                             <div className="flex flex-col w-full justify-center items-center gap-5">
                                 <p>{EMPTY_MSGS[activeTab]}</p>
                                 {!NO_NEW_TRIP_BUTTON.includes(activeTab) && (

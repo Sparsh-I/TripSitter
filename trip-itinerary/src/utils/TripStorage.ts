@@ -1,4 +1,4 @@
-import type { Trip, TripLeg, TripMember } from '../types/Trip.ts';
+import type { Trip, TripInvite, TripLeg, TripMember } from '../types/Trip.ts';
 import {supabase} from "./SupabaseClient";
 
 // TRIP INFORMATION
@@ -101,6 +101,12 @@ export async function unarchiveTrip(trip: Trip): Promise<void> {
     if (error) throw error;
 }
 
+export function inviterLabel(inviter: TripInvite["inviter"]): string {
+    if (!inviter) return "Unknown user";
+    const full = [inviter.firstName, inviter.lastName].filter(Boolean).join(" ");
+    return full ? `${full} (@${inviter.username})` : `@${inviter.username}`;
+}
+
 
 // TRIP MEMBERS
 
@@ -112,7 +118,7 @@ export async function getTripMembers(tripId: string): Promise<TripMember[]> {
     
     if (error) throw error;
 
-    return data.map(r => ({ tripId: r.trip_id, userId: r.user_id, status: r.status }));
+    return data.map(r => ({ tripId: r.trip_id, userId: r.user_id, status: r.status, invitedBy: r.invited_by ?? null }));
 }
 
 export async function inviteTripMember(tripId: string, userId: string): Promise<void> {
@@ -128,7 +134,8 @@ export async function acceptTripInvite(tripId: string): Promise<void> {
     if (!user) throw new Error("Not logged in");
 
     const { error } = await supabase
-        .from("trip_members").update({ status: "accepted" })
+        .from("trip_members")
+        .update({ status: "accepted" })
         .eq("trip_id", tripId).eq("user_id", user.id);
 
     if (error) throw error;
@@ -144,15 +151,22 @@ export async function removeTripMember(tripId: string, userId: string): Promise<
     if (error) throw error;
 }
 
-export async function getTripRequests(userId: string): Promise<Trip[]> {
-    const { data, error } = await supabase
-        .from("trip_members")
-        .select("*")
-        .eq("user_id", userId).eq("status", "pending");
-    
+export async function getTripInvites(): Promise<TripInvite[]> {
+    const { data, error } = await supabase.rpc("get_trip_invites");
     if (error) throw error;
-
-    return data.map(fromTripRow);
+    return data.map((r: any) => ({
+        tripId: r.trip_id,
+        title: r.title,
+        invitedAt: r.invited_at,
+        inviter: r.inviter_id
+            ? {
+                id: r.inviter_id,
+                username: r.inviter_username,
+                firstName: r.inviter_first_name,
+                lastName: r.inviter_last_name,
+            }
+            : null,
+    }));
 }
 
 

@@ -31,5 +31,13 @@ export interface TripLeg {
 export interface TripMember {
     tripId: string;
     userId: string;
-    status: "pending" | "accepted"; 
+    status: "pending" | "accepted";
+    invitedBy: string;
+}
+
+export interface TripInvite {
+    tripId: string;
+    title: string;
+    invitedAt: string;
+    inviter: { id: string; username: string; firstName: string | null; lastName: string | null } | null;
 }
