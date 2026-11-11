@@ -7,7 +7,7 @@ interface PhotoPopupProps {
     onClose: () => void;
 }
 
-export default function PreviewTripPopup({ photoUrl, onClose }: PhotoPopupProps) {
+export default function PhotoPopup({ photoUrl, onClose }: PhotoPopupProps) {
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
         window.addEventListener("keydown", onKey);

@@ -11,7 +11,7 @@ import DatePicker from "../../components/global/DatePicker.tsx";
 import type { DateRange } from "react-day-picker";
 
 import type { TripLocation } from "../../components/global/LocationSearch.tsx";
-import { addTrip, getTripById, getTripLegs, updateTrip, uploadPhoto } from "../../utils/TripStorage.ts";
+import { addTrip, getTripById, getTripLegs, updateTrip, updateTripLeg, uploadPhoto } from "../../utils/TripStorage.ts";
 import type { Trip, TripLeg } from "../../types/Trip.ts";
 
 import placeholder from '/assets/my_trips/placeholder.jpg'
@@ -185,6 +185,15 @@ export default function TripFormPage() {
         }
     }
 
+    async function renameLeg(legId: string, title: string) {
+        const leg = tripLegs.find(l => l.legId === legId);
+        if (!leg) return;
+
+        const updated = { ...leg, title };
+        await updateTripLeg(updated);
+        setTripLegs(prev => prev.map(l => l.legId === legId ? updated : l));
+    }
+
     function addPhoto(file: File) {
         if (!tripDetails) return;
         const path = `trip_${tripDetails.id}/${crypto.randomUUID()}_${file.name}`;
@@ -192,7 +201,7 @@ export default function TripFormPage() {
     }
 
     return (
-        <div>
+        <div className="mb-15">
             <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border flex justify-between items-start"
                 style={{ backgroundImage: `url(${banner})` }}
             >
@@ -254,7 +263,7 @@ export default function TripFormPage() {
                         </div>
                     )}
 
-                    {activeTab === "Trip Legs" && <TripLegsTab tripLegs={tripLegs} />}
+                    {activeTab === "Trip Legs" && <TripLegsTab tripLegs={tripLegs} onRenameLeg={renameLeg} />}
 
                     {activeTab === "Members" && tripDetails && <MembersList trip={tripDetails} />}
                 </div>
