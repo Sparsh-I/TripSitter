@@ -57,7 +57,7 @@ export default function TripLegsTab({ tripLegs, onRenameLeg }: Props) {
 
             {tripLegs.length === 0 ? (
                 <p className="text-black py-6">No trip legs yet. I don't even know how you got here.</p>
-            ) : tripLegs.length !== 1 ? (
+            ) : tripLegs.length === 1 ? (
                 <div className="p-5">{details}</div>
             ) : (
                 <div className="flex flex-row gap-5 p-5">
