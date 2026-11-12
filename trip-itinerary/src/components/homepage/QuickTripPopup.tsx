@@ -24,7 +24,7 @@ export default function QuickTripPopup({ title, dateLabel, onClose }: NewTripPop
             return;
         }
 
-        const trip: Omit<Trip, 'id' | 'ownerId'> = {
+        const trip: Omit<Trip, 'id' | 'ownerId' | 'archived'> = {
             title: tripTitle,
             lat: location.lat,
             lng: location.lng,

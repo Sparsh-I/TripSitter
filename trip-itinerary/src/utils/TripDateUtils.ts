@@ -1,5 +1,5 @@
 import type { Trip } from "../types/Trip.ts";
-import type { TripLeg } from "../types/TripLeg.ts";
+import type { TripLeg } from "../types/Trip.ts";
 
 type Dated = { startDate: Date, endDate: Date };
 
