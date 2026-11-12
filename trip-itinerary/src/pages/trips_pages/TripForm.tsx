@@ -1,6 +1,5 @@
 import SplashScreen from "../../components/global/SplashScreen.tsx";
 
-import { useAuthContext } from "../../context/AuthContext.tsx";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useIsMobile } from "../../hooks/useIsMobile.ts";
@@ -11,7 +10,7 @@ import DatePicker from "../../components/global/DatePicker.tsx";
 import type { DateRange } from "react-day-picker";
 
 import type { TripLocation } from "../../components/global/LocationSearch.tsx";
-import { addTrip, getTripById, getTripLegs, updateTrip, updateTripLeg, uploadPhoto } from "../../utils/TripStorage.ts";
+import { addTrip, getTripById, /* getTripLegs, */ updateTrip, updateTripLeg, /* uploadPhoto */ } from "../../utils/TripStorage.ts";
 import type { Trip, TripLeg } from "../../types/Trip.ts";
 
 import placeholder from '/assets/my_trips/placeholder.jpg'
@@ -25,14 +24,11 @@ import MembersList from "../../components/my_trips/trip_form/MembersList.tsx";
 const TABS = ["General", "Trip Legs", "Members"] as const;
 
 export default function TripFormPage() {
-    const { session } = useAuthContext();
-    const userId = session?.user.id;
-
     const { id } = useParams<{ id: string }>();
     const isEditing = !!id;
 
     const [activeTab, openTab] = useTabParam("tab", TABS, "General");
-    const [saveDisabled, setSaveDisabled] = useState(true);
+    const [saveDisabled, /* setSaveDisabled */] = useState(true);
     
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const [loading, setLoading] = useState(isEditing);
@@ -66,8 +62,6 @@ export default function TripFormPage() {
         .catch(e => console.error("Failed to load trip:", e))
         .finally(() => setLoading(false));
     }, [id]);
-    
-    const ownerId = tripDetails?.ownerId;
 
     // useEffect(() => {
     //     if (!tripDetails?.id) return;
@@ -129,23 +123,9 @@ export default function TripFormPage() {
         }
     }
 
-    const addLink = () => setLinks(prev => [...prev, ""]);
-    const updateLinkAt = (i: number, v: string) => setLinks(prev => prev.map((l, idx) => (idx === i ? v : l)));
-    const removeLinkAt = (i: number) => setLinks(prev => prev.filter((_, idx) => idx !== i));
-
-    // function addEntry() {
-    //     setEntries(prev => [...prev, { range: undefined, location: "" }]);
-    // }
-    //
-    // function removeEntry(index: number) {
-    //     setEntries(prev => prev.filter((_, i) => i !== index));
-    // }
-    //
-    // function setRangeAt(index: number, range: DateRange | undefined) {
-    //     setEntries(prev =>
-    //         prev.map((entry, i) => (i === index ? { ...entry, range } : entry))
-    //     );
-    // }
+    // const addLink = () => setLinks(prev => [...prev, ""]);
+    // const updateLinkAt = (i: number, v: string) => setLinks(prev => prev.map((l, idx) => (idx === i ? v : l)));
+    // const removeLinkAt = (i: number) => setLinks(prev => prev.filter((_, idx) => idx !== i));
 
     function saveTitle() {
         const trimmed = title.trim();
@@ -194,11 +174,11 @@ export default function TripFormPage() {
         setTripLegs(prev => prev.map(l => l.legId === legId ? updated : l));
     }
 
-    function addPhoto(file: File) {
-        if (!tripDetails) return;
-        const path = `trip_${tripDetails.id}/${crypto.randomUUID()}_${file.name}`;
-        uploadPhoto(file, path);
-    }
+    // function addPhoto(file: File) {
+    //     if (!tripDetails) return;
+    //     const path = `trip_${tripDetails.id}/${crypto.randomUUID()}_${file.name}`;
+    //     uploadPhoto(file, path);
+    // }
 
     return (
         <div className="mb-15">
@@ -230,40 +210,58 @@ export default function TripFormPage() {
             <div className="border-t-5 border-(--primary-colour-alt)">
                 <div className="m-10">
                     {activeTab === "General" && (
-                        <div className="flex flex-col items-start gap-2">
-                            <h3>Gallery</h3>
-                            {galleryPhotos.length === 0 ? (
-                                <p className="text-gray-500">No photos available.</p>
-                            ) : (
-                                <div className="flex gap-5 overflow-x-auto w-full py-3">
-                                    {galleryPhotos.map(photo => (
-                                        <div key={photo.key} className="group relative">
-                                            <img src={photo.url} alt={photo.alt} className="w-100 h-60 object-cover" />
-                                            
-                                            <div className="absolute inset-0 bg-gray-900/10 opacity-0 group-hover:opacity-100 flex items-start justify-end transition-opacity">
-                                                <button 
-                                                    onClick={() => setSelectedPhoto(photo.url)}
-                                                    className="flex-shrink-0 w-full h-full p-0 bg-transparent rounded-lg overflow-hidden">
-                                                </button>
+                        <div>
+                            <div className="flex flex-col items-start gap-2">
+                                <h3>Gallery</h3>
+                                {galleryPhotos.length === 0 ? (
+                                    <p className="text-gray-500">No photos available.</p>
+                                ) : (
+                                    <div className="flex gap-5 overflow-x-auto w-full py-3">
+                                        {galleryPhotos.map(photo => (
+                                            <div key={photo.key} className="group relative">
+                                                <img src={photo.url} alt={photo.alt} className="w-100 h-60 object-cover" />
+                                                
+                                                <div className="absolute inset-0 bg-gray-900/10 opacity-0 group-hover:opacity-100 flex items-start justify-end transition-opacity">
+                                                    <button 
+                                                        onClick={() => setSelectedPhoto(photo.url)}
+                                                        className="flex-shrink-0 w-full h-full p-0 bg-transparent rounded-lg overflow-hidden">
+                                                    </button>
 
-                                                <button 
-                                                    className="absolute m-3 bg-white text-black text-sm hover:bg-gray-200 translate-y-5 group-hover:translate-y-0 transition-transform duration-300"
-                                                    onClick={() => updateBanner(photo.url)}
-                                                >
-                                                    Set Banner Photo
-                                                </button>
+                                                    <button 
+                                                        className="absolute m-3 bg-white text-black text-sm hover:bg-gray-200 translate-y-5 group-hover:translate-y-0 transition-transform duration-300"
+                                                        onClick={() => updateBanner(photo.url)}
+                                                    >
+                                                        Set Banner Photo
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                    {selectedPhoto && (
-                                        <PhotoPopup photoUrl={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
-                                    )}
-                                </div>
-                            )}
+                                        ))}
+                                        {selectedPhoto && (
+                                            <PhotoPopup photoUrl={selectedPhoto} onClose={() => setSelectedPhoto(null)} />
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                            <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
+                            <div className="flex">
+                                <DatePicker
+                                    selected={range}
+                                    onSelect={setRange}
+                                    fieldSize={21}
+                                    numMonths={isMobile ? 1 : 2}
+                                />
+                            </div>
                         </div>
                     )}
 
-                    {activeTab === "Trip Legs" && <TripLegsTab tripLegs={tripLegs} onRenameLeg={renameLeg} />}
+                    {activeTab === "Trip Legs" && tripDetails && (
+                        <TripLegsTab 
+                            tripLegs={tripLegs} 
+                            onRenameLeg={renameLeg} 
+                            tripStart={new Date(tripDetails.startDate)}
+                            tripEnd={new Date(tripDetails.endDate)}
+                        />
+                    )}
 
                     {activeTab === "Members" && tripDetails && <MembersList trip={tripDetails} />}
                 </div>
@@ -279,6 +277,7 @@ export default function TripFormPage() {
                         className={`${saveDisabled
                                     ? "bg-[#9a9a9a] border-[#9a9a9a] cursor-not-allowed"
                                     : "bg-(--primary-colour-alt) border-(--primary-colour-alt) cursor-pointer"}`}
+                        onClick={save}
                     >
                         Save
                     </button>

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import {useIsMobile} from "../../hooks/useIsMobile.ts";
 import type { TripLeg } from "../../types/Trip.ts";
 
 interface Props {
@@ -18,8 +17,6 @@ export default function RenameTripPopup({ leg, onClose, onSave }: Props) {
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
     }, [onClose]);
-
-    const isMobile = useIsMobile();
 
     const saveDisabled = saving || !title.trim();
 

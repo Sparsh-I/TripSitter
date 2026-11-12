@@ -1,23 +1,33 @@
+import { useIsMobile } from "../../../hooks/useIsMobile.ts";
 import { useEffect, useState } from 'react';
+
 import addFile from '/assets/my_trips/add-file.svg';
 import addSquare from '/assets/my_trips/add-square.svg';
 import { countryFlag, getCountryCode } from '../../../utils/LocationUtils.ts';
 import type { TripLocation } from '../../global/LocationSearch.tsx';
 import type { TripLeg } from '../../../types/Trip.ts';
 
+import DatePicker from "../../../components/global/DatePicker.tsx";
+import type { DateRange } from "react-day-picker";
+
 interface TripLegsDetailsProps {
-    tripLeg: TripLeg
+    tripLeg: TripLeg;
+    tripStart: Date;
+    tripEnd: Date;
 }
 
-interface LegPhoto {
-    id: string;
-    path: string;
-    url: string;
-}
+// interface LegPhoto {
+//     id: string;
+//     path: string;
+//     url: string;
+// }
 
-export default function TripLegsDetails({ tripLeg }: TripLegsDetailsProps) {
+export default function TripLegsDetails({ tripLeg, tripStart, tripEnd }: TripLegsDetailsProps) {
     const [flag, setFlag] = useState("");
     const [location, setLocation] = useState<TripLocation | null>(null);
+    const [range, setRange] = useState<DateRange | undefined>();
+
+    const isMobile = useIsMobile();
 
     useEffect(() => {
         if (!tripLeg) return;
@@ -37,6 +47,17 @@ export default function TripLegsDetails({ tripLeg }: TripLegsDetailsProps) {
                 <h1 className="font-xl">
                     {flag}
                 </h1>
+            </div>
+            <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
+            <div>
+                <DatePicker
+                    selected={range}
+                    onSelect={setRange}
+                    fieldSize={21}
+                    numMonths={isMobile ? 1 : 2}
+                    minDate={tripStart}
+                    maxDate={tripEnd}
+                />
             </div>
             <div className="flex flex-col gap-10">
                 <div>

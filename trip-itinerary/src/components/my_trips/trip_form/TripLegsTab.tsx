@@ -6,16 +6,18 @@ import { useState } from "react";
 
 import { IconButton } from "../TripPreview.tsx";
 import edit from '/assets/my_trips/edit.svg';
-import trash from '/assets/my_trips/trash.svg';
+// import trash from '/assets/my_trips/trash.svg';
 import RenameTripPopup from "../RenameTripLegPopup.tsx";
 
 interface Props {
     tripLegs: TripLeg[];
     onRenameLeg: (legId: string, title: string) => Promise<void>
+    tripStart: Date;
+    tripEnd: Date;
     legLabel?: (leg: TripLeg, index: number) => string;
 }
 
-export default function TripLegsTab({ tripLegs, onRenameLeg }: Props) {
+export default function TripLegsTab({ tripLegs, onRenameLeg, tripStart, tripEnd }: Props) {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const selectedId = searchParams.get("leg");
@@ -23,15 +25,6 @@ export default function TripLegsTab({ tripLegs, onRenameLeg }: Props) {
 
     const { menu, open } = useContextMenu<TripLeg>();
     const [renamingLeg, setRenamingLeg] = useState<TripLeg | null>(null);
-    const [showPopup, setShowPopup] = useState(false);
-
-    function openRenamePopup() {
-        setShowPopup(true);
-    }
-
-    function closeRenamePopup() {
-        setShowPopup(false);
-    }
 
     function selectLeg(id: string) {
         setSearchParams(prev => {
@@ -43,7 +36,12 @@ export default function TripLegsTab({ tripLegs, onRenameLeg }: Props) {
 
     const details = selected && (
         <div className="flex-1 min-w-0">
-            <TripLegsDetails key={selected.legId} tripLeg={selected} />
+            <TripLegsDetails 
+                key={selected.legId} 
+                tripLeg={selected} 
+                tripStart={tripStart}
+                tripEnd={tripEnd}
+            />
         </div>
     );
 
@@ -78,7 +76,12 @@ export default function TripLegsTab({ tripLegs, onRenameLeg }: Props) {
                     </nav>
 
                     <div className="flex-1 min-w-0">
-                        <TripLegsDetails key={selected.legId} tripLeg={selected} />
+                        <TripLegsDetails
+                            key={selected.legId} 
+                            tripLeg={selected} 
+                            tripStart={tripStart}
+                            tripEnd={tripEnd}
+                        />
                     </div>
                 </div>
             )}

@@ -18,7 +18,6 @@ export default function MembersList({ trip }: MembersListProps) {
     const [connectedIds, setConnectedIds] = useState<Set<string>>(new Set());
     const [showPopup, setShowPopup] = useState(false);
 
-    // members + their profiles (also the owner's)
     const loadMembers = useCallback(async () => {
         try {
             const list = await getTripMembers(trip.id);
