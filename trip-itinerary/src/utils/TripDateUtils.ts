@@ -14,7 +14,7 @@ export function closestUpcomingTrip(tripList: Trip[]): Trip | null {
 
     return upcoming.reduce((closest, trip) =>
         new Date(trip.startDate) < new Date(closest.startDate) ? trip : closest);
-}
+} 
 
 // export function currentTrips(tripList: Trip[]): Trip[] {
 //     const today = new Date();
