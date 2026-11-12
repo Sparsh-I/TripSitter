@@ -29,7 +29,7 @@ export default function HomePage() {
         <div className="min-h-screen flex flex-col">
             <NavBar/>
             <main className="flex-1">
-                <div className="w-full h-[29em] max-md:h-[33em] bg-[url('/assets/images/lake.jpg')] bg-cover bg-top p-[2em] box-border">
+                <div className="w-full h-116 max-md:h-132 bg-[url('/assets/images/lake.jpg')] bg-cover bg-top p-8 box-border">
                     <h2 className="px-[18px] w-fit bg-(--background-colour) rounded-xl !mx-0 max-md:!mb-4 max-md:!leading-[1.6]">
                         Welcome back{!loading && `, ${name}`}! Planning a trip?
                     </h2>

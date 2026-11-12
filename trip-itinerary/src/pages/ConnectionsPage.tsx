@@ -4,27 +4,17 @@ import { useState, useEffect, useCallback } from 'react';
 import * as ConnUtils from "../utils/ConnectionUtils.ts";
 import type { Connection } from '../types/Connection.ts';
 import { useAuthContext } from '../context/AuthContext.tsx';
-import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../utils/SupabaseClient.ts';
+import { TabButton } from '../components/global/TabButton.tsx';
+import { useTabParam } from '../hooks/useTabParam.ts';
 
 const TABS = ["Connections", "Requests", "Add Connection"] as const;
 const SUB_TABS = ["Incoming", "Outgoing"] as const;
 
-type TabName = typeof TABS[number];
-type SubTabName = typeof SUB_TABS[number];
-
-function parseParams<T extends string>(value: string | null, allowed: readonly T[], fallback: T): T {
-    return value !== null && (allowed as readonly string[]).includes(value)
-        ? (value as T)
-        : fallback;
-}
-
-
 export default function ConnectionsPage() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const activeTab = parseParams<TabName>(searchParams.get("tab"), TABS, "Connections");
-    const activeSubTab = parseParams<SubTabName>(searchParams.get("sub"), SUB_TABS, "Incoming");
-    
+    const [activeTab, openTab] = useTabParam("tab", TABS, "Connections", ["sub"]);
+    const [activeSubTab, openSubTab] = useTabParam("sub", SUB_TABS, "Incoming");
+
     const [connections, setConnections] = useState<Connection[]>([]);
     const [otherUsername, setOtherUsername] = useState("");
     const [profiles, setProfiles] = useState<Record<string, ConnUtils.ProfileSummary>>({});
@@ -64,41 +54,38 @@ export default function ConnectionsPage() {
                 return () => { 
                     void supabase.removeChannel(channel);
                 };
-            }, [userId, load]);
+    }, [userId, load]);
             
-            function openTab(tabName: TabName) {
-                setSearchParams({tab: tabName})
-            }
-            
-            function openSubTab(subTabName: SubTabName) {
-                setSearchParams({tab: "Requests", sub: subTabName})
-            }
-            
-            const current = ConnUtils.currentConnections(connections);
-            const incoming = ConnUtils.incomingRequests(connections, userId!);
-            const outgoing = ConnUtils.outgoingRequests(connections, userId!);
-            
-            async function handleSendRequest() {
-                if (!userId || !otherUsername) return;
-                setSending(true);
-                
-                try {
-                    await ConnUtils.sendConnectionRequest(otherUsername);
-                    setOtherUsername("");
-                    setMessage({type: "success", text: `Connection request sent to ${otherUsername}!`})
-                } catch (err) {
-                    setMessage({type: "error", text: "Connection request failed to send. Please try again."})       
-                    console.error("Failed to send connection request", err);
-                } finally {
-                    setSending(false);
-                }
-            }
-            
-            useEffect(() => {
-                if (!message) return;
-                const t = setTimeout(() => setMessage(null), 3000);
-                return () => clearTimeout(t);
-            }, [message]);
+    const current = ConnUtils.currentConnections(connections);
+    const incoming = ConnUtils.incomingRequests(connections, userId!);
+    const outgoing = ConnUtils.outgoingRequests(connections, userId!);
+    
+    async function handleSendRequest() {
+        if (!userId || !otherUsername) return;
+        setSending(true);
+        
+        try {
+            await ConnUtils.sendConnectionRequest(otherUsername);
+            setOtherUsername("");
+            setMessage({type: "success", text: `Connection request sent to ${otherUsername}!`})
+        } catch (err) {
+            setMessage({type: "error", text: "Connection request failed to send. Please try again."})       
+            console.error("Failed to send connection request", err);
+        } finally {
+            setSending(false);
+        }
+    }
+    
+    useEffect(() => {
+        void load();
+    }, [load]);
+
+
+    useEffect(() => {
+        if (!message) return;
+        const t = setTimeout(() => setMessage(null), 3000);
+        return () => clearTimeout(t);
+    }, [message]);
 
     const WRAPPER = "w-full box-border px-[10%]";
     const HEADING = "text-left pt-[50px]";
@@ -110,20 +97,6 @@ export default function ConnectionsPage() {
     const ACTION_PLAIN = `${ACTION_BASE} text-(--primary-colour-alt)`;
     const ACTION_GREEN = `${ACTION_BASE} border-2 border-(--custom-green) text-(--custom-green) hover:bg-(--custom-green) hover:text-(--background-colour)`;
     const ACTION_RED = `${ACTION_BASE} border-2 border-(--custom-red) text-(--custom-red) hover:bg-(--custom-red) hover:text-(--background-colour)`;
-    
-    function TabButton({ active, alt = false, className = "", ...props }:
-        { active: boolean; alt?: boolean } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-        const style = active
-            ? "!rounded-[10px] !bg-(--primary-colour) !text-black"
-            : alt
-                ? "rounded-[15px]"
-                : "!rounded-[10px] !bg-white !text-black";
-        return <button className={`${style} ${className}`} {...props} />;
-    }
-    
-    function displayName(p?: ConnUtils.ProfileSummary) {
-        return p ? `${p.first_name ?? ""} ${p.last_name ?? ""}` : "Unknown User";
-    }
 
     const sendDisabled = otherUsername.trim() === "" || sending;
             
@@ -149,9 +122,14 @@ export default function ConnectionsPage() {
                                     const otherId = ConnUtils.otherUserId(connection, userId!);
                                     return (
                                         <tr key={`${connection.userId}-${connection.connectionId}`} className={ROW}>
-                                            <td className={`${CELL} text-left`}>{displayName(profiles[otherId])}</td>
+                                            <td className={`${CELL} text-left`}>
+                                                <div>{ConnUtils.displayName(profiles[otherId])}</div>
+                                                {profiles[otherId]?.username && <div className="text-[#909090] text-[0.8rem]">@{profiles[otherId].username}</div>}
+                                            </td>
                                             <td className={`${CELL} text-right`}>
-                                                <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(otherId)}>View Profile</button>
+                                                <div className="flex items-center justify-end">
+                                                    <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(otherId)}>View Profile</button>
+                                                </div>
                                             </td>
                                         </tr>
                                     );
@@ -177,9 +155,14 @@ export default function ConnectionsPage() {
                                         <tr><td colSpan={3} className="no-content-display"><h4>No incoming requests</h4></td></tr>
                                     ) : incoming.map(c => (
                                         <tr key={`${c.userId}-${c.connectionId}`} className={ROW}>
-                                            <td className={`${CELL} text-left`}>{displayName(profiles[c.userId])}</td>
+                                            <td className={`${CELL} text-left`}>
+                                                <div>{ConnUtils.displayName(profiles[c.userId])}</div>
+                                                {profiles[c.userId]?.username && <div className="text-[#909090] text-[0.8rem]">@{profiles[c.userId].username}</div>}
+                                            </td>
                                             <td className={CELL}>
-                                                <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.userId)}>View Profile</button>
+                                                <div className="flex items-center justify-end">
+                                                    <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.userId)}>View Profile</button>
+                                                </div>
                                             </td>
                                             <td className={`${CELL} text-right`}>
                                                 <button className={ACTION_GREEN} onClick={async () => { await ConnUtils.acceptRequest(c.userId); await load(); }}>✓</button>
@@ -201,11 +184,13 @@ export default function ConnectionsPage() {
                                         return (
                                             <tr key={`${c.userId}-${c.connectionId}`} className={ROW}>
                                                 <td className={`${CELL} text-left`}>
-                                                    <div>{displayName(other)}</div>
+                                                    <div>{ConnUtils.displayName(other)}</div>
                                                     {other?.username && <div className="text-[#909090] text-[0.8rem]">@{other.username}</div>}
                                                 </td>
                                                 <td className={CELL}>
-                                                    <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.connectionId)}>View Profile</button>
+                                                    <div className="flex items-center justify-end">
+                                                        <button className={ACTION_PLAIN} onClick={() => ConnUtils.viewProfile(c.connectionId)}>View Profile</button>
+                                                    </div>
                                                 </td>
                                                 <td className={`${CELL} text-right`}>
                                                     <button className={ACTION_RED} onClick={async () => { await ConnUtils.cancelRequest(c.connectionId); await load(); }}>⏎</button>
@@ -234,7 +219,7 @@ export default function ConnectionsPage() {
                             <button
                                 disabled={sendDisabled}
                                 onClick={handleSendRequest}
-                                className={`ml-10 whitespace-nowrap ${sendDisabled}
+                                className={`ml-10 whitespace-nowrap ${sendDisabled
                                     ? "bg-[#9a9a9a] border-[#9a9a9a] cursor-not-allowed"
                                     : "bg-(--primary-colour-alt) border-(--primary-colour-alt) cursor-pointer"}`}
                             >

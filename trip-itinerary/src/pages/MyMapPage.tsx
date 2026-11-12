@@ -1,16 +1,17 @@
 import NavBar from '../components/global/NavBar.tsx';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import {getTrips} from "../utils/TripStorage.ts";
+import {getLegsForTrips, getTrips} from "../utils/TripStorage.ts";
 import type { Map as LeafletMap } from "leaflet";
 import L from "leaflet";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useMemo, useRef, useState} from "react";
 import Footer from "../components/global/Footer.tsx";
-import {currentTrips, futureTrips, pastTrips} from "../utils/TripDateUtils.ts";
+import {currentItems, futureItems, pastItems} from "../utils/TripDateUtils.ts";
 import type {Trip} from "../types/Trip.ts";
 import currentPin from "/assets/my_map/current-pin.svg";
 import upcomingPin from "/assets/my_map/upcoming-pin.svg";
 import pastPin from "/assets/my_map/past-pin.svg";
+import type { TripLeg } from '../types/Trip.ts';
 
 const iconOptions = {
     iconSize: [80, 80] as [number, number],
@@ -27,6 +28,7 @@ type FilterType = "all" | "current" | "upcoming" | "past";
 export default function MyMapPage() {
     const mapRef = useRef<LeafletMap | null>(null);
     const [allTrips, setAllTrips] = useState<Trip[]>([]);
+    const [allTripLegs, setAllTripLegs] = useState<TripLeg[]>([]);
     const [filter, setFilter] = useState<FilterType>("all");
     const [, setLoading] = useState(true);
 
@@ -34,23 +36,53 @@ export default function MyMapPage() {
     useEffect(() => {
         let cancelled = false;
 
-        getTrips()
-          .then(setAllTrips)
-          .catch(err => {
-            console.error("Failed to load trips: ", err);
-          }).finally(() => {
-            if (!cancelled) setLoading(false);
-          });
-      return () => {
-        cancelled = true;
-      };
+        (async () => {
+            try {
+                const trips = await getTrips();
+                const legs = await getLegsForTrips(trips.map(t => t.id));
+                if (cancelled) return;
+                setAllTrips(trips);
+                setAllTripLegs(legs);
+            } catch (err) {
+                console.error("Failed to load trips or legs: ", err);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
+        
+        return () => { cancelled = true; };
     }, []);
 
+    const legLabels = useMemo(() => {
+        const tripById = new Map(allTrips.map(t => [t.id, t]));
+        
+        const byTrip = new Map<string, TripLeg[]>();
+        for (const leg of allTripLegs)
+            byTrip.set(leg.tripId, [...(byTrip.get(leg.tripId) ?? []), leg]);
+
+        const labels = new Map<string, string>();
+        for (const [tripId, legs] of byTrip) {
+            const title = tripById.get(tripId)?.title ?? "Untitled Trip";
+            const sorted = [...legs].sort((a, b) =>
+                a.startDate.getTime() - b.startDate.getTime() ||
+                a.endDate.getTime() - b.endDate.getTime() ||
+                a.legId.localeCompare(b.legId)
+            );
+
+            sorted.forEach((leg, i) => {
+                labels.set(leg.legId, sorted.length > 1 ? `${title} (Leg ${i + 1})` : title);
+            });
+        }
+
+        return labels;
+    }, [allTrips, allTripLegs]);
+
+
     const places =
-        filter === "current" ? currentTrips(allTrips)
-        : filter === "upcoming" ? futureTrips(allTrips)
-        : filter === "past" ? pastTrips(allTrips)
-        : allTrips;
+        filter === "current" ? currentItems(allTripLegs)
+        : filter === "upcoming" ? futureItems(allTripLegs)
+        : filter === "past" ? pastItems(allTripLegs)
+        : allTripLegs;
 
     function handleMarkerClick(lat: number, lng: number) {
         mapRef.current?.flyTo([lat, lng], 10, {
@@ -62,10 +94,10 @@ export default function MyMapPage() {
         setFilter(e.target.value as FilterType);
     }
 
-    function getTripCategory(trip: Trip): FilterType {
+    function getTripLegCategory(leg: TripLeg): FilterType {
         const now = new Date();
-        const start = new Date(trip.startDate);
-        const end = new Date(trip.endDate);
+        const start = new Date(leg.startDate);
+        const end = new Date(leg.endDate);
 
         if (now >= start && now <= end) return "current";
         if (start > now) return "upcoming";
@@ -140,16 +172,17 @@ export default function MyMapPage() {
                     >
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" noWrap={true}/>
                             {places.map((place) => {
-                                const category = getTripCategory(place);
+                                const category = getTripLegCategory(place);
+                                const label = legLabels.get(place.legId) ?? place.locationLabel;
                                 return (
                                     <Marker
-                                        key={place.title}
-                                        title={place.title}
+                                        key={place.legId}
+                                        title={label}
                                         position={[place.lat, place.lng]}
                                         icon={iconMap[category]}
                                         eventHandlers={{click: () => handleMarkerClick(place.lat, place.lng)}}
                                     >
-                                        <Popup>{place.title}</Popup>
+                                        <Popup>{label}</Popup>
                                     </Marker>
                                 )
                             })};

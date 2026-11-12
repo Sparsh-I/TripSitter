@@ -20,6 +20,10 @@ async function requireUser() {
     return user;
 }   
 
+export function displayName(p?: ProfileSummary) {
+    return p ? `${p.first_name ?? ""} ${p.last_name ?? ""}` : "Unknown User";
+}
+
 export async function getUserIdByUsername(username: string): Promise<string> {
     const { data, error } = await supabase
         .from('profiles')
@@ -45,6 +49,11 @@ export async function getProfileSummaries(ids: string[]): Promise<Record<string,
 
 export async function getConnections(): Promise<Connection[]> {
     const user = await requireUser();
+    console.log("me:", user.id);
+    const all = await supabase.from('connections').select('*');
+    console.log("unfiltered:", all.data, all.error);
+
+    // const user = await requireUser();
     const {data, error} = await supabase
         .from('connections')
         .select('*')
@@ -170,3 +179,15 @@ export function otherUserId(connection: Connection, currentUserId: string): stri
         : connection.userId;
 }
 
+export async function hasExistingConnection(currentUserId: string, otherUserId: string): Promise<boolean> {
+    const { data, error } = await supabase
+        .from('connections')
+        .select('*')
+        .or(
+            `and(user_id.eq.${currentUserId},connection_id.eq.${otherUserId})` + 
+            `and(user_id.eq.${otherUserId},connection_id.eq.${currentUserId})`
+        );
+    
+    if (error) throw new Error(`Failed to check existing connection: ${error.message}`);
+    return data.length > 0;
+}

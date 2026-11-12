@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { DayPicker } from 'react-day-picker';
-import type { DateRange } from 'react-day-picker';
+import type { DateRange, Matcher } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { formatDate } from "../../utils/TripDateUtils.ts";
 
@@ -10,11 +10,18 @@ interface DatePickerProps {
     variant?: 'default' | 'popup';
     fieldSize: number;
     numMonths?: number;
+    minDate?: Date;
+    maxDate?: Date;
 }
 
-export default function DatePicker({ selected, onSelect, variant = 'default', fieldSize, numMonths = 2 }: DatePickerProps) {
+export default function DatePicker({ selected, onSelect, variant = 'default', fieldSize, numMonths = 2, minDate, maxDate }: DatePickerProps) {
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
+
+    const disabled: Matcher[] = [
+        { before: minDate ?? new Date() },        // default: block the past
+        ...(maxDate ? [{ after: maxDate }] : []), // only block the future if a max is set
+    ];
 
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
@@ -56,7 +63,10 @@ export default function DatePicker({ selected, onSelect, variant = 'default', fi
                         selected={selected}
                         onSelect={onSelect}
                         numberOfMonths={numMonths}
-                        disabled={{ before: new Date() }}
+                        disabled={disabled}
+                        defaultMonth={selected?.from ?? minDate}
+                        startMonth={minDate} 
+                        endMonth={maxDate}
                     />
                     <div style={{display: 'flex', justifyContent: 'space-around'}}>
                         <button className="bg-gray-500" onClick={clearDates}>Clear</button>

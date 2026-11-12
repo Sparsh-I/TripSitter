@@ -4,7 +4,6 @@ import { type TripLocation } from "../global/LocationSearch.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { formatDate } from "../../utils/TripDateUtils.ts";
 import { createPortal } from "react-dom";
-import image from '/assets/trip_preview/placeholder.jpg';
 import EmbedWidget from "./EmbedWidget.tsx";
 import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
@@ -42,7 +41,7 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                 <h2>{trip.title}</h2>
 
                 <div className="w-full h-80 bg-(--primary-colour-alt) bg-cover bg-center mt-1.25 mb-2.5
-                                bg-[url(/assets/trip_preview/placeholder.jpg)]"
+                                bg-[url(/assets/my_trips/placeholder.jpg)]"
                 />
                 <table className="mx-auto [&_td]:p-4">
                     <tbody>

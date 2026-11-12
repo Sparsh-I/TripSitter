@@ -1,13 +1,14 @@
-import placeholder from '/assets/trip_preview/placeholder.jpg';
-import eye from '/assets/trip_preview/eye.svg';
-import edit from '/assets/trip_preview/edit.svg';
-import share from '/assets/trip_preview/share.svg';
-import trash from '/assets/trip_preview/trash.svg';
+import placeholder from '/assets/my_trips/placeholder.jpg';
+import eye from '/assets/my_trips/eye.svg';
+import edit from '/assets/my_trips/edit.svg';
+import share from '/assets/my_trips/share.svg';
+import archive from '/assets/my_trips/archive.svg';
+import trash from '/assets/my_trips/trash.svg';
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types/Trip.ts";
 import PreviewTripPopup from "./PreviewTripPopup.tsx";
 import { useState } from "react";
-import { deleteTrip } from "../../utils/TripStorage.ts";
+import { archiveTrip, deleteTrip, unarchiveTrip } from "../../utils/TripStorage.ts";
 import { useContextMenu } from '../../hooks/useContextMenu.ts';
 
 interface IconButtonProps {
@@ -15,25 +16,35 @@ interface IconButtonProps {
     label: string;
     onClick: () => void;
     danger?: boolean;
+    notext?: boolean;
 }
 
-function IconButton({ main, label, onClick, danger = false }: IconButtonProps) {
+export function IconButton({ main, label, onClick, danger = false, notext = false }: IconButtonProps) {
     const colour = danger
         ? "text-(--custom-red)"
         : "";
-
-    return (
-        <button className={`flex flex-row w-full gap-10 justify-between rounded-none bg-gray-200 hover:bg-gray-300`} onClick={onClick} aria-label={label}>
-            <p className={`${colour}`}>{label}</p>
-            <span className="block size-5">
-                <img src={main} alt="" className="object-cover"/>
-            </span>
-        </button>
-    );
+    if (notext) {
+        return (
+            <button className={`flex flex-row justify-center rounded-2xl bg-transparent hover:bg-gray-200 cursor-pointer`} onClick={onClick} aria-label={label}>
+                <span className="block size-5">
+                    <img src={main} alt="" className="object-cover"/>
+                </span>
+            </button>
+        );
+    } else {
+        return (
+            <button className={`flex flex-row w-full gap-10 justify-between rounded-none bg-gray-200 hover:bg-gray-300`} onClick={onClick} aria-label={label}>
+                <p className={`${colour}`}>{label}</p>
+                <span className="block size-5">
+                    <img src={main} alt="" className="object-cover"/>
+                </span>
+            </button>
+        );
+    }
 }
 
 interface TripPreviewProps {
-    tripDetails: Trip
+    tripDetails: Trip;
 }
 
 export default function TripPreview({ tripDetails }: TripPreviewProps ) {
@@ -57,6 +68,26 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
             } catch (error) {
                 console.error("Failed to delete trip:", error);
                 alert("Something went wrong deleting this trip.");
+            }
+        }
+    }
+
+    async function handleArchive(isArchived: boolean) {
+        if (isArchived) {
+            try {
+                await unarchiveTrip(tripDetails);
+                window.location.reload();
+            } catch (error) {
+                console.error("Failed to unarchive trip:", error);
+                alert("Something went wrong unarchiving this trip.");
+            }
+        } else {
+            try {
+                await archiveTrip(tripDetails);
+                window.location.reload();
+            } catch (error) {
+                console.error("Failed to archive trip:", error);
+                alert("Something went wrong archiving this trip.");
             }
         }
     }
@@ -95,6 +126,7 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                     <li><IconButton main={edit} label="Edit" onClick={() => navigate(`/my-trips/${tripDetails.id}/edit`)} /></li>
                     <li role="separator" className="my-1 border-t border-gray-400" />
                     <li><IconButton main={share} label="Share" onClick={() => undefined} /></li>
+                    <li><IconButton main={archive} label="Archive" onClick={() => handleArchive(tripDetails.archived)} /></li>
                     <li role="separator" className="my-1 border-t border-gray-400" />
                     <li><IconButton main={trash} label="Delete" onClick={handleDelete} danger /></li>
                 </ul>
