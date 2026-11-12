@@ -77,12 +77,17 @@ export default function TripFormPage() {
     useEffect(() => {
         setTripLegs([
             {
-                id: "test-1",
                 legId: "test-1",
                 locationLabel: "Test leg",
                 photos: [
                     "https://i.pinimg.com/736x/51/d0/be/51d0bee2f524d4ded52831ba446e3620.jpg",
                     "https://i.pinimg.com/736x/37/a1/aa/37a1aa9b33ad6710b0d3dcf3ae759c16.jpg",
+                ],
+            } as any,
+            {
+                legId: "test-2",
+                locationLabel: "Another test leg",
+                photos: [
                     "https://i.pinimg.com/736x/82/fd/9c/82fd9caa6e595ce294861923be8b344f.jpg",
                     "https://i.pinimg.com/736x/48/d6/fd/48d6fda15ce21a7d8707ad6d7249d266.jpg",
                 ],

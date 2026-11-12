@@ -65,10 +65,10 @@ export default function TripLegsTab({ tripLegs, onRenameLeg, tripStart, tripEnd 
                                 key={leg.legId}
                                 onContextMenu={(e) => open(e, leg)} 
                                 onClick={() => selectLeg(leg.legId)}
-                                className={`w-35 rounded-lg text-left h-10 py-0 px-4 truncate text-white
+                                className={`w-45 rounded-lg text-left h-10 py-0 px-2 truncate text-white
                                     ${selected.legId === leg.legId
                                         ? "bg-[#595959]"
-                                        : "text-black hover:bg-(--background-colour)"}`}
+                                        : "!text-black bg-transparent hover:bg-(--background-colour-alt) hover:text-black"}`}
                             >
                                 {i + 1}. {leg.locationLabel}
                             </button>
