@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import addFile from '/assets/my_trips/add-file.svg';
 import addSquare from '/assets/my_trips/add-square.svg';
 import { countryFlag, getCountryCode } from '../../../utils/LocationUtils.ts';
-import type { TripLocation } from '../../global/LocationSearch.tsx';
 import type { TripLeg } from '../../../types/Trip.ts';
 
 import DatePicker from "../../../components/global/DatePicker.tsx";

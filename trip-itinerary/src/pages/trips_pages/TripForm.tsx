@@ -64,6 +64,7 @@ export default function TripFormPage() {
     }, [id]);
 
     useEffect(() => {
+        let cancelled = false;
         if (!tripDetails?.id) return;
 
         getTripLegs(tripDetails.id)
