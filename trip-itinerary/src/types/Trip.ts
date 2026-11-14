@@ -23,8 +23,8 @@ export interface TripLeg {
     startDate: Date;
     endDate: Date;
     links?: string[];
-    documents?: string[];
-    photos?: string[];
+    documents?: { id: string; path: string; url: string }[].
+    photos?: { id: string; path: string; url: string }[];
     notes?: string;
 }
 

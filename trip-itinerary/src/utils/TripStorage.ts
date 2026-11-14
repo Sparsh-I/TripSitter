@@ -174,30 +174,29 @@ export async function getTripInvites(): Promise<TripInvite[]> {
 
 function fromLegRow(row: any): TripLeg {
     return {
-        tripId: row.trip_id,
         legId: row.leg_id,
-        legTitle: row.leg_title,
+        tripId: row.trip_id,
+        legTitle: row.leg_title ?? undefined,
+        locationLabel: row.location_label,
         lat: row.lat,
         lng: row.lng,
-        locationLabel: row.location_label,
-        startDate: row.start_date,
-        endDate: row.end_date,
-        links : row.links ?? undefined,
-        documents : row.links ?? undefined,
-        photos : row.links ?? undefined,
+        startDate: new Date(row.start_date),
+        endDate: new Date(row.end_date),
+        links: row.links ?? [],
         notes: row.notes ?? undefined,
-    }
+    };
 }
 
-function toLegRow(leg: Omit<TripLeg, 'id'>) {
+function toLegRow(leg: Omit<TripLeg, 'legId'>) {
     return {
         trip_id: leg.tripId,
-        legTitle: leg.legTitle,
+        leg_title: leg.legTitle ?? null,
         location_label: leg.locationLabel,
         lat: leg.lat,
         lng: leg.lng,
         start_date: leg.startDate,
         end_date: leg.endDate,
+        links: leg.links ?? [],
         notes: leg.notes ?? null,
     };
 }
@@ -223,7 +222,7 @@ export async function getLegsForTrips(tripIds: string[]): Promise<TripLeg[]> {
     return data.map(fromLegRow);
 }
 
-export async function addTripLeg(leg: Omit<TripLeg, 'id'>): Promise<TripLeg> {
+export async function addTripLeg(leg: Omit<TripLeg, 'legId'>): Promise<TripLeg> {
     const { data, error } = await supabase
         .from('trip_legs')
         .insert(toLegRow(leg))

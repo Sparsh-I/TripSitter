@@ -13,6 +13,7 @@ import PhotoPopup from "../PhotoPopup.tsx";
 
 interface TripLegsDetailsProps {
     tripLeg: TripLeg;
+    onChange: (patch: Partial<TripLeg>) => void;
     tripStart: Date;
     tripEnd: Date;
 }
@@ -23,30 +24,29 @@ interface TripLegsDetailsProps {
 //     url: string;
 // }
 
-export default function TripLegsDetails({ tripLeg, tripStart, tripEnd }: TripLegsDetailsProps) {
+export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd }: TripLegsDetailsProps) {
     const [flag, setFlag] = useState("");
-    const [location, setLocation] = useState<TripLocation | null>(null);
-    const [range, setRange] = useState<DateRange | undefined>();
+    const [range, setRange] = useState<DateRange | undefined>({
+        from: new Date(tripLeg.startDate),
+        to: new Date(tripLeg.endDate),
+    });
     const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
-
     const isMobile = useIsMobile();
 
     useEffect(() => {
-        if (!tripLeg) return;
+        let cancelled = false;
+        getCountryCode(tripLeg.lat, tripLeg.lng)
+            .then(code => { if (!cancelled) setFlag(countryFlag(code)); })
+            .catch(() => { if (!cancelled) setFlag(""); });
+        return () => { cancelled = true; };
+    }, [tripLeg.lat, tripLeg.lng]);
 
-        setLocation({lat: tripLeg.lat, lng: tripLeg.lng, label: tripLeg.locationLabel });
-
-        if (!location) return;
-
-        getCountryCode(location.lat, location.lng)
-            .then(code => setFlag(countryFlag(code)))
-            .catch(() => setFlag(""));
-    }, [location?.lat, location?.lng]);
-
-    const tripLegPhotos = (tripLeg.photos ?? []).map((url, i) => ({
-        key: `${tripLeg.legId}-${i}`,
-        url,
-        alt: `${tripLeg.locationLabel} photo ${i + 1}`,
+    const tripLegPhotos = (tripLeg.photos ?? []).map((p, i) => ({
+        key: p.id,
+        id: p.id,
+        path: p.path,
+        url: p.url,
+        alt: `${tripLeg.legTitle ?? tripLeg.locationLabel} photo ${i + 1}`,
     }));
 
     return (
@@ -60,7 +60,10 @@ export default function TripLegsDetails({ tripLeg, tripStart, tripEnd }: TripLeg
             <div>
                 <DatePicker
                     selected={range}
-                    onSelect={setRange}
+                    onSelect={r => {
+                        setRange(r);
+                        if (r?.from && r?.to) onChange({ startDate: r.from, endDate: r.to });
+                    }}
                     fieldSize={21}
                     numMonths={isMobile ? 1 : 2}
                     minDate={tripStart}
@@ -108,7 +111,11 @@ export default function TripLegsDetails({ tripLeg, tripStart, tripEnd }: TripLeg
 
                 <div>
                     <h3 className="text-left pb-3">Plan/Notes</h3>
-                    <textarea className="w-full h-40"></textarea>
+                    <textarea
+                        className="w-full h-40"
+                        value={tripLeg.notes ?? ""}
+                        onChange={e => onChange({ notes: e.target.value })}
+                    />
                 </div>
 
                 <div>

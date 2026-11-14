@@ -10,7 +10,7 @@ import DatePicker from "../../components/global/DatePicker.tsx";
 import type { DateRange } from "react-day-picker";
 
 import type { TripLocation } from "../../components/global/LocationSearch.tsx";
-import { addTrip, getTripById, /* getTripLegs, */ updateTrip, updateTripLeg, /* uploadPhoto */ } from "../../utils/TripStorage.ts";
+import { addTrip, addTripLeg, getTripById, getTripLegs, updateTrip, updateTripLeg, /* uploadPhoto */ } from "../../utils/TripStorage.ts";
 import type { Trip, TripLeg } from "../../types/Trip.ts";
 
 import placeholder from '/assets/my_trips/placeholder.jpg'
@@ -28,7 +28,6 @@ export default function TripFormPage() {
     const isEditing = !!id;
 
     const [activeTab, openTab] = useTabParam("tab", TABS, "General");
-    const [saveDisabled, /* setSaveDisabled */] = useState(true);
     
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const [loading, setLoading] = useState(isEditing);
@@ -39,6 +38,7 @@ export default function TripFormPage() {
     const [notes, setNotes] = useState("");
     const [banner, setBanner] = useState(placeholder);
     
+    const [savedLegs, setSavedLegs] = useState<TripLeg[]>([]);
     const [tripLegs, setTripLegs] = useState<TripLeg[]>([]);
     const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 
@@ -63,42 +63,86 @@ export default function TripFormPage() {
         .finally(() => setLoading(false));
     }, [id]);
 
-    // useEffect(() => {
-    //     if (!tripDetails?.id) return;
-    //     let cancelled = false;
-
-    //     getTripLegs(tripDetails.id)
-    //         .then(legs => { if (!cancelled) setTripLegs(legs); })
-    //         .catch(e => console.error("Failed to load trip legs:", e));
-            
-    //     return () => { cancelled = true; };
-    // }, [tripDetails?.id]);
-
     useEffect(() => {
-        setTripLegs([
-            {
-                legId: "test-1",
-                locationLabel: "Test leg",
-                photos: [
-                    "https://i.pinimg.com/736x/51/d0/be/51d0bee2f524d4ded52831ba446e3620.jpg",
-                    "https://i.pinimg.com/736x/37/a1/aa/37a1aa9b33ad6710b0d3dcf3ae759c16.jpg",
-                ],
-            } as any,
-            {
-                legId: "test-2",
-                locationLabel: "Another test leg",
-                photos: [
-                    "https://i.pinimg.com/736x/82/fd/9c/82fd9caa6e595ce294861923be8b344f.jpg",
-                    "https://i.pinimg.com/736x/48/d6/fd/48d6fda15ce21a7d8707ad6d7249d266.jpg",
-                ],
-            } as any,
-        ]);
-    }, []);
+        if (!tripDetails?.id) return;
+
+        getTripLegs(tripDetails.id)
+            .then(legs => { setSavedLegs(legs); setTripLegs(legs); })
+            .catch(e => console.error("Failed to load trip legs:", e));
+            
+        return () => { cancelled = true; };
+    }, [tripDetails?.id]);
+
+    // useEffect(() => {
+    //     setTripLegs([
+    //         {
+    //             legId: "test-1",
+    //             locationLabel: "Test leg",
+    //             photos: [
+    //                 "https://i.pinimg.com/736x/51/d0/be/51d0bee2f524d4ded52831ba446e3620.jpg",
+    //                 "https://i.pinimg.com/736x/37/a1/aa/37a1aa9b33ad6710b0d3dcf3ae759c16.jpg",
+    //             ],
+    //         } as any,
+    //         // {
+    //         //     legId: "test-2",
+    //         //     locationLabel: "Another test leg",
+    //         //     photos: [
+    //         //         "https://i.pinimg.com/736x/82/fd/9c/82fd9caa6e595ce294861923be8b344f.jpg",
+    //         //         "https://i.pinimg.com/736x/48/d6/fd/48d6fda15ce21a7d8707ad6d7249d266.jpg",
+    //         //     ],
+    //         // } as any,
+    //     ]);
+    // }, []);
 
     if (loading) return <SplashScreen />;
     if (isEditing && !tripDetails) {
         return <div className="flex justify-center items-center min-h-screen"><h1>No Trip Found :(</h1></div>;
     }
+
+    const tripFieldsChanged = 
+        !!tripDetails && (
+            title.trim() !== tripDetails.title ||
+            notes !== (tripDetails.notes ?? "") ||
+            location?.label !== tripDetails.locationLabel ||
+            range?.from?.getTime() !== new Date(tripDetails.startDate).getTime() ||
+            range?.to?.getTime() !== new Date(tripDetails.endDate).getTime() ||
+            JSON.stringify(links.filter(l => l.trim() !== "")) !== JSON.stringify(tripDetails.links ?? [])
+        );
+
+    function updateLeg(legId: string, patch: Partial<TripLeg>) {
+        setTripLegs(prev => prev.map(l => l.legId === legId ? { ...l, ...patch} : l));
+    }
+
+    async function addLeg(): Promise<TripLeg | undefined> {
+        if (!tripDetails) return;
+        try {
+            const newLeg = await addTripLeg({
+                tripId: tripDetails.id,
+                legTitle: "Untitled Trip Leg",
+                lat: tripDetails.lat,
+                lng: tripDetails.lng,
+                locationLabel: tripDetails.locationLabel,
+                startDate: new Date(tripDetails.startDate),
+                endDate: new Date(tripDetails.endDate),
+            });
+            setSavedLegs(prev => [...prev, newLeg]);
+            setTripLegs(prev => [...prev, newLeg]);
+            return newLeg;
+        } catch (e) {
+            console.error("Failed to add trip leg:", e);
+            alert("Couldn't add trip leg, please try again.");
+        }
+    }
+
+    const legSnapshot = (l: TripLeg) =>
+        JSON.stringify([l.legTitle, l.locationLabel, l.lat, l.lng, l.startDate, l.endDate, l.notes, l.links]);
+
+    const dirtyLegs = tripLegs.filter(l => {
+        const saved = savedLegs.find(s => s.legId === l.legId);
+        return !saved || legSnapshot(saved) !== legSnapshot(l);
+    })
+
+    const saveDisabled = !(tripFieldsChanged || dirtyLegs.length > 0);
 
     async function save() {
         if (!location || !range?.from || !range?.to) {
@@ -119,7 +163,11 @@ export default function TripFormPage() {
         };
 
         try {
-            if (isEditing) await updateTrip({ ...tripDetails!, ...values });
+            if (isEditing) {
+                await updateTrip({ ...tripDetails!, ...values });
+                await Promise.all(dirtyLegs.map(updateTripLeg));
+                setSavedLegs(tripLegs);
+            }
             else await addTrip(values);
             navigate("/my-trips");
         } catch (e) {
@@ -148,13 +196,13 @@ export default function TripFormPage() {
         }
     }
 
-    const galleryPhotos = tripLegs.flatMap(leg => 
-        (leg.photos ?? []).map((url, i) => ({
-            key: `${leg.legId}-${i}`,
-            url,
-            alt: `${leg.locationLabel} photo ${i + 1}`,
+    const galleryPhotos = tripLegs.flatMap(leg =>
+        (leg.photos ?? []).map((p, i) => ({
+            key: p.id,
+            url: p.url,
+            alt: `${leg.legTitle ?? leg.locationLabel} photo ${i + 1}`,
         }))
-    )
+    );
 
     function updateBanner(url: string) {
         if (!tripDetails) return;
@@ -168,15 +216,6 @@ export default function TripFormPage() {
         } catch (e) {
             console.error("Failed to update trip banner: ", e);
         }
-    }
-
-    async function renameLeg(legId: string, title: string) {
-        const leg = tripLegs.find(l => l.legId === legId);
-        if (!leg) return;
-
-        const updated = { ...leg, title };
-        await updateTripLeg(updated);
-        setTripLegs(prev => prev.map(l => l.legId === legId ? updated : l));
     }
 
     // function addPhoto(file: File) {
@@ -196,15 +235,13 @@ export default function TripFormPage() {
                     onChange={e => setTitle(e.target.value)}
                     onBlur={saveTitle}
                     size={Math.max(title.length, 10)}
-                    defaultValue="Untitled Trip"
                     placeholder="Give this trip a name!"
                     className="bg-transparent text-2xl font-bold rounded-lg px-2 max-w-full
                                 border-2 border-transparent outline-none cursor-text
                                 hover:bg-white/70 hover:border-gray-300
                                 focus:bg-white focus:border-(--primary-colour-alt)"
 
-                >
-                </input>
+                />
                 <button className="rounded-full" onClick={() => navigate("/my-trips")}>Return to My Trips</button>
             </div>
             <div className="flex justify-center gap-0 mt-3">
@@ -262,7 +299,8 @@ export default function TripFormPage() {
                     {activeTab === "Trip Legs" && tripDetails && (
                         <TripLegsTab 
                             tripLegs={tripLegs} 
-                            onRenameLeg={renameLeg} 
+                            onUpdateLeg={updateLeg}
+                            onAddLeg={addLeg} 
                             tripStart={new Date(tripDetails.startDate)}
                             tripEnd={new Date(tripDetails.endDate)}
                         />

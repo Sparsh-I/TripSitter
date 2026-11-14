@@ -6,25 +6,24 @@ import { useState } from "react";
 
 import { IconButton } from "../TripPreview.tsx";
 import edit from '/assets/my_trips/edit.svg';
-// import trash from '/assets/my_trips/trash.svg';
 import RenameTripPopup from "../RenameTripLegPopup.tsx";
 
 interface Props {
     tripLegs: TripLeg[];
-    onRenameLeg: (legId: string, title: string) => Promise<void>
+    onUpdateLeg: (legId: string, patch: Partial<TripLeg>) => void;
+    onAddLeg: () => Promise<TripLeg | undefined>;
     tripStart: Date;
     tripEnd: Date;
-    legLabel?: (leg: TripLeg, index: number) => string;
 }
 
-export default function TripLegsTab({ tripLegs, onRenameLeg, tripStart, tripEnd }: Props) {
+export default function TripLegsTab({ tripLegs, onUpdateLeg, onAddLeg, tripStart, tripEnd }: Props) {
     const [searchParams, setSearchParams] = useSearchParams();
+    const { menu, open } = useContextMenu<TripLeg>();
+    const [renamingLeg, setRenamingLeg] = useState<TripLeg | null>(null);
+    const [adding, setAdding] = useState(false);
 
     const selectedId = searchParams.get("leg");
     const selected = tripLegs.find(l => l.legId === selectedId) ?? tripLegs[0];
-
-    const { menu, open } = useContextMenu<TripLeg>();
-    const [renamingLeg, setRenamingLeg] = useState<TripLeg | null>(null);
 
     function selectLeg(id: string) {
         setSearchParams(prev => {
@@ -34,72 +33,82 @@ export default function TripLegsTab({ tripLegs, onRenameLeg, tripStart, tripEnd 
         });
     }
 
-    const details = selected && (
-        <div className="flex-1 min-w-0">
-            <TripLegsDetails 
-                key={selected.legId} 
-                tripLeg={selected} 
-                tripStart={tripStart}
-                tripEnd={tripEnd}
-            />
-        </div>
+    async function handleAdd() {
+        setAdding(true);
+        try {
+            const newLeg = await onAddLeg();
+            if (newLeg) selectLeg(newLeg.legId);
+        } finally {
+            setAdding(false);
+        }
+    }
+
+    const addButton = (
+        <button
+            disabled={adding}
+            onClick={handleAdd}
+            className="border-[0.1em] p-1 w-full border-(--primary-colour-alt) bg-transparent text-black hover:bg-(--background-colour)"
+        >
+            {adding ? "Adding..." : "+ Add Trip Leg"}
+        </button>
     );
+
+    if (tripLegs.length === 0) {
+        return (
+            <div className="py-6">
+                <p className="text-black pb-4">No trip legs yet.</p>
+                {addButton}
+            </div>
+        );
+    }
 
     return (
         <div>
-            <div className="text-right">
-                <button className="cursor-not-allowed border-[0.1em] border-(--primary-colour-alt) bg-transparent text-black hover:bg-(--background-colour)">
-                    + Add Trip Leg
-                </button>
+            <div className="flex flex-row gap-5 p-5">
+                <nav className="flex flex-col gap-1 w-[15%] mr-4 shrink-0">
+                    {tripLegs.length > 1 && tripLegs.map((leg, i) => (
+                        <button
+                            key={leg.legId}
+                            onContextMenu={e => open(e, leg)}
+                            onClick={() => selectLeg(leg.legId)}
+                            className={`w-full rounded-lg text-left h-10 py-0 px-2 truncate ${
+                                selected.legId === leg.legId
+                                    ? "bg-[#595959] text-white"
+                                    : "!text-black bg-transparent hover:bg-(--background-colour-alt)"
+                            }`}
+                        >
+                            {i + 1}. {leg.legTitle ?? leg.locationLabel}
+                        </button>
+                    ))}
+                    {addButton}
+                </nav>
+
+                <div className="flex-1 min-w-0">
+                    <TripLegsDetails
+                        key={selected.legId}
+                        tripLeg={selected}
+                        onChange={patch => onUpdateLeg(selected.legId, patch)}
+                        tripStart={tripStart}
+                        tripEnd={tripEnd}
+                    />
+                </div>
             </div>
 
-            {tripLegs.length === 0 ? (
-                <p className="text-black py-6">No trip legs yet. I don't even know how you got here.</p>
-            ) : tripLegs.length === 1 ? (
-                <div className="p-5">{details}</div>
-            ) : (
-                <div className="flex flex-row gap-5 p-5">
-                    <nav className="flex flex-col gap-1 w-[15%] shrink-0">
-                        {tripLegs.map((leg, i) => (
-                            <button
-                                key={leg.legId}
-                                onContextMenu={(e) => open(e, leg)} 
-                                onClick={() => selectLeg(leg.legId)}
-                                className={`w-45 rounded-lg text-left h-10 py-0 px-2 truncate text-white
-                                    ${selected.legId === leg.legId
-                                        ? "bg-[#595959]"
-                                        : "!text-black bg-transparent hover:bg-(--background-colour-alt) hover:text-black"}`}
-                            >
-                                {i + 1}. {leg.locationLabel}
-                            </button>
-                        ))}
-                    </nav>
-
-                    <div className="flex-1 min-w-0">
-                        <TripLegsDetails
-                            key={selected.legId} 
-                            tripLeg={selected} 
-                            tripStart={tripStart}
-                            tripEnd={tripEnd}
-                        />
-                    </div>
-                </div>
-            )}
-
             {menu && (
-                <ul className="fixed z-50 bg-gray-200 py-2" 
-                    style={{ top: menu.y, left: menu.x }} onClick={(e) => e.stopPropagation()}>
+                <ul
+                    className="fixed z-50 bg-gray-200 py-2"
+                    style={{ top: menu.y, left: menu.x }}
+                    onClick={e => e.stopPropagation()}
+                >
                     <li><IconButton main={edit} label="Rename" onClick={() => setRenamingLeg(menu.data)} /></li>
-                    <li role="separator" className="my-1 border-t border-gray-400" />
-                    {/* <li><IconButton main={trash} label="Delete" onClick={(handleDelete)} danger /></li> */}
                 </ul>
             )}
 
             {renamingLeg && (
-                <RenameTripPopup 
+                <RenameTripPopup
                     leg={renamingLeg}
                     onClose={() => setRenamingLeg(null)}
-                    onSave={title => onRenameLeg(renamingLeg.legId, title)}
+                    onSave={async title => onUpdateLeg(renamingLeg.legId, { legTitle: title })}
                 />
             )}
         </div>
