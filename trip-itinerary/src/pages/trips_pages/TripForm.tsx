@@ -68,7 +68,7 @@ export default function TripFormPage() {
         if (!tripDetails?.id) return;
 
         getTripLegs(tripDetails.id)
-            .then(legs => { setSavedLegs(legs); setTripLegs(legs); })
+            .then(legs => { if (!cancelled) { setSavedLegs(legs); setTripLegs(legs); } })
             .catch(e => console.error("Failed to load trip legs:", e));
             
         return () => { cancelled = true; };
