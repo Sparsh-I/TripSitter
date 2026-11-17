@@ -56,7 +56,6 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
         to: new Date(tripLeg.endDate),
     });
     const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
-    const [links, setLinks] = useState<string[]>([""]);
     const [linkEntries, setLinkEntries] = useState<LinkEntry[]>(
         () => (tripLeg.links ?? []).map(url => ({ url, type: detectLinkType(url) }))
     );
@@ -140,7 +139,7 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
                                     <select
                                         value={link.type}
                                         onChange={e => updateType(i, e.target.value as LinkType)}
-                                        className="shrink-0"
+                                        className="appearance-none text-center rounded-l-xl rounded-r-none"
                                     >
                                         <option value="airbnb">Airbnb</option>
                                         <option value="custom">Custom</option>
@@ -151,10 +150,10 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
                                         value={link.url}
                                         onChange={e => updateUrl(i, e.target.value)}
                                         placeholder={link.type === "airbnb" ? "Paste an Airbnb listing link" : "Paste a link"}
-                                        className="w-full"
+                                        className="w-full rounded-none"
                                     />
 
-                                    <button onClick={() => removeLink(i)} aria-label="Remove link">✕</button>
+                                    <button onClick={() => removeLink(i)} aria-label="Remove link" className="rounded-l-none">✕</button>
                                 </div>
 
                                 {/* preview */}
