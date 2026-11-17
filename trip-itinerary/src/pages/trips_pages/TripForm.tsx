@@ -32,7 +32,6 @@ export default function TripFormPage() {
     const [tripDetails, setTripDetails] = useState<Trip | null>(null);
     const [loading, setLoading] = useState(isEditing);
     const [title, setTitle] = useState("");
-    const [links, setLinks] = useState<string[]>([""]);
     const [range, setRange] = useState<DateRange | undefined>();
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [notes, setNotes] = useState("");
@@ -57,7 +56,6 @@ export default function TripFormPage() {
             setRange({ from: new Date(trip.startDate), to: new Date(trip.endDate) });
             setLocation({ lat: trip.lat, lng: trip.lng, label: trip.locationLabel });
             setNotes(trip.notes ?? "");
-            if (trip.links?.length) setLinks(trip.links);
         })
         .catch(e => console.error("Failed to load trip:", e))
         .finally(() => setLoading(false));
@@ -106,8 +104,7 @@ export default function TripFormPage() {
             notes !== (tripDetails.notes ?? "") ||
             location?.label !== tripDetails.locationLabel ||
             range?.from?.getTime() !== new Date(tripDetails.startDate).getTime() ||
-            range?.to?.getTime() !== new Date(tripDetails.endDate).getTime() ||
-            JSON.stringify(links.filter(l => l.trim() !== "")) !== JSON.stringify(tripDetails.links ?? [])
+            range?.to?.getTime() !== new Date(tripDetails.endDate).getTime()
         );
 
     function updateLeg(legId: string, patch: Partial<TripLeg>) {
@@ -159,7 +156,6 @@ export default function TripFormPage() {
             startDate: range.from,
             endDate: range.to,
             notes: notes || undefined,
-            links: links.filter(l => l.trim() !== ""),
             photo: banner !== placeholder ? banner : undefined,
         };
 
@@ -176,10 +172,6 @@ export default function TripFormPage() {
             alert("Something went wrong saving your trip. Please try again.");
         }
     }
-
-    // const addLink = () => setLinks(prev => [...prev, ""]);
-    // const updateLinkAt = (i: number, v: string) => setLinks(prev => prev.map((l, idx) => (idx === i ? v : l)));
-    // const removeLinkAt = (i: number) => setLinks(prev => prev.filter((_, idx) => idx !== i));
 
     function saveTitle() {
         const trimmed = title.trim();

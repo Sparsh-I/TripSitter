@@ -8,7 +8,6 @@ export interface Trip {
     startDate: Date;
     endDate: Date;
     notes?: string;
-    links?: string[];
     photo?: string;
     archived: boolean;
 }

@@ -9,6 +9,7 @@ import type { TripLeg } from '../../../types/Trip.ts';
 import DatePicker from "../../../components/global/DatePicker.tsx";
 import type { DateRange } from "react-day-picker";
 import PhotoPopup from "../PhotoPopup.tsx";
+import EmbedWidget from "../EmbedWidget.tsx";
 
 interface TripLegsDetailsProps {
     tripLeg: TripLeg;
@@ -17,11 +18,36 @@ interface TripLegsDetailsProps {
     tripEnd: Date;
 }
 
+type LinkType = "airbnb" | "custom";
+const AIRBNB_HOSTS = /(^|\/\/)(www\.)?airbnb\.[a-z.]+/i;
+
+interface LinkEntry {
+    url: string;
+    type: LinkType;
+    label?: string;
+}
+
 // interface LegPhoto {
 //     id: string;
 //     path: string;
 //     url: string;
 // }
+
+function detectLinkType(url: string): LinkType {
+    return AIRBNB_HOSTS.test(url.trim()) ? "airbnb" : "custom";
+}
+
+function toSafeHref(raw: string): string | null {
+    const trimmed = raw.trim();
+    if (!trimmed) return null;
+    const withProtocol = /^[a-z][a-z0-9+.-]*:/i.test(trimmed) ? trimmed : `https://${trimmed}`;
+    try {
+        const u = new URL(withProtocol);
+        return u.protocol === "http:" || u.protocol === "https:" ? u.href : null;
+    } catch {
+        return null;
+    }
+}
 
 export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd }: TripLegsDetailsProps) {
     const [flag, setFlag] = useState("");
@@ -30,6 +56,10 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
         to: new Date(tripLeg.endDate),
     });
     const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+    const [links, setLinks] = useState<string[]>([""]);
+    const [linkEntries, setLinkEntries] = useState<LinkEntry[]>(
+        () => (tripLeg.links ?? []).map(url => ({ url, type: detectLinkType(url) }))
+    );
     const isMobile = useIsMobile();
 
     useEffect(() => {
@@ -47,6 +77,26 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
         url: p.url,
         alt: `${tripLeg.legTitle ?? tripLeg.locationLabel} photo ${i + 1}`,
     }));
+
+    function commit(next: LinkEntry[]) {
+        setLinkEntries(next);
+        onChange({ links: next.map(l => l.url).filter(u => u.trim() !== "") });
+    }
+
+    function updateUrl(i: number, url: string) {
+        commit(linkEntries.map((l, idx) =>
+            idx === i
+                ? { url, type: detectLinkType(url) === "airbnb" ? "airbnb" : l.type }
+                : l
+        ));
+    }
+
+    function updateType(i: number, type: LinkType) {
+        commit(linkEntries.map((l, idx) => (idx === i ? { ...l, type } : l)));
+    }
+
+    const addLink = () => commit([...linkEntries, { url: "", type: "custom" }]);
+    const removeLink = (i: number) => commit(linkEntries.filter((_, idx) => idx !== i));
 
     return (
         <div>
@@ -70,6 +120,84 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
                 />
             </div>
             <div className="flex flex-col gap-10">
+                <div>
+                    <h3 className="text-left pb-3">Plan/Notes</h3>
+                    <textarea
+                        className="w-full h-40"
+                        value={tripLeg.notes ?? ""}
+                        onChange={e => onChange({ notes: e.target.value })}
+                    />
+                </div>
+
+                <div>
+                    <h3 className="text-left pb-3">Links</h3>
+                    {linkEntries.map((link, i) => {
+                        const href = link.type === "custom" ? toSafeHref(link.url) : null;
+
+                        return (
+                            <div key={i} className="my-4">
+                                <div className="flex gap-2 items-center">
+                                    <select
+                                        value={link.type}
+                                        onChange={e => updateType(i, e.target.value as LinkType)}
+                                        className="shrink-0"
+                                    >
+                                        <option value="airbnb">Airbnb</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+
+                                    <input
+                                        type="text"
+                                        value={link.url}
+                                        onChange={e => updateUrl(i, e.target.value)}
+                                        placeholder={link.type === "airbnb" ? "Paste an Airbnb listing link" : "Paste a link"}
+                                        className="w-full"
+                                    />
+
+                                    <button onClick={() => removeLink(i)} aria-label="Remove link">✕</button>
+                                </div>
+
+                                {/* preview */}
+                                {link.type === "airbnb" && link.url.trim() !== "" && (
+                                    <div className="mt-2">
+                                        <EmbedWidget link={link.url} />
+                                    </div>
+                                )}
+
+                                {link.type === "custom" && href && (
+                                    <a
+                                        href={href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="mt-2 inline-block text-(--primary-colour-alt) hover:underline break-all"
+                                    >
+                                        {new URL(href).hostname}
+                                    </a>
+                                )}
+
+                                {link.type === "custom" && link.url.trim() !== "" && !href && (
+                                    <p className="mt-2 text-sm text-(--custom-red)">That doesn't look like a valid link.</p>
+                                )}
+                            </div>
+                        );
+                    })}
+                    <button type="button"
+                            className="text-(--primary-colour-alt) bg-transparent hover:underline flex p-0"
+                            onClick={addLink}>
+                        + Add Link
+                    </button>
+                </div>
+
+                <div>
+                    <h3 className="text-left pb-3">Files</h3>
+                    <button className="flex flex-col justify-center gap-3 items-center w-35 h-35 bg-gray-200 hover:bg-gray-300">
+                        <span className="block size-6">
+                            <img src={addFile} alt="" className="object-cover"/>
+                        </span>
+                        <p>Upload file</p>
+                    </button>
+                </div>
+
                 <div>
                     <h3 className="text-left pb-3">Photos</h3>
                     <div className="flex gap-5 overflow-x-auto w-full py-3">
@@ -106,25 +234,6 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
                             <p>Upload photo</p>
                         </button>
                     </div>
-                </div>
-
-                <div>
-                    <h3 className="text-left pb-3">Plan/Notes</h3>
-                    <textarea
-                        className="w-full h-40"
-                        value={tripLeg.notes ?? ""}
-                        onChange={e => onChange({ notes: e.target.value })}
-                    />
-                </div>
-
-                <div>
-                    <h3 className="text-left pb-3">Files</h3>
-                    <button className="flex flex-col justify-center gap-3 items-center w-35 h-35 bg-gray-200 hover:bg-gray-300">
-                        <span className="block size-6">
-                            <img src={addFile} alt="" className="object-cover"/>
-                        </span>
-                        <p>Upload file</p>
-                    </button>
                 </div>
             </div>
         </div>

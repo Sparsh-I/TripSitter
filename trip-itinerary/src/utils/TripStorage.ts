@@ -14,7 +14,6 @@ function fromTripRow(row: any): Trip {
         startDate: row.start_date,
         endDate: row.end_date,
         notes: row.notes ?? undefined,
-        links : row.links ?? undefined,
         photo: row.photo ?? undefined,
         archived: row.archived,
     }
@@ -54,7 +53,6 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): 
             start_date: trip.startDate,
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
-            links: trip.links ?? undefined,
             photo: trip.photo ?? undefined,
             archived: false,
         });
@@ -72,7 +70,6 @@ export async function updateTrip(trip: Trip): Promise<void> {
             start_date: trip.startDate,
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
-            links: trip.links ?? undefined,
             photo: trip.photo ?? undefined,
             archived: trip.archived,
         })
