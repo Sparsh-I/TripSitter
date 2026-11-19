@@ -112,7 +112,7 @@ export default function TripPreview({ tripDetails }: TripPreviewProps ) {
                 </div>
                 <div className="w-fit rounded-md bg-(--background-colour) max-md:w-[225px]">
                     <img
-                        src={placeholder}
+                        src={tripDetails.photo ?? placeholder}
                         alt="placeholder"
                         className="w-full rounded-md object-contain max-md:h-[150px]"
                     />
