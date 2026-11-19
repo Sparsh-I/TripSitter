@@ -36,6 +36,7 @@ export default function TripFormPage() {
     const [location, setLocation] = useState<TripLocation | null>(null);
     const [notes, setNotes] = useState("");
     const [banner, setBanner] = useState(placeholder);
+    const [isMultiLeg, setIsMultiLeg] = useState(false);
     
     const [savedLegs, setSavedLegs] = useState<TripLeg[]>([]);
     const [tripLegs, setTripLegs] = useState<TripLeg[]>([]);
@@ -56,9 +57,12 @@ export default function TripFormPage() {
             setRange({ from: new Date(trip.startDate), to: new Date(trip.endDate) });
             setLocation({ lat: trip.lat, lng: trip.lng, label: trip.locationLabel });
             setNotes(trip.notes ?? "");
+            // setIsMultiLeg(trip.isMultiLeg)
         })
         .catch(e => console.error("Failed to load trip:", e))
         .finally(() => setLoading(false));
+
+        setIsMultiLeg(true);
     }, [id]);
 
     useEffect(() => {
@@ -157,6 +161,7 @@ export default function TripFormPage() {
             endDate: range.to,
             notes: notes || undefined,
             photo: banner !== placeholder ? banner : undefined,
+            // isMultiLeg: multiLegTrip,
         };
 
         try {
@@ -286,6 +291,32 @@ export default function TripFormPage() {
                                     numMonths={isMobile ? 1 : 2}
                                 />
                             </div>
+                            <h3 className="text-(--secondary-colour-alt) text-left mt-5">Trip Type</h3>
+                            <div className="relative isolate grid grid-flow-col auto-cols-fr rounded-full bg-(--primary-colour) p-1.5 w-70">
+                                {([
+                                    [false, "Single Leg"],
+                                    [true, "Multi Leg"]
+                                ] as const).map(([value, label]) => (
+                                    <label key={label} 
+                                           className="group relative grid min-h-11 min-w-[9.5rem] cursor-pointer place-items-center rounded-full px-5
+                                                      transition-colors duration-300
+                                                      has-checked:bg-white has-checked:shadow
+                                                      has-focus-visible:ring-2 has-focus-visible:ring-(--primary-colour)"
+                                    >
+                                        <input 
+                                            type="radio" 
+                                            name="trip-type" 
+                                            checked={isMultiLeg === value}
+                                            value="single-leg" 
+                                            onChange={() => setIsMultiLeg(value)}
+                                            className="sr-only"
+                                        />
+                                        <span className="text-[15px] font-semibold transition-colors duration-300 group-has-checked:text-black">
+                                            {label}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
                         </div>
                     )}
 
@@ -296,6 +327,7 @@ export default function TripFormPage() {
                             onAddLeg={addLeg} 
                             tripStart={new Date(tripDetails.startDate)}
                             tripEnd={new Date(tripDetails.endDate)}
+                            // tripType={isMultiLeg}
                         />
                     )}
 
