@@ -4,8 +4,6 @@ import { type TripLocation } from "../global/LocationSearch.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { formatDate } from "../../utils/TripDateUtils.ts";
 import { createPortal } from "react-dom";
-import EmbedWidget from "./EmbedWidget.tsx";
-import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
 interface PreviewPopupProps {
     trip: Trip;
@@ -29,8 +27,6 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
             label: trip.locationLabel,
         });
     }, [trip]);
-
-    const isMobile = useIsMobile();
 
     return createPortal(
         <div className="popup-overlay" onClick={onClose}>
