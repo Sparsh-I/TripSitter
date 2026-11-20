@@ -135,7 +135,7 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
             <div className="flex flex-col gap-10">
                 <div>
                     <h3 className="text-left pb-3">Location</h3>
-                    <LocationSearch onLocationSelect={handleLocationSelect} />
+                    <LocationSearch onLocationSelect={handleLocationSelect} defaultVal={tripLeg.locationLabel} />
                 </div>
 
                 <div>
