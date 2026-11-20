@@ -222,6 +222,8 @@ export default function TripFormPage() {
     //     uploadPhoto(file, path);
     // }
 
+    const tripTypeLocked = tripLegs.length > 1;
+
     return (
         <div className="mb-15">
             <div className="w-full h-60 max-md:h-132 bg-cover bg-[calc(50%)_calc(40%)] p-8 box-border flex justify-between items-start"
@@ -291,10 +293,11 @@ export default function TripFormPage() {
                                             [true, "Multi Leg"]
                                         ] as const).map(([value, label]) => (
                                             <label key={label} 
-                                                className="group relative grid min-h-9 min-w-[2.5rem] cursor-pointer place-items-center rounded-full
+                                                className={`group relative grid min-h-9 min-w-[2.5rem] place-items-center rounded-full
                                                 transition-colors duration-300
                                                 has-checked:bg-white has-checked:shadow
-                                                has-focus-visible:ring-2 has-focus-visible:ring-(--primary-colour)"
+                                                has-focus-visible:ring-2 has-focus-visible:ring-(--primary-colour)
+                                                ${tripTypeLocked ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
                                             >
                                                 <input 
                                                     type="radio" 
@@ -303,6 +306,7 @@ export default function TripFormPage() {
                                                     value="single-leg" 
                                                     onChange={() => setIsMultiLeg(value)}
                                                     className="sr-only"
+                                                    disabled={tripTypeLocked}
                                                 />
                                                 <span className="group-has-checked:font-semibold transition-colors duration-300 group-has-checked:text-black">
                                                     {label}
@@ -310,6 +314,11 @@ export default function TripFormPage() {
                                             </label>
                                         ))}
                                     </div>
+                                    {tripTypeLocked && (
+                                        <p className="mt-3 text-(--custom-red)">
+                                            There are already multiple legs, can't change type.
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col">
