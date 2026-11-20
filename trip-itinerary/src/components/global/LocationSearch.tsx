@@ -54,7 +54,7 @@ export default function LocationSearch({ onLocationSelect, defaultVal = "" }: Lo
     }
 
     return (
-        <div style={{ position: "relative" }}>
+        <div className="relative">
             <input
                 type="text"
                 value={query}
@@ -63,6 +63,7 @@ export default function LocationSearch({ onLocationSelect, defaultVal = "" }: Lo
                 onBlur={() => setOpen(false)}
                 placeholder="Search for a location..."
                 size={37}
+                className="w-full rounded-xl"
             />
 
             {open && results.length > 0 && (

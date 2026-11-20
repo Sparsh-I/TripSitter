@@ -250,7 +250,7 @@ export default function TripFormPage() {
             <div className="border-t-5 border-(--primary-colour-alt)">
                 <div className="m-10">
                     {activeTab === "General" && (
-                        <div>
+                        <div className="flex flex-col gap-7">
                             <div className="flex flex-col items-start gap-2">
                                 <h3>Gallery</h3>
                                 {galleryPhotos.length === 0 ? (
@@ -282,40 +282,47 @@ export default function TripFormPage() {
                                     </div>
                                 )}
                             </div>
-                            <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
-                            <div className="flex">
-                                <DatePicker
-                                    selected={range}
-                                    onSelect={setRange}
-                                    fieldSize={21}
-                                    numMonths={isMobile ? 1 : 2}
-                                />
-                            </div>
-                            <h3 className="text-(--secondary-colour-alt) text-left mt-5">Trip Type</h3>
-                            <div className="relative isolate grid grid-flow-col auto-cols-fr rounded-full bg-(--primary-colour) p-1.5 w-70">
-                                {([
-                                    [false, "Single Leg"],
-                                    [true, "Multi Leg"]
-                                ] as const).map(([value, label]) => (
-                                    <label key={label} 
-                                           className="group relative grid min-h-11 min-w-[9.5rem] cursor-pointer place-items-center rounded-full px-5
-                                                      transition-colors duration-300
-                                                      has-checked:bg-white has-checked:shadow
-                                                      has-focus-visible:ring-2 has-focus-visible:ring-(--primary-colour)"
-                                    >
-                                        <input 
-                                            type="radio" 
-                                            name="trip-type" 
-                                            checked={isMultiLeg === value}
-                                            value="single-leg" 
-                                            onChange={() => setIsMultiLeg(value)}
-                                            className="sr-only"
+                            <div className="flex flex-row gap-20">
+                                <div className="flex flex-col">
+                                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Trip Type</h3>
+                                    <div className="relative isolate grid grid-flow-col auto-cols-fr rounded-full bg-(--primary-colour) p-1.5 w-60">
+                                        {([
+                                            [false, "Single Leg"],
+                                            [true, "Multi Leg"]
+                                        ] as const).map(([value, label]) => (
+                                            <label key={label} 
+                                                className="group relative grid min-h-9 min-w-[2.5rem] cursor-pointer place-items-center rounded-full
+                                                transition-colors duration-300
+                                                has-checked:bg-white has-checked:shadow
+                                                has-focus-visible:ring-2 has-focus-visible:ring-(--primary-colour)"
+                                            >
+                                                <input 
+                                                    type="radio" 
+                                                    name="trip-type" 
+                                                    checked={isMultiLeg === value}
+                                                    value="single-leg" 
+                                                    onChange={() => setIsMultiLeg(value)}
+                                                    className="sr-only"
+                                                />
+                                                <span className="group-has-checked:font-semibold transition-colors duration-300 group-has-checked:text-black">
+                                                    {label}
+                                                </span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col">
+                                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
+                                    <div className="flex">
+                                        <DatePicker
+                                            selected={range}
+                                            onSelect={setRange}
+                                            fieldSize={21}
+                                            numMonths={isMobile ? 1 : 2}
                                         />
-                                        <span className="text-[15px] font-semibold transition-colors duration-300 group-has-checked:text-black">
-                                            {label}
-                                        </span>
-                                    </label>
-                                ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -327,7 +334,7 @@ export default function TripFormPage() {
                             onAddLeg={addLeg} 
                             tripStart={new Date(tripDetails.startDate)}
                             tripEnd={new Date(tripDetails.endDate)}
-                            // tripType={isMultiLeg}
+                            multiLeg={isMultiLeg}
                         />
                     )}
 

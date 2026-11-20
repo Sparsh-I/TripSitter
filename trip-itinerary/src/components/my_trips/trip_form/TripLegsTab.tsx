@@ -14,9 +14,10 @@ interface Props {
     onAddLeg: () => Promise<TripLeg | undefined>;
     tripStart: Date;
     tripEnd: Date;
+    multiLeg: boolean
 }
 
-export default function TripLegsTab({ tripLegs, onUpdateLeg, onAddLeg, tripStart, tripEnd }: Props) {
+export default function TripLegsTab({ tripLegs, onUpdateLeg, onAddLeg, tripStart, tripEnd, multiLeg }: Props) {
     const [searchParams, setSearchParams] = useSearchParams();
     const { menu, open } = useContextMenu<TripLeg>();
     const [renamingLeg, setRenamingLeg] = useState<TripLeg | null>(null);
@@ -64,24 +65,26 @@ export default function TripLegsTab({ tripLegs, onUpdateLeg, onAddLeg, tripStart
 
     return (
         <div>
-            <div className="flex flex-row gap-5 p-5">
-                <nav className="flex flex-col gap-1 w-[15%] mr-4 shrink-0">
-                    {tripLegs.length > 1 && tripLegs.map((leg, i) => (
-                        <button
-                            key={leg.legId}
-                            onContextMenu={e => open(e, leg)}
-                            onClick={() => selectLeg(leg.legId)}
-                            className={`w-full rounded-lg text-left h-10 py-0 px-2 truncate ${
-                                selected.legId === leg.legId
-                                    ? "bg-[#595959] text-white"
-                                    : "!text-black bg-transparent hover:bg-(--background-colour-alt)"
-                            }`}
-                        >
-                            {i + 1}. {leg.legTitle ?? leg.locationLabel}
-                        </button>
-                    ))}
-                    {addButton}
-                </nav>
+            <div className="flex flex-row gap-5 pt-0 p-5">
+                {multiLeg &&
+                    <nav className="flex flex-col gap-1 w-[15%] mr-4 shrink-0">
+                        {tripLegs.length >= 1 && tripLegs.map((leg, i) => (
+                            <button
+                                key={leg.legId}
+                                onContextMenu={e => open(e, leg)}
+                                onClick={() => selectLeg(leg.legId)}
+                                className={`w-full rounded-lg text-left h-10 py-0 px-2 truncate ${
+                                    selected.legId === leg.legId
+                                        ? "bg-[#595959] text-white"
+                                        : "!text-black bg-transparent hover:bg-(--background-colour-alt)"
+                                }`}
+                            >
+                                {i + 1}. {leg.legTitle ?? leg.locationLabel}
+                            </button>
+                        ))}
+                        {addButton}
+                    </nav>
+                }
 
                 <div className="flex-1 min-w-0">
                     <TripLegsDetails

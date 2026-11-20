@@ -10,6 +10,7 @@ import DatePicker from "../../../components/global/DatePicker.tsx";
 import type { DateRange } from "react-day-picker";
 import PhotoPopup from "../PhotoPopup.tsx";
 import EmbedWidget from "../EmbedWidget.tsx";
+import LocationSearch, { type TripLocation } from "../../global/LocationSearch.tsx";
 
 interface TripLegsDetailsProps {
     tripLeg: TripLeg;
@@ -97,28 +98,46 @@ export default function TripLegsDetails({ tripLeg, onChange, tripStart, tripEnd 
     const addLink = () => commit([...linkEntries, { url: "", type: "custom" }]);
     const removeLink = (i: number) => commit(linkEntries.filter((_, idx) => idx !== i));
 
+    function handleLocationSelect(loc: TripLocation | null) {
+        if (!loc) return;
+        onChange({
+            lat: loc.lat,
+            lng: loc.lng,
+            locationLabel: loc.label,
+        });
+    }
+
     return (
         <div>
-            <div className="flex flex-col items-end">
-                <h1 className="font-xl">
-                    {flag}
-                </h1>
-            </div>
-            <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
-            <div>
-                <DatePicker
-                    selected={range}
-                    onSelect={r => {
-                        setRange(r);
-                        if (r?.from && r?.to) onChange({ startDate: r.from, endDate: r.to });
-                    }}
-                    fieldSize={21}
-                    numMonths={isMobile ? 1 : 2}
-                    minDate={tripStart}
-                    maxDate={tripEnd}
-                />
+            <div className="flex flex-row justify-between">
+                <div className="flex flex-col items-start gap-2 mb-7">
+                    <h3 className="text-(--secondary-colour-alt) text-left mt-5">Dates</h3>
+                    <div>
+                        <DatePicker
+                            selected={range}
+                            onSelect={r => {
+                                setRange(r);
+                                if (r?.from && r?.to) onChange({ startDate: r.from, endDate: r.to });
+                            }}
+                            fieldSize={21}
+                            numMonths={isMobile ? 1 : 2}
+                            minDate={tripStart}
+                            maxDate={tripEnd}
+                        />
+                    </div>
+                </div>
+                <div className="flex flex-col items-end">
+                    <h1 className="font-xl">
+                        {flag}
+                    </h1>
+                </div>
             </div>
             <div className="flex flex-col gap-10">
+                <div>
+                    <h3 className="text-left pb-3">Location</h3>
+                    <LocationSearch onLocationSelect={handleLocationSelect} />
+                </div>
+
                 <div>
                     <h3 className="text-left pb-3">Plan/Notes</h3>
                     <textarea
