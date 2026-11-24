@@ -69,18 +69,23 @@ export default function TripLegsTab({ tripLegs, onUpdateLeg, onAddLeg, tripStart
                 {multiLeg &&
                     <nav className="flex flex-col gap-1 w-[15%] mr-4 shrink-0">
                         {tripLegs.length >= 1 && tripLegs.map((leg, i) => (
-                            <button
-                                key={leg.legId}
-                                onContextMenu={e => open(e, leg)}
-                                onClick={() => selectLeg(leg.legId)}
-                                className={`w-full rounded-lg text-left h-10 py-0 px-2 truncate ${
-                                    selected.legId === leg.legId
+                            <div key={leg.legId} className="relative inline-block group">
+                                <button
+                                    onContextMenu={e => open(e, leg)}
+                                    onClick={() => selectLeg(leg.legId)}
+                                    className={`w-full rounded-lg text-left h-10 py-0 px-2 truncate ${
+                                        selected.legId === leg.legId
                                         ? "bg-[#595959] text-white"
                                         : "!text-black bg-transparent hover:bg-(--background-colour-alt)"
-                                }`}
-                            >
-                                {i + 1}. {leg.legTitle ?? leg.locationLabel}
-                            </button>
+                                    }`}
+                                    >
+                                    {i + 1}. {leg.legTitle ?? leg.locationLabel}
+                                </button>
+
+                                <span className="pointer-events-none absolute left-0 -bottom-5 z-10 hidden whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white shadow-lg group-hover:block">
+                                    {leg.legTitle ?? leg.locationLabel}
+                                </span>
+                            </div>
                         ))}
                         {addButton}
                     </nav>

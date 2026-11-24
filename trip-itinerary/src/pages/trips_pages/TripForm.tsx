@@ -57,7 +57,7 @@ export default function TripFormPage() {
             setRange({ from: new Date(trip.startDate), to: new Date(trip.endDate) });
             setLocation({ lat: trip.lat, lng: trip.lng, label: trip.locationLabel });
             setNotes(trip.notes ?? "");
-            // setIsMultiLeg(trip.isMultiLeg)
+            setIsMultiLeg(trip.isMultiLeg)
         })
         .catch(e => console.error("Failed to load trip:", e))
         .finally(() => setLoading(false));
@@ -161,7 +161,7 @@ export default function TripFormPage() {
             endDate: range.to,
             notes: notes || undefined,
             photo: banner !== placeholder ? banner : undefined,
-            // isMultiLeg: multiLegTrip,
+            isMultiLeg: isMultiLeg,
         };
 
         try {

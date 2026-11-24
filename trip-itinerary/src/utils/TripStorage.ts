@@ -16,6 +16,7 @@ function fromTripRow(row: any): Trip {
         notes: row.notes ?? undefined,
         photo: row.photo ?? undefined,
         archived: row.archived,
+        isMultiLeg: row.is_multi_leg,
     }
 }
 
@@ -55,6 +56,7 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): 
             notes: trip.notes ?? undefined,
             photo: trip.photo ?? undefined,
             archived: false,
+            isMultiLeg: false,
         });
     if (error) throw error;
 }
@@ -72,6 +74,7 @@ export async function updateTrip(trip: Trip): Promise<void> {
             notes: trip.notes ?? undefined,
             photo: trip.photo ?? undefined,
             archived: trip.archived,
+            isMutliLeg: trip.isMultiLeg,
         })
         .eq('id', trip.id);
     if (error) throw error;

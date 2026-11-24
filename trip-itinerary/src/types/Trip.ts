@@ -10,6 +10,7 @@ export interface Trip {
     notes?: string;
     photo?: string;
     archived: boolean;
+    isMultiLeg: boolean;
 }
 
 export interface TripLeg {
