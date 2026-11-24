@@ -39,7 +39,7 @@ export async function getTripById(id: string): Promise<Trip | null> {
     return fromTripRow(data);
 }
 
-export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): Promise<void> {
+export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived' | 'isMultiLeg'>): Promise<void> {
     const {data : {user}} = await supabase.auth.getUser();
     if (!user) throw new Error("Not logged in!");
 
@@ -56,7 +56,7 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): 
             notes: trip.notes ?? undefined,
             photo: trip.photo ?? undefined,
             archived: false,
-            isMultiLeg: false,
+            is_mutli_leg: false,
         });
     if (error) throw error;
 }
@@ -74,7 +74,7 @@ export async function updateTrip(trip: Trip): Promise<void> {
             notes: trip.notes ?? undefined,
             photo: trip.photo ?? undefined,
             archived: trip.archived,
-            isMutliLeg: trip.isMultiLeg,
+            is_multi_leg: trip.isMultiLeg,
         })
         .eq('id', trip.id);
     if (error) throw error;

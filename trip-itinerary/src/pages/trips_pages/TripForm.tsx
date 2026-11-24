@@ -61,8 +61,6 @@ export default function TripFormPage() {
         })
         .catch(e => console.error("Failed to load trip:", e))
         .finally(() => setLoading(false));
-
-        setIsMultiLeg(true);
     }, [id]);
 
     useEffect(() => {
@@ -108,7 +106,8 @@ export default function TripFormPage() {
             notes !== (tripDetails.notes ?? "") ||
             location?.label !== tripDetails.locationLabel ||
             range?.from?.getTime() !== new Date(tripDetails.startDate).getTime() ||
-            range?.to?.getTime() !== new Date(tripDetails.endDate).getTime()
+            range?.to?.getTime() !== new Date(tripDetails.endDate).getTime() ||
+            isMultiLeg !== tripDetails.isMultiLeg
         );
 
     function updateLeg(legId: string, patch: Partial<TripLeg>) {
