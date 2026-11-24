@@ -4,8 +4,6 @@ import { type TripLocation } from "../global/LocationSearch.tsx";
 import type { Trip } from "../../types/Trip.ts";
 import { formatDate } from "../../utils/TripDateUtils.ts";
 import { createPortal } from "react-dom";
-import EmbedWidget from "./EmbedWidget.tsx";
-import {useIsMobile} from "../../hooks/useIsMobile.ts";
 
 interface PreviewPopupProps {
     trip: Trip;
@@ -16,7 +14,6 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
     const [, setLocation] = useState<TripLocation | null>(null);
     const [, setTitle] = useState("");
     const [, setRange] = useState<DateRange | undefined>(undefined);
-    const [links, setLinks] = useState<string[]>([""]);
 
     useEffect(() => {
         setTitle(trip.title);
@@ -29,10 +26,7 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
             lng: trip.lng,
             label: trip.locationLabel,
         });
-        if (trip.links) setLinks(trip.links);
     }, [trip]);
-
-    const isMobile = useIsMobile();
 
     return createPortal(
         <div className="popup-overlay" onClick={onClose}>
@@ -40,8 +34,8 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                 <button onClick={onClose} className="popup-close">x</button>
                 <h2>{trip.title}</h2>
 
-                <div className="w-full h-80 bg-(--primary-colour-alt) bg-cover bg-center mt-1.25 mb-2.5
-                                bg-[url(/assets/my_trips/placeholder.jpg)]"
+                <div className={`w-full h-80 bg-(--primary-colour-alt) bg-cover bg-center mt-1.25 mb-2.5
+                                ${trip.photo ?? "bg-[url(/assets/my_trips/placeholder.jpg)]"}`}
                 />
                 <table className="mx-auto [&_td]:p-4">
                     <tbody>
@@ -57,17 +51,8 @@ export default function PreviewTripPopup({ trip, onClose }: PreviewPopupProps) {
                             <td><p className="popup-labels"><strong>Notes</strong></p></td>
                             <td><p>{trip.notes}</p></td>
                         </tr>
-                        <tr className="odd:bg-gray-200 even:bg-white">
-                            <td><p className="popup-labels"><strong>Relevant Links</strong></p></td>
-                            {!isMobile && links.map((link, index) => (
-                                <td key={index} className="!p-0 !-m-2"><EmbedWidget link={link}/></td>
-                            ))}
-                        </tr>
                     </tbody>
                 </table>
-                {isMobile && links.map((link, index) => (
-                    <td key={index}><EmbedWidget link={link}/></td>
-                ))}
             </div>
         </div>,
         document.body

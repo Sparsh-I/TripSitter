@@ -14,9 +14,9 @@ function fromTripRow(row: any): Trip {
         startDate: row.start_date,
         endDate: row.end_date,
         notes: row.notes ?? undefined,
-        links : row.links ?? undefined,
         photo: row.photo ?? undefined,
         archived: row.archived,
+        isMultiLeg: row.is_multi_leg,
     }
 }
 
@@ -39,7 +39,7 @@ export async function getTripById(id: string): Promise<Trip | null> {
     return fromTripRow(data);
 }
 
-export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): Promise<void> {
+export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived' | 'isMultiLeg'>): Promise<void> {
     const {data : {user}} = await supabase.auth.getUser();
     if (!user) throw new Error("Not logged in!");
 
@@ -54,9 +54,9 @@ export async function addTrip(trip: Omit<Trip, 'id' | 'ownerId' | 'archived'>): 
             start_date: trip.startDate,
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
-            links: trip.links ?? undefined,
             photo: trip.photo ?? undefined,
             archived: false,
+            is_mutli_leg: false,
         });
     if (error) throw error;
 }
@@ -72,9 +72,9 @@ export async function updateTrip(trip: Trip): Promise<void> {
             start_date: trip.startDate,
             end_date: trip.endDate,
             notes: trip.notes ?? undefined,
-            links: trip.links ?? undefined,
             photo: trip.photo ?? undefined,
             archived: trip.archived,
+            is_multi_leg: trip.isMultiLeg,
         })
         .eq('id', trip.id);
     if (error) throw error;
@@ -174,30 +174,29 @@ export async function getTripInvites(): Promise<TripInvite[]> {
 
 function fromLegRow(row: any): TripLeg {
     return {
-        tripId: row.trip_id,
         legId: row.leg_id,
-        legTitle: row.leg_title,
+        tripId: row.trip_id,
+        legTitle: row.leg_title ?? undefined,
+        locationLabel: row.location_label,
         lat: row.lat,
         lng: row.lng,
-        locationLabel: row.location_label,
-        startDate: row.start_date,
-        endDate: row.end_date,
-        links : row.links ?? undefined,
-        documents : row.links ?? undefined,
-        photos : row.links ?? undefined,
+        startDate: new Date(row.start_date),
+        endDate: new Date(row.end_date),
+        links: row.links ?? [],
         notes: row.notes ?? undefined,
-    }
+    };
 }
 
-function toLegRow(leg: Omit<TripLeg, 'id'>) {
+function toLegRow(leg: Omit<TripLeg, 'legId'>) {
     return {
         trip_id: leg.tripId,
-        legTitle: leg.legTitle,
+        leg_title: leg.legTitle ?? null,
         location_label: leg.locationLabel,
         lat: leg.lat,
         lng: leg.lng,
         start_date: leg.startDate,
         end_date: leg.endDate,
+        links: leg.links ?? [],
         notes: leg.notes ?? null,
     };
 }
@@ -223,7 +222,7 @@ export async function getLegsForTrips(tripIds: string[]): Promise<TripLeg[]> {
     return data.map(fromLegRow);
 }
 
-export async function addTripLeg(leg: Omit<TripLeg, 'id'>): Promise<TripLeg> {
+export async function addTripLeg(leg: Omit<TripLeg, 'legId'>): Promise<TripLeg> {
     const { data, error } = await supabase
         .from('trip_legs')
         .insert(toLegRow(leg))

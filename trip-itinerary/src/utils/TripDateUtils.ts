@@ -8,28 +8,13 @@ export const formatDate= (date: Date | undefined): string => {
 }
 
 export function closestUpcomingTrip(tripList: Trip[]): Trip | null {
-    const upcoming = futureTrips(tripList);
+    const upcoming = futureItems(tripList);
 
     if (upcoming.length === 0) return null;
 
     return upcoming.reduce((closest, trip) =>
         new Date(trip.startDate) < new Date(closest.startDate) ? trip : closest);
 } 
-
-// export function currentTrips(tripList: Trip[]): Trip[] {
-//     const today = new Date();
-//     return tripList.filter(trip => new Date(trip.startDate) < today && new Date(trip.endDate) > today);
-// }
-
-export function futureTrips(tripList: Trip[]): Trip[] {
-    const today = new Date();
-    return tripList.filter(trip => new Date(trip.startDate) >= today);
-}
-
-// export function pastTrips(tripList: Trip[]): Trip[] {
-//     const today = new Date();
-//     return tripList.filter(trip => new Date(trip.endDate) <= today);
-// }
 
 export function currentItems<T extends Dated>(items: T[]): T[] {
     const today = new Date();

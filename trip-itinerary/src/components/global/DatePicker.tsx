@@ -19,10 +19,9 @@ export default function DatePicker({ selected, onSelect, variant = 'default', fi
     const ref = useRef<HTMLDivElement>(null);
 
     const disabled: Matcher[] = [
-        { before: minDate ?? new Date() },        // default: block the past
-        ...(maxDate ? [{ after: maxDate }] : []), // only block the future if a max is set
+        ...(minDate ? [{ before: minDate }] : []),
+        ...(maxDate ? [{ after: maxDate }] : []),
     ];
-
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) {
             if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
